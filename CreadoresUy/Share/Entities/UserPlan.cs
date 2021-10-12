@@ -8,6 +8,13 @@ namespace Share.Entities
 {
     public class UserPlan 
     {
+        public UserPlan(int idPlan, int idUser, DateTime dateTime)
+        {
+            IdPlan = idPlan;
+            IdUser = idUser;
+            DateTime = dateTime;
+        }
+
         public int IdPlan {  get; set; }
         public Plan Plan {  get; set; }
         public int IdUser {  get; set; }
