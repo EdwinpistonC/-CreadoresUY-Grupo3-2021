@@ -90,11 +90,18 @@ namespace Persistence.Context
             .WithMany(c => c.Messages)
             .HasForeignKey(m => m.IdChat);
 
+            modelBuilder.Entity<Message>()
+            .HasOne<User>(m => m.User)
+            .WithMany(u => u.Messages)
+            .HasForeignKey(m => m.IdUser);
+
 
             modelBuilder.Entity<Chat>()
             .HasOne<User>(c => c.User)
             .WithMany(u => u.Chats)
-            .HasForeignKey(c => c.IdUser);
+            .HasForeignKey(c => c.IdUser)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Restrict); ;
 
             modelBuilder.Entity<Chat>()
             .HasOne<Creator>(c => c.Creator)

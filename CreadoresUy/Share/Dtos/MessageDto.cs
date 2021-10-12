@@ -9,8 +9,8 @@ namespace Share.Dtos
 {
     public class MessageDto
     {
-        public int IdSender { get; set; }
-        public int IdReceiver { get; set; }
+        public int IdCreator { get; set; }
+        public int IdUser { get; set; }
 
         public string Text {  get; set; }
 

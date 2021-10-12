@@ -29,7 +29,9 @@ namespace Api
             services.AddApplication();
             services.AddPersistence(Configuration);
             services.AddControllers();
-            services.AddDbContext<CreadoresUyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Data")));
+            services.AddDbContext<CreadoresUyDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Data"));
+            });
 
             services.AddSwaggerGen(c =>
             {

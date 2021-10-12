@@ -9,6 +9,15 @@ namespace Share.Entities
 {
     public class Message : BaseEntity
     {
+        public Message(int idUser, TipoEmisor tipoEmisor, string text, DateTime sended, int idChat)
+        {
+            IdUser = idUser;
+            TipoEmisor = tipoEmisor;
+            Text = text;
+            Sended = sended;
+            IdChat = idChat;
+        }
+
         public int IdUser { get; set; }
         public User User { get; set; }
         public TipoEmisor TipoEmisor {  get; set; } 

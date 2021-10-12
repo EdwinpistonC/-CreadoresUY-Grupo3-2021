@@ -23,5 +23,8 @@ namespace Share.Entities
 
         public ICollection<Chat> Chats { get; set; }
 
+        public ICollection<Message> Messages { get; set; }
+
+
     }
 }

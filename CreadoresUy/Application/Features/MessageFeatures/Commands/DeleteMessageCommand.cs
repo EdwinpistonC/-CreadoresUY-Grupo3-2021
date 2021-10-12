@@ -1,5 +1,6 @@
 ﻿using Application.Interface;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +22,11 @@ namespace Application.Features.MessageFeatures.Commands
             }
             public async Task<int> Handle(DeleteMessageCommand command, CancellationToken cancellationToken)
             {
+                /*
                 var mensaje = _context.Messages.Where(m => m.Id == command.IdMessage)
                     .Where(m => m.IdChat == command.IdChat).FirstOrDefault();
+
+
                 if (mensaje != null)
                 {
                     mensaje.Deleted = true;
@@ -33,12 +37,18 @@ namespace Application.Features.MessageFeatures.Commands
                 {
                     return default;
                 }
+                */
+                
 
-                /*
-                   var Chat = _context.Chats.Where(a => a.Id == command.IdChat).FirstOrDefault();
+
+                   var Chat = _context.Chats.Where(a => a.Id == command.IdChat).Include(c => c.Messages).FirstOrDefault();
                    if (Chat != null) { 
                        var Mensajes = Chat.Messages;
-                       if(Mensajes != null) { 
+                        System.Console.WriteLine("salida de texto");
+
+                        System.Console.WriteLine(Chat.Id);
+                        System.Console.WriteLine(Chat.Messages.Count());
+                        if (Mensajes != null) { 
                            foreach (var item in Mensajes)
                            {
                                if (item.Id == command.IdMessage)
@@ -57,8 +67,7 @@ namespace Application.Features.MessageFeatures.Commands
                                }
                            }
                        }
-
-                       return 403; //Mensaje no existe en chat Valido
+                    return 403; //Mensaje no existe en chat Valido
                    }
                    else
                    {
@@ -66,7 +75,7 @@ namespace Application.Features.MessageFeatures.Commands
 
                    }
 
-               */
+               
             }
         }
     }
