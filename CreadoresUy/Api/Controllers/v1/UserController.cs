@@ -10,16 +10,8 @@ namespace Api.Controllers.v1
     [ApiVersion("1.0")]
     public class UserController : BaseApiController
     {
-        /*
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-        */
-
-        [HttpPost]
-        public async Task<ActionResult<UserSignInCommand>> CreateUser(UserSignInCommand command)
+        public async Task<ActionResult<UserSignUpCommand>> CreateUser(UserSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
         }

@@ -26,6 +26,15 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("https://localhost:44332");
+                                  });
+            });
+
             services.AddApplication();
             services.AddPersistence(Configuration);
             services.AddControllers();
@@ -65,7 +74,7 @@ namespace Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
             }
 
-
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
