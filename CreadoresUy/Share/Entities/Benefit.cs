@@ -8,10 +8,11 @@ namespace Share.Entities
 {
     public class Benefit: BaseEntity
     {
+        public string Description;
+
         public int IdPlan { get; set; }
         public Plan Plan { get; set; }
 
-        public string Description;
         
     }
 }
