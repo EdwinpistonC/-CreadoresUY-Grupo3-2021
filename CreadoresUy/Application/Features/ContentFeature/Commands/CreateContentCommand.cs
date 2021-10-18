@@ -1,25 +1,27 @@
-﻿using Application.Interface;
+﻿using Application.Features.UserFeatures.Validators;
+using Application.Interface;
 using AutoMapper;
+using FluentValidation.Results;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.ContentFeature.Commands
 {
-    public class CreateContentCommand : IRequest<int>
+    public class CreateContentCommand : IRequest<Response<String>>
     {
         public ContentDto Content {  get; set; }
-        public ICollection<PlanDto> Plans { get; set; }
+       
 
-        public ICollection<TagDto> Tags { get; set; }
-
-        public class CreateContentCommandHandler : IRequestHandler<CreateContentCommand, int>
+        public class CreateContentCommandHandler : IRequestHandler<CreateContentCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
@@ -29,50 +31,95 @@ namespace Application.Features.ContentFeature.Commands
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<int> Handle(CreateContentCommand command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(CreateContentCommand command, CancellationToken cancellationToken)
             {
+                var dto = command.Content;
+                Response<string> res = new Response<String>();
+                res.Message = new List<String>();
+                var validator = new CreateContentCommandValidator(_context);
+                ValidationResult result = validator.Validate(dto);
+
+                if (!result.IsValid)
+                {
+                    res.CodStatus = HttpStatusCode.BadRequest;
+                    res.Success = false;
+                    foreach (var error in result.Errors)
+                    {
+                        var msg = error.ErrorMessage;
+                        res.Message.Add(msg);
+                    }
+                    return res;
+                }
+
                 var content = _mapper.Map<Content>(command.Content);
+
                 content.ContentPlans = new List<ContentPlan>();
 
                 content.ContentTags = new List<ContentTag>();
 
-                if (command.Plans != null)
+                if (content.Draft == false)
                 {
-                    foreach (var p in command.Plans)
+                    content.DatePublish = DateTime.Now;
+                }
+                _context.Contents.Add(content);
+                await _context.SaveChangesAsync();
+
+                if (command.Content.Plans != null)
+                {
+                    foreach (var planId in command.Content.Plans)
                     {
-                        var contentPlan = new ContentPlan()
+
+                        var contentPlan = new ContentPlan
                         {
-                            IdPlan = p.Id,
+                            IdPlan = planId,
                             IdContent = content.Id
                         };
+
                         content.ContentPlans.Add(contentPlan);
                     }
                 }
-                
-
-                foreach (var t in command.Tags)
-                {
-                    var tag = new Tag()
-                    {
-                        Name = t.Name
-                    };
-                    _context.Tags.Add(tag);
-                    await _context.SaveChangesAsync();
-
-                    var contentTag = new ContentTag()
-                    {
-                        IdTag = tag.Id,
-                        IdContent = content.Id
-                    };
-                    content.ContentTags.Add(contentTag);
-                }
-
-
-                _context.Contents.Add(content);
-
                 await _context.SaveChangesAsync();
-                return content.Id;
-            }
+
+                if (command.Content.Tags != null)
+                {
+                    foreach (var t in command.Content.Tags)
+                    {
+                        var tag = _mapper.Map<Tag>(t);
+                        var findTag = await _context.Tags.Where(x => x.Name == tag.Name).FirstOrDefaultAsync();
+                        Console.WriteLine("gol");
+
+                        Console.WriteLine(findTag != null);
+
+                        if (findTag != null)
+                        {
+                            Console.WriteLine(findTag.Id);
+
+                            tag.Id = findTag.Id;
+                        }
+                        else
+                        {
+                            _context.Tags.Add(tag);
+                            await _context.SaveChangesAsync();
+
+                        }
+
+                        var tagContent = new ContentTag
+                        {
+                            IdTag= tag.Id,
+                            IdContent= content.Id
+                        };
+                        content.ContentTags.Add(tagContent);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+
+
+                res.CodStatus = HttpStatusCode.Accepted;
+                res.Success = true;
+                var msg1 = "Content ingresado correctamente";
+                res.Message.Add(msg1);
+                return res;
         }
 
     }
@@ -84,60 +131,60 @@ namespace Application.Features.ContentFeature.Commands
 
 
 
-    public class CreateUserCommand : IRequest<int>
-    {
-        public string Name { get; set; }
-
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string? Description { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime? LasLogin { get; set; }
-        public string? ImgProfile { get; set; }
-        public int CreatorId { get; set; }
-
-        public Creator? Creator { get; set; }
-
-        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+        public class CreateUserCommand : IRequest<int>
         {
-            private readonly ICreadoresUyDbContext _context;
-            public CreateUserCommandHandler(ICreadoresUyDbContext context)
-            {
-                _context = context;
-            }
-            public async Task<int> Handle(CreateUserCommand command, CancellationToken cancellationToken)
-            {
-                var user = new User();
+            public string Name { get; set; }
 
-                user.Name = command.Name;
-                user.Email = command.Email;
-                user.Password = command.Password;
-                user.Description = command.Description;
-                user.Created = command.Created;
-                user.LasLogin = command.LasLogin;
-                user.ImgProfile = command.ImgProfile;
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public string? Description { get; set; }
+            public DateTime Created { get; set; }
+            public DateTime? LasLogin { get; set; }
+            public string? ImgProfile { get; set; }
+            public int CreatorId { get; set; }
 
-                if (command.Creator != null)
+            public Creator? Creator { get; set; }
+
+            public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+            {
+                private readonly ICreadoresUyDbContext _context;
+                public CreateUserCommandHandler(ICreadoresUyDbContext context)
                 {
-                    var creator = _context.Creators.Find(command.Creator.Id);
-                    if (creator == null)
-                    {
-                        user.Creator = command.Creator;
-                    }
-                    else
-                    {
-                        user.CreatorId = command.Creator.Id;
-                    }
+                    _context = context;
                 }
-                if (command.CreatorId != 0)
+                public async Task<int> Handle(CreateUserCommand command, CancellationToken cancellationToken)
                 {
-                    user.CreatorId = command.CreatorId;
+                    var user = new User();
+
+                    user.Name = command.Name;
+                    user.Email = command.Email;
+                    user.Password = command.Password;
+                    user.Description = command.Description;
+                    user.Created = command.Created;
+                    user.LasLogin = command.LasLogin;
+                    user.ImgProfile = command.ImgProfile;
+
+                    if (command.Creator != null)
+                    {
+                        var creator = _context.Creators.Find(command.Creator.Id);
+                        if (creator == null)
+                        {
+                            user.Creator = command.Creator;
+                        }
+                        else
+                        {
+                            user.CreatorId = command.Creator.Id;
+                        }
+                    }
+                    if (command.CreatorId != 0)
+                    {
+                        user.CreatorId = command.CreatorId;
+                    }
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+                    return user.Id;
                 }
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                return user.Id;
             }
         }
-
     }
 }

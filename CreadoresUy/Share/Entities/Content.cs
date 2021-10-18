@@ -24,7 +24,7 @@ namespace Share.Entities
         public string Link {  get; set; }
         public string Img {  get; set; }
 
-        public TpoContent Type { get; set; }
+        public TipoContent Type { get; set; }
 
         public ICollection<ContentTag> ContentTags { get; set; }
 

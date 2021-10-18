@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Share.Enums
 {
-    public enum TpoContent
+    public enum TipoContent
     {
         Text,
         Image,

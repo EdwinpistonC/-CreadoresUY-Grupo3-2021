@@ -15,6 +15,8 @@ namespace Api
             CreateMap<Plan, PlanDto>();
             CreateMap<PlanDto, Plan>();
 
+            CreateMap<Tag, TagDto>();
+            CreateMap<TagDto, Tag>();
 
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();

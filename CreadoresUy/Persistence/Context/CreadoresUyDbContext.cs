@@ -198,7 +198,7 @@ namespace Persistence.Context
                         Title = datas.ContentTiles[contentSelected],
                         Description = datas.ContentTexts[contentSelected],
                         AddedDate=DateTime.Now,
-                        Type=TpoContent.Text
+                        Type=TipoContent.Text
                     };
 
 

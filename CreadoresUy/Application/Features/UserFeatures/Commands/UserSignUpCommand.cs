@@ -7,6 +7,7 @@ using Share.Dtos;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ namespace Application.Features.UserFeatures.Commands
 
                 if (!result.IsValid)
                 {
-                    res.CodStatus = 400;
+                    res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
                     foreach (var error in result.Errors)
                     {
@@ -50,7 +51,7 @@ namespace Application.Features.UserFeatures.Commands
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                res.CodStatus = 201;
+                res.CodStatus = HttpStatusCode.Accepted;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";
                 res.Message.Add(msg1);
