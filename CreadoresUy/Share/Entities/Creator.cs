@@ -26,5 +26,8 @@ namespace Share.Entities
 
         public ICollection<Chat> Chats { get; set; }
 
+        public ICollection<CategoryCreator> CategoryCreators { get; set; }
+
+
     }
 }

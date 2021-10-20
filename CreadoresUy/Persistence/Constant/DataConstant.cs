@@ -16,6 +16,7 @@ namespace Persistence.Constant
         public static int MaxPlans = 10;
         public static int MaxBenefits = 4;
         public static int MaxTags = 5;
+        public static int MaxCategory = 2;
 
 
         public static int MaxContent = 20;
@@ -48,6 +49,29 @@ namespace Persistence.Constant
 
         static readonly string BENEFITS_PATH = Path.Combine(Environment.CurrentDirectory.Replace("Api", "Persistence"), @"Data\", BenefitsFile);
 
+        static readonly public List<String> CategoryName = new List<string>()
+        {
+            "Deporte",
+            "Musica",
+            "Arte",
+            "Dibujo",
+            "Humor",
+            "Arquitectura",
+            "Desarrolador",
+            "Cine"
+        };
+
+        static readonly public List<String> CategoryDescription = new List<string>()
+        {
+            "Para los que le gusta ejercitarce",
+            "Cantar y crear nuevas melodías",
+            "Expreciones Artisticas varias",
+            "Dibujo en todas sus expreciones",
+            "Hacer reír al publico",
+            "Creracion de nuevos lugares",
+            "Desarrollo de videojuegos o de plataformas de aprendizaje",
+            "El septimo arte"
+        };
 
         public List<String> Names = new List<string>();
 
@@ -79,6 +103,7 @@ namespace Persistence.Constant
             "live.com",
             "outlook.com"
         };
+
 
 
         public DataConstant()

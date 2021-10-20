@@ -29,6 +29,7 @@ namespace Persistence.Context
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<UserPlan> UserPlans { get; set; }
+        public DbSet<Content> Category { get; set; }
 
         public CreadoresUyDbContext()
         {
@@ -51,6 +52,7 @@ namespace Persistence.Context
 
             modelBuilder.ApplyConfiguration(new BenefitConfiguration());
 
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
 
             modelBuilder.Entity<UserPlan>().HasKey(up => new { up.IdUser, up.IdPlan });
@@ -64,6 +66,19 @@ namespace Persistence.Context
             .HasOne<Plan>(up => up.Plan)
             .WithMany(p => p.UserPlans)
             .HasForeignKey(up => up.IdPlan);
+
+            modelBuilder.Entity<CategoryCreator>().HasKey(up => new { up.IdCreator, up.IdCategory });
+
+            modelBuilder.Entity<CategoryCreator>()
+            .HasOne<Creator>(cc => cc.Creator)
+            .WithMany(c => c.CategoryCreators)
+            .HasForeignKey(cc => cc.IdCreator);
+
+            modelBuilder.Entity<CategoryCreator>()
+            .HasOne<Category>(cc => cc.Category)
+            .WithMany(c => c.CategoryCreators)
+            .HasForeignKey(cc => cc.IdCategory);
+
 
 
             modelBuilder.Entity<ContentTag>().HasKey(ct => new { ct.IdTag, ct.IdContent });
@@ -134,6 +149,7 @@ namespace Persistence.Context
 
             ICollection<ContentPlan> contentPlans = new Collection<ContentPlan>();
             ICollection<ContentTag> contentTags = new Collection<ContentTag>();
+            ICollection<CategoryCreator> categoryCreators = new Collection<CategoryCreator>();
 
             var datas = new DataConstant();
             Random r = new Random();
@@ -187,7 +203,27 @@ namespace Persistence.Context
                 }
                 int cantContent = r.Next(3, r.Next(3, DataConstant.MaxPlans));
 
+                Dictionary<int, int> controlCategory =
+                new Dictionary<int, int>();
 
+                for (int c = 0; c < DataConstant.MaxCategory; c++)
+                {
+                    int categorySelected=0;
+                    do
+                    {
+                        categorySelected = r.Next(0, DataConstant.CategoryName.Count);
+
+                    }while (controlCategory.ContainsKey(categorySelected));
+
+                    controlCategory.Add(categorySelected, categorySelected);
+
+                    CategoryCreator categoryCreator = new CategoryCreator
+                    {
+                         IdCategory= categorySelected + 1,
+                         IdCreator=i+1
+                    };
+                    categoryCreators.Add(categoryCreator);
+                }
                 for (int c = 0; c < cantContent; c++)
                 {
                     int contentSelected = r.Next(0, datas.ContentTiles.Count);
@@ -255,6 +291,7 @@ namespace Persistence.Context
 
             modelBuilder.Entity<ContentPlan>().HasData(contentPlans);
             modelBuilder.Entity<ContentTag>().HasData(contentTags);
+            modelBuilder.Entity<CategoryCreator>().HasData(categoryCreators);
 
         }
 
