@@ -1,5 +1,6 @@
 ﻿using Application.Interface;
 using MediatR;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Share;
 using Share.Entities;
@@ -9,21 +10,25 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Share.Dtos;
 
 namespace Application.Features.UserFeatures.Queries
 {
 
-    public class GetUserById : IRequest<User>
+    public class GetUserById : IRequest<UserDto>
     {
         public int Id { get; set; }
-        public class GetUserByIdHandler : IRequestHandler<GetUserById, User>
+        public class GetUserByIdHandler : IRequestHandler<GetUserById, UserDto>
         {
             private readonly ICreadoresUyDbContext _context;
-            public GetUserByIdHandler(ICreadoresUyDbContext context)
+            private readonly IMapper _mapper;
+
+            public GetUserByIdHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
-            public async Task<User> Handle(GetUserById query, CancellationToken cancellationToken)
+            public async Task<UserDto> Handle(GetUserById query, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.Where(a => a.Id == query.Id).FirstOrDefaultAsync();
                 if (user.CreatorId != null)
@@ -32,7 +37,8 @@ namespace Application.Features.UserFeatures.Queries
                 }
 
                 if (user == null) return null;
-                return user;
+
+                return _mapper.Map<UserDto>(user);
             }
         }
     }
