@@ -7,6 +7,7 @@ using Share.Dtos;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Application.Features.UserFeatures.Commands
     public class UserSignUpCommand : IRequest<Response<String>>
     {
         public CreateUserDto CreateUserDto { get; set; }
+
         public class UserSignUpCommandHandler : IRequestHandler<UserSignUpCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
@@ -28,14 +30,18 @@ namespace Application.Features.UserFeatures.Commands
             public async Task<Response<String>> Handle(UserSignUpCommand command, CancellationToken cancellationToken)
             {
                 var dto = command.CreateUserDto;
-                Response<string> res = new Response<String>();
-                res.Message = new List<String>();
+
+                Response<string> res = new Response<String>
+                {
+                    Obj = "",
+                    Message = new List<String>()
+                };
                 var validator = new UserSignUpCommandValidator(_context);
                 ValidationResult result = validator.Validate(dto);
 
                 if (!result.IsValid)
                 {
-                    res.CodStatus = 400;
+                    res.CodStatus = (int)HttpStatusCode.BadRequest;
                     res.Success = false;
                     foreach (var error in result.Errors)
                     {
@@ -44,13 +50,13 @@ namespace Application.Features.UserFeatures.Commands
                     }
                     return res;
                 }
-                   
+
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                res.CodStatus = 201;
+                res.CodStatus = (int)HttpStatusCode.Created;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";
                 res.Message.Add(msg1);

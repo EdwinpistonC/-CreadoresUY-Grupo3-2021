@@ -15,6 +15,7 @@ namespace Api
 {
     public class Startup
     {
+        readonly string MyCors = "_MyCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,10 +29,10 @@ namespace Api
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
+                options.AddPolicy(name: MyCors,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://localhost:44332");
+                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 
@@ -74,7 +75,7 @@ namespace Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
             }
 
-            app.UseCors();
+            app.UseCors(MyCors);
 
             app.UseHttpsRedirection();
 
