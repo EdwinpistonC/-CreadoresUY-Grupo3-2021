@@ -20,8 +20,7 @@ namespace Application.Features.UserFeatures.Validators
                 .Must(ExisteCorreo).WithMessage("Ya existe un usuario ingresado en el sistema con el mismo Email");
             
             RuleFor(x => x.Password).NotEmpty().WithMessage("{PropertyName} No puede ser vacio")
-                .MinimumLength(8).WithMessage("{PropertyName} Debe contener menos de 8 caracteres")
-                .MaximumLength(16).WithMessage("{PropertyName} No puede contener mas de 16 caracteres");
+                .MinimumLength(8).WithMessage("{PropertyName} Debe contener al menos de 8 caracteres");
         }
 
         public bool ExisteCorreo(string correo)

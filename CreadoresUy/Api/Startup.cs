@@ -33,7 +33,7 @@ namespace Api
                 options.AddPolicy(name: MyCors,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://localhost:44332").AllowAnyHeader().AllowAnyMethod();
+                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 

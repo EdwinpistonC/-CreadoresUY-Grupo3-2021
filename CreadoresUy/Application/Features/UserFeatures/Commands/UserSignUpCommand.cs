@@ -16,6 +16,7 @@ namespace Application.Features.UserFeatures.Commands
     public class UserSignUpCommand : IRequest<Response<String>>
     {
         public CreateUserDto CreateUserDto { get; set; }
+
         public class UserSignUpCommandHandler : IRequestHandler<UserSignUpCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
@@ -29,8 +30,12 @@ namespace Application.Features.UserFeatures.Commands
             public async Task<Response<String>> Handle(UserSignUpCommand command, CancellationToken cancellationToken)
             {
                 var dto = command.CreateUserDto;
-                Response<string> res = new Response<String>();
-                res.Message = new List<String>();
+
+                Response<string> res = new Response<String>
+                {
+                    Obj = "",
+                    Message = new List<String>()
+                };
                 var validator = new UserSignUpCommandValidator(_context);
                 ValidationResult result = validator.Validate(dto);
 
@@ -45,7 +50,7 @@ namespace Application.Features.UserFeatures.Commands
                     }
                     return res;
                 }
-                   
+
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;
                 _context.Users.Add(user);
