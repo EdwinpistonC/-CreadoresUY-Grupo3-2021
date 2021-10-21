@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -20,13 +21,17 @@ namespace Share.Entities
         public string WelcomeMsg {  get; set; }
         public int Followers {  get; set; }
 
+        public TipoCategory Category1 { get; set; }
+        public TipoCategory Category2 { get; set; }
+
+
+
         // Se referencia al usuario para tener la navegacion dentro de EF 
         public User User {  get; set; }
         public ICollection<Plan> Plans {  get; set; }
 
         public ICollection<Chat> Chats { get; set; }
 
-        public ICollection<CategoryCreator> CategoryCreators { get; set; }
 
 
     }
