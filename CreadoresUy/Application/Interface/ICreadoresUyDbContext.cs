@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Share;
+using Share.Dtos;
 using Share.Entities;
 using System.Threading.Tasks;
 
@@ -24,5 +25,8 @@ namespace Application.Interface
         DbSet<UserPlan> UserPlans { get; set; }
 
         Task<int> SaveChangesAsync();
+        public string GenerateJWT(User user);
+        public User GetById(int id);
+
     }
 }

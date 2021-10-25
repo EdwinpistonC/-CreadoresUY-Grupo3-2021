@@ -21,6 +21,7 @@ namespace Persistence.Configuration
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Email).IsRequired();
+            builder.Property(e => e.IsAdmin).HasDefaultValue(false);
 
 
             //Seed Data
@@ -40,7 +41,12 @@ namespace Persistence.Configuration
             Dictionary<string, string> control =
                 new Dictionary<string, string>();
 
-            for (int i = 0; i < DataConstant.UserQuantity; i++)
+
+
+
+            creadores.Add(
+                    new User { Id = 1, Created = DateTime.Now,  Name = "admin", Password = "admin", Email = "admin" ,IsAdmin=true});
+            for (int i = 1; i < DataConstant.UserQuantity; i++)
             {
 
                 string name;

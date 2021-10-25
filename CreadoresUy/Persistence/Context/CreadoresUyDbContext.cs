@@ -1,21 +1,28 @@
 ﻿using Application.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Persistence.Configuration;
 using Persistence.Constant;
-using Share;
 using Share.Entities;
 using Share.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Persistence.Context
 {
     public class CreadoresUyDbContext : DbContext, ICreadoresUyDbContext
     {
+        static public readonly string KEY= "ThisismySecretKey";
+        static public readonly string ISSUER= "Test.com";
+
         public DbSet<User> Users { get; set; }
         public DbSet<Creator> Creators { get; set; }
         public DbSet<Content> Contents { get; set; }
@@ -31,9 +38,10 @@ namespace Persistence.Context
         public DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<Content> Category { get; set; }
 
+
+
         public CreadoresUyDbContext()
         {
-
         }
         public CreadoresUyDbContext(DbContextOptions<CreadoresUyDbContext> options)
            : base(options)
@@ -132,6 +140,37 @@ namespace Persistence.Context
 
             Seed(modelBuilder);
         }
+        public string GenerateJWT(User user)
+        {
+
+
+            
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            //claim is used to add identity to JWT token
+            var claims = Array.Empty<Claim>();
+
+            claims.Append(new Claim(JwtRegisteredClaimNames.Sub, user.Name));
+            claims.Append(new Claim("roles", "User"));
+            claims.Append(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+            claims.Append(new Claim("Date", DateTime.Now.ToString()));
+            claims.Append(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+            var token = new JwtSecurityToken(ISSUER,
+              ISSUER,
+              claims,    //null original value
+              signingCredentials: credentials);
+            Console.WriteLine(token);
+            var writeToken = new JwtSecurityTokenHandler().WriteToken(token); //return access token
+            Console.WriteLine(writeToken);
+            return writeToken;
+        }
+        public User GetById(int id)
+        {
+            return Users.FirstOrDefault(x => x.Id == id);
+        }
+
 
         public void Seed(ModelBuilder modelBuilder)
         {
@@ -299,5 +338,51 @@ namespace Persistence.Context
         {
             return await base.SaveChangesAsync();
         }
+    }
+}
+public interface IJwtAuth
+{
+    string Authentication(string username, string password);
+}
+
+public class Auth : IJwtAuth
+{
+    private readonly string username = "kirtesh";
+    private readonly string password = "Demo1";
+    private readonly string key;
+    public Auth(string key)
+    {
+        this.key = key;
+    }
+    public string Authentication(string username, string password)
+    {
+        if (!(username.Equals(username) || password.Equals(password)))
+        {
+            return null;
+        }
+
+        // 1. Create Security Token Handler
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        // 2. Create Private Key to Encrypted
+        var tokenKey = Encoding.ASCII.GetBytes(key);
+
+        //3. Create JETdescriptor
+        var tokenDescriptor = new SecurityTokenDescriptor()
+        {
+            Subject = new ClaimsIdentity(
+                new Claim[]
+                {
+                        new Claim(ClaimTypes.Name, username)
+                }),
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+        };
+        //4. Create Token
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        // 5. Return Token from method
+        return tokenHandler.WriteToken(token);
     }
 }
