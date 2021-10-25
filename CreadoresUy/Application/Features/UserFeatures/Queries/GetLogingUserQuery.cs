@@ -44,6 +44,8 @@ namespace Application.Features.UserFeatures.Queries
                 Response<AuthenticateResponse> res = new Response<AuthenticateResponse>();
 
                 if (user == null) {
+                    res.Message = new List<string>();
+
                     res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
                     res.Message.Add("Contraseña o email erroneos");

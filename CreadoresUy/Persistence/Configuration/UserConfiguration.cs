@@ -45,7 +45,7 @@ namespace Persistence.Configuration
 
 
             creadores.Add(
-                    new User { Id = 1, Created = DateTime.Now,  Name = "admin", Password = "admin", Email = "admin" ,IsAdmin=true});
+                    new User { Id = 1, Created = DateTime.Now,  Name = "admin", Password = "admin123", Email = "admin@admin" ,IsAdmin=true});
             for (int i = 1; i < DataConstant.UserQuantity; i++)
             {
 
