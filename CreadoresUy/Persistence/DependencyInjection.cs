@@ -14,7 +14,6 @@ namespace Persistence
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(CreadoresUyDbContext).Assembly.FullName)));
-
             services.AddScoped<ICreadoresUyDbContext>(provider => provider.GetService<CreadoresUyDbContext>());
         }
     }

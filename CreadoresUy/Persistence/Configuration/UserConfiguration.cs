@@ -21,6 +21,7 @@ namespace Persistence.Configuration
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Email).IsRequired();
+            builder.Property(e => e.IsAdmin).HasDefaultValue(false);
 
 
             //Seed Data
@@ -40,7 +41,12 @@ namespace Persistence.Configuration
             Dictionary<string, string> control =
                 new Dictionary<string, string>();
 
-            for (int i = 0; i < DataConstant.UserQuantity; i++)
+
+
+
+
+            int i = 0;
+            for (i = 3; i < DataConstant.UserQuantity; i++)
             {
 
                 string name;
@@ -59,7 +65,7 @@ namespace Persistence.Configuration
 
                 string password = name + surname;
 
-                if (i < DataConstant.CreatorQuantity)
+                if (i < DataConstant.CreatorQuantity-1)
                 {
                     creadores.Add(
                     new User { Id = i + 1,Created= DateTime.Now, CreatorId = i + 1, Name = name+ surname,Password= password, Email = email });
@@ -69,8 +75,16 @@ namespace Persistence.Configuration
                     creadores.Add(
                         new User { Id = i + 1, Created = DateTime.Now, Name = name + surname, Password = password, Email = email });
                 }
-                
+           
             }
+            creadores.Add(
+             new User { Id = i+1, Created = DateTime.Now, Name = "admin", Password = "admin123", Email = "admin@admin", IsAdmin = true });
+
+            creadores.Add(
+                    new User { Id = i+2, Created = DateTime.Now, Name = "usuario", Password = "usuario123", Email = "usuario@usuario" });
+            creadores.Add(
+                    new User { Id = i + 3, Created = DateTime.Now, CreatorId = DataConstant.CreatorQuantity - 1, Name = "creador", Password = "creador123", Email = "creador@creador" });
+
             return creadores;
         }
     }

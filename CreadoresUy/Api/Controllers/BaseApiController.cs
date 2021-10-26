@@ -1,12 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
-    [ApiController]
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [ApiController]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public abstract class BaseApiController : ControllerBase
     {
         private IMediator _mediator;
