@@ -8,9 +8,9 @@ namespace Share.Enums
 {
     public enum TipoCategory
     {
-        Arte, 
-        Comida, 
-        Trading,
-        Música
+        Arte = 1, 
+        Comida = 2, 
+        Trading = 3,
+        Música=4
     }
 }

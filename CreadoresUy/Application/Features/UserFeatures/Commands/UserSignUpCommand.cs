@@ -56,7 +56,6 @@ namespace Application.Features.UserFeatures.Commands
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                res.CodStatus = HttpStatusCode.Accepted;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";
                 res.Message.Add(msg1);
