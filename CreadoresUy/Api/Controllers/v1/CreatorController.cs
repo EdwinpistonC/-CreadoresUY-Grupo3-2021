@@ -9,9 +9,6 @@ namespace Api.Controllers.v1
 
     public class CreatorController : BaseApiController
     {
-         [HttpPost]
-        public async Task<IActionResult> Create(CreateCreatorCommand command)
-
         [HttpPost]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
