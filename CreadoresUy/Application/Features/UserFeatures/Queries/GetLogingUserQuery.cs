@@ -42,9 +42,9 @@ namespace Application.Features.UserFeatures.Queries
                 var user = await _context.Users.Where(x =>  (x.Email == u.Email  &&  x.Password == u.Password)).FirstOrDefaultAsync();
 
                 Response<AuthenticateResponse> res = new Response<AuthenticateResponse>();
+                res.Message = new List<string>();
 
                 if (user == null) {
-                    res.Message = new List<string>();
 
                     res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
@@ -57,6 +57,7 @@ namespace Application.Features.UserFeatures.Queries
                 res.CodStatus = HttpStatusCode.OK;
                 res.Success = true;
                 res.Obj = new AuthenticateResponse(user, token); ;
+                res.Message.Add("Logueado");
 
 
                 return res;

@@ -22,11 +22,47 @@ namespace WebApi.Models
             UserId = user.Id;
             Name = user.Name;
             Email = user.Email;
-            Description = user.Description;
-            Created = user.Created;
-            LasLogin = user.LasLogin;
-            ImgProfile = user.ImgProfile;
-            CreatorId = user.CreatorId;
+            if (user.Description == null)
+            {
+                Description = "";
+            }
+            else
+            {
+                Description = user.Description;
+            }
+            if (user.Created == null)
+            {
+                Created = DateTime.Now;
+            }
+            else
+            {
+                Created = user.Created;
+            }
+            if (user.LasLogin == null)
+            {
+                LasLogin = DateTime.Now;
+            }
+            else
+            {
+                LasLogin = user.LasLogin;
+            }
+            if (user.ImgProfile == null)
+            {
+                ImgProfile = "";
+            }
+            else
+            {
+                ImgProfile = user.ImgProfile;
+            }
+            if (user.ImgProfile == null)
+            {
+                CreatorId = 0;
+            }
+            else
+            {
+                CreatorId = user.CreatorId;
+            }
+
             Token = token;
             IsAdmin = (bool)user.IsAdmin;
         }
