@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\AdminFeatures\Queries\" />
     <Folder Include="Features\ContentFeature\Queries\" />
   </ItemGroup>
 
