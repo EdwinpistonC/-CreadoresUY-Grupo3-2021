@@ -1,4 +1,5 @@
 ﻿using Application.Features.AdminFeatures.Commands;
+using Application.Features.AdminFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,13 @@ namespace Api.Controllers.v1
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdminCommand { Id = id }));
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await Mediator.Send(new GetAllAdminQuery { }));
         }
     }
 }

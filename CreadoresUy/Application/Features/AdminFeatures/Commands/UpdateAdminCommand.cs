@@ -1,15 +1,11 @@
-﻿using Application.Features.UserFeatures.Validators;
-using Application.Interface;
-using FluentValidation.Results;
+﻿using Application.Interface;
 using MediatR;
-using Share;
 using Share.Dtos;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +24,7 @@ namespace Application.Features.AdminFeatures.Commands
         public string? ImgProfile { get; set; }
         public int CreatorId { get; set; }
 
+        public Creator? Creator { get; set; }
 
         public class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, Response<String>>
         {
@@ -38,56 +35,47 @@ namespace Application.Features.AdminFeatures.Commands
             }
             public async Task<Response<String>> Handle(UpdateAdminCommand command, CancellationToken cancellationToken)
             {
-                var user = _context.Users.Where(a => (a.Id == command.Id && a.IsAdmin == true)).FirstOrDefault();
-
+                var user = _context.Users.Where(a => a.Id == command.Id).FirstOrDefault();
                 Response<string> res = new Response<String>
                 {
                     Obj = "",
                     Message = new List<String>()
                 };
 
-
+                var msg = "";
 
                 if (user == null)
                 {
-                    res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
-                    res.Message.Add("Id de usuario no pertenece a un admin");
+                    res.CodStatus = HttpStatusCode.BadRequest;
+                    msg = "Id no pertenece a un admin";
+                    res.Message.Add(msg);
                     return res;
+
                 }
                 else
 
                 {
-                    var validator = new AdminCommandValidator(_context);
-
-                    ValidationResult result = validator.Validate(user);
-
-                    if (!result.IsValid)
-                    {
-                        res.CodStatus = HttpStatusCode.BadRequest;
-                        res.Success = false;
-                        foreach (var error in result.Errors)
-                        {
-                            var msg = error.ErrorMessage;
-                            res.Message.Add(msg);
-                        }
-                        return res;
-                    }
                     user.Name = command.Name;
                     user.Email = command.Email;
                     user.Password = command.Password;
                     user.Description = command.Description;
+                    user.Created = command.Created;
+                    user.LasLogin = command.LasLogin;
                     user.ImgProfile = command.ImgProfile;
+                    if (command.Creator != null)
+                    {
+                        user.Creator = command.Creator;
+                    }
                     if (command.CreatorId != 0)
                     {
                         user.CreatorId = command.CreatorId;
                     }
                     await _context.SaveChangesAsync();
-
                     res.Success = true;
                     res.CodStatus = HttpStatusCode.OK;
-                    var msg1 = "Admin modificado";
-                    res.Message.Add(msg1);
+                    msg = "Admin eliminado";
+                    res.Message.Add(msg);
                     return res;
                 }
             }
