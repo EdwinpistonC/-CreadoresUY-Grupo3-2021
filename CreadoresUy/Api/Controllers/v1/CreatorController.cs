@@ -1,5 +1,4 @@
-﻿using Application.Features.AdminFeatures.Commands;
-using Application.Features.CreatorFeatures.Commands;
+﻿using Application.Features.CreatorFeatures.Commands;
 using Application.Features.CreatorFeatures.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -38,7 +37,12 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await Mediator.Send(new GetAllCreatorQuery { }));
+        }
 
 
         /* TRAE los planes asociados a un creador

@@ -3,7 +3,7 @@ using FluentValidation;
 using Share.Dtos;
 using Share.Entities;
 using System.Linq;
-namespace Application.Features.UserFeatures.Validators
+namespace Application.Features.AdminFeatures.Validators
 {
     public class AdminCommandValidator : AbstractValidator<User>
     {

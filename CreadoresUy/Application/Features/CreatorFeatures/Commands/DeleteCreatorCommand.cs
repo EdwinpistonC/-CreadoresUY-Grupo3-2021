@@ -12,7 +12,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdminFeatures.Commands
+namespace Application.Features.CreatorFeatures.Commands
 {
 
     public class DeleteCreatorCommand : IRequest<Response<String>>
