@@ -1,23 +1,24 @@
-﻿using Application.Interface;
+﻿using Application.Features.UserFeatures.Validators;
+using Application.Interface;
 using AutoMapper;
+using FluentValidation.Results;
 using MediatR;
 using Share;
 using Share.Dtos;
 using Share.Entities;
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.AdminFeatures.Commands
 {
-    public class CreateAdminCommand :IRequest<int>
+    public class CreateAdminCommand : IRequest<Response<String>>
     {
-        public UserDto User {  get; set; }
-        public int CreatorId { get; set; }
+        public CreateUserDto CreateUserDto { get; set; }
 
-        public Creator? Creator { get; set; }
-
-        public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, int>
+        public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
@@ -27,30 +28,43 @@ namespace Application.Features.AdminFeatures.Commands
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<int> Handle(CreateAdminCommand command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(CreateAdminCommand command, CancellationToken cancellationToken)
             {
-                var user = _mapper.Map<User>(command.User);
-                if (command.Creator != null)
-                {
-                    var creator = _context.Creators.Find(command.Creator.Id);
-                    if (creator == null)
-                    {
-                        user.Creator = command.Creator;
-                    }
-                    else
-                    {
-                        user.CreatorId = command.Creator.Id;
-                    }
-                }
-                if (command.CreatorId != 0)
-                {
-                    user.CreatorId = command.CreatorId;
-                }
-                user.IsAdmin = true;
+                var dto = command.CreateUserDto;
 
+                Response<string> res = new Response<String>
+                {
+                    Obj = "",
+                    Message = new List<String>()
+                };
+                var validator = new UserSignUpCommandValidator(_context);
+                ValidationResult result = validator.Validate(dto);
+
+                if (!result.IsValid)
+                {
+                    res.CodStatus = HttpStatusCode.BadRequest;
+                    res.Success = false;
+                    foreach (var error in result.Errors)
+                    {
+                        var msg = error.ErrorMessage;
+                        res.Message.Add(msg);
+                    }
+                    return res;
+                }
+
+                var user = _mapper.Map<User>(dto);
+                user.Created = DateTime.Now;
+                user.IsAdmin = true;
+                Console.WriteLine(user.IsAdmin);
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                return user.Id;            }
+
+                res.Success = true;
+                res.CodStatus = HttpStatusCode.OK;
+                var msg1 = "Admin ingresado correctamente";
+                res.Message.Add(msg1);
+                return res;
+            }
         }
 
     }
