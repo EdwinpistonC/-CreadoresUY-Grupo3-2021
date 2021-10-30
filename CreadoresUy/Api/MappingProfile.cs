@@ -24,6 +24,9 @@ namespace Api
             CreateMap<User, LoginDto>();
             CreateMap<LoginDto, User>();
 
+            CreateMap<Creator, CreatorRawDto>();
+            CreateMap<CreatorRawDto, Creator>();
+
             CreateMap<User, AdminDto>();
             CreateMap<AdminDto, User>();
 

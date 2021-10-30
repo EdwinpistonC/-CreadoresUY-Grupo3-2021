@@ -1,4 +1,5 @@
-﻿using Application.Features.CreatorFeatures.Commands;
+﻿using Application.Features.AdminFeatures.Commands;
+using Application.Features.CreatorFeatures.Commands;
 using Application.Features.CreatorFeatures.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -14,6 +15,32 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(command));
         }
+
+
+        [HttpPost]
+        [Route("Basic")]
+        public async Task<ActionResult<CreateCreatorCommand>> CreateCreator(CreateCreatorCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPatch]
+        [Route("Update")]
+        public async Task<ActionResult<UpdateCreatorCommand>> Update(UpdateCreatorCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<ActionResult<DeleteCreatorCommand>> Delete(DeleteCreatorCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+
+
+
         /* TRAE los planes asociados a un creador
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlansByIdUser(int id)
