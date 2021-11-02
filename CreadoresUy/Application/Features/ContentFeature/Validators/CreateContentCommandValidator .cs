@@ -3,7 +3,7 @@ using FluentValidation;
 using Share.Dtos;
 using Share.Enums;
 using System.Linq;
-namespace Application.Features.UserFeatures.Validators
+namespace Application.Features.ContentFeatures.Validators
 {
     public class CreateContentCommandValidator : AbstractValidator<ContentDto>
     {

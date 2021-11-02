@@ -54,7 +54,7 @@ namespace WebApi.Models
             {
                 ImgProfile = user.ImgProfile;
             }
-            if (user.ImgProfile == null)
+            if (user.CreatorId == null)
             {
                 CreatorId = 0;
             }

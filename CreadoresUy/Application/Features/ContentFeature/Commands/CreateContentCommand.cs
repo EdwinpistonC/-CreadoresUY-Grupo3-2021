@@ -1,4 +1,5 @@
-﻿using Application.Features.UserFeatures.Validators;
+﻿using Application.Features.ContentFeatures.Validators;
+using Application.Features.UserFeatures.Validators;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
@@ -10,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
