@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Application.Features.CreatorFeatures.Validators
+namespace Application.Features.Validators
 {
     public class CreatorSignUpCommandValidator : AbstractValidator<CreatorDto>
     {

@@ -2,7 +2,7 @@
 using FluentValidation;
 using Share.Dtos;
 using System.Linq;
-namespace Application.Features.UserFeatures.Validators
+namespace Application.Features.Validators
 {
     public class UserSignUpCommandValidator : AbstractValidator<CreateUserDto>
     {
