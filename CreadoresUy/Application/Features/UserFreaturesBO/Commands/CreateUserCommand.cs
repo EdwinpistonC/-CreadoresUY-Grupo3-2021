@@ -1,4 +1,4 @@
-﻿using Application.Features.UserFeatures.Validators;
+﻿using Application.Features.Validators;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
@@ -11,23 +11,23 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFeatures.Commands
+namespace Application.Features.UserFreaturesBO.Commands
 {
-    public class UserSignUpCommand : IRequest<Response<String>>
+    public class CreateUserCommand : IRequest<Response<String>>
     {
         public CreateUserDto CreateUserDto { get; set; }
-
-        public class UserSignUpCommandHandler : IRequestHandler<UserSignUpCommand, Response<String>>
+        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public UserSignUpCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public CreateUserCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Response<String>> Handle(UserSignUpCommand command, CancellationToken cancellationToken)
+
+            public async Task<Response<String>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
             {
                 var dto = command.CreateUserDto;
 
@@ -36,7 +36,7 @@ namespace Application.Features.UserFeatures.Commands
                     Obj = "",
                     Message = new List<String>()
                 };
-                var validator = new UserSignUpCommandValidator(_context);
+                var validator = new UserSignUpValidator(_context);
                 ValidationResult result = validator.Validate(dto);
 
                 if (!result.IsValid)
@@ -62,6 +62,6 @@ namespace Application.Features.UserFeatures.Commands
                 return res;
             }
         }
-
     }
 }
+
