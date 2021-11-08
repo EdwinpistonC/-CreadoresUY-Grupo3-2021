@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Share\Share.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\ContentFeature\Queries\" />
-  </ItemGroup>
-
 </Project>
