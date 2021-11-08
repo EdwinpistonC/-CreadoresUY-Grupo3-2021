@@ -1,5 +1,7 @@
 ﻿using Application.Features.ContentFeature.Commands;
+using Application.Features.CreatorFeatures.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -13,6 +15,13 @@ namespace Api.Controllers.v1
         public async Task<IActionResult> Create(CreateContentCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Feed(int IdUser)
+        {
+            return Ok(await Mediator.Send(new GetFeedQuery { IdUser=IdUser}));
         }
     }
 }
