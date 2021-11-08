@@ -67,7 +67,7 @@ namespace Application.Features.CreatorFeatures.Commands
                 }
                 if (creatorDto.Category1 != null) creator.Category1 = creatorDto.Category1;
                 if (creatorDto.Category2 != null) creator.Category2 = creatorDto.Category2;
-                if (creatorDto.CreatorDescription != null) creator.CreatorDescription = creatorDto.CreatorDescription;
+                if (creatorDto.CreatorDescription != null) creator.ContentDescription = creatorDto.CreatorDescription;
                 if (creatorDto.CreatorName != null) creator.CreatorName = creatorDto.CreatorName;
                 if (creatorDto.WelcomeMsg != null) creator.WelcomeMsg = creatorDto.WelcomeMsg;
                 if (creatorDto.YoutubeLink != null) creator.YoutubeLink = creatorDto.YoutubeLink;
