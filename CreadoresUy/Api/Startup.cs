@@ -1,4 +1,6 @@
 using Application;
+using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.Context;
+using Persistence.Storage;
 using System.Text;
 
 namespace Api
@@ -29,7 +33,20 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+             *  services.Configure<Conexion>(Configuration.GetSection("Conexion"));
 
+            services.AddControllers();
+
+            services.AddSingleton<IConexion>
+                    (d => d.GetRequiredService<IOptions<Conexion>>().Value);
+             */
+
+            services.Configure<FirebaseSotrageManager>(Configuration.GetSection("Storage"));
+            services.AddSingleton<IFirebaseStorageManager>
+                   (d => d.GetRequiredService<IOptions<FirebaseSotrageManager>>().Value);
+
+            services.AddSingleton<ImagePostService>();
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyCors,

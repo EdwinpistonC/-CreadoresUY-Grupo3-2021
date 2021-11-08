@@ -11,10 +11,14 @@ namespace Share.Dtos
         public TipoCategory Category2 { get; set; }
         public string CreatorName { get; set; } //Datos creador
         public string NickName { get; set; }
-        public string CreatorDescription { get; set; }
+        public string ContentDescription { get; set; }
+        public string Biography {  get; set;}  
         public string YoutubeLink { get; set; }
-        public string WelcomeMsg { get; set; }
-        public ICollection<BasePlanDto> Plans { get; set; } 
+        public string CreatorImage {  get; set; }
+        public string CoverImage { get; set; }
+
+        //FALTA ESPECIFICAR LA INFO BANCARIA
+
 
     }
 }

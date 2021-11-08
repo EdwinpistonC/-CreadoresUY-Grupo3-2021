@@ -1,5 +1,4 @@
-﻿using Application.Features.ContentFeatures.Validators;
-using Application.Features.UserFeatures.Validators;
+﻿using Application.Features.Validators;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;

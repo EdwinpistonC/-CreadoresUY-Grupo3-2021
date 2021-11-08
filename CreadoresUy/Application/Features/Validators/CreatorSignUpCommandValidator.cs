@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Application.Features.CreatorFeatures.Validators
+namespace Application.Features.Validators
 {
     public class CreatorSignUpCommandValidator : AbstractValidator<CreatorDto>
     {
@@ -22,10 +22,12 @@ namespace Application.Features.CreatorFeatures.Validators
             RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
             RuleFor(x => x.CreatorName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.NickName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.CreatorDescription).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.Plans).NotEmpty().WithMessage("{PropertyName} es un campo requerido")
-            .Must(MinimosValidos).WithMessage("{PropertyName} debe contener al menos 3 planes");
+            RuleFor(x => x.ContentDescription).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
+            RuleFor(x => x.Biography).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.YoutubeLink).NotEmpty().WithMessage("{PropertyName} es un campo requerido");
+            RuleFor(x => x.CreatorImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
+            RuleFor(x => x.CoverImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
+            
         }
 
         public bool IdValido(int id) 
@@ -58,15 +60,6 @@ namespace Application.Features.CreatorFeatures.Validators
                 return true;
             }
             return false;
-        }
-
-        private bool MinimosValidos(ICollection<BasePlanDto> plans)
-        {
-            if (plans.Count() < 3)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }
