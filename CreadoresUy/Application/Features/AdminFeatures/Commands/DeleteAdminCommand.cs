@@ -27,6 +27,8 @@ namespace Application.Features.AdminFeatures.Commands
             public async Task<Response<String>> Handle(DeleteAdminCommand command, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.Where(a => (a.Id == command.Id && a.IsAdmin== true)).FirstOrDefaultAsync();
+
+
                 Response<string> res = new Response<String>
                 {
                     Obj = "",

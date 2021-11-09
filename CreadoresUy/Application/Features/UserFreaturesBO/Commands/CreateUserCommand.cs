@@ -3,7 +3,6 @@ using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
-using Share;
 using Share.Dtos;
 using Share.Entities;
 using System;
@@ -12,23 +11,23 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdminFeatures.Commands
+namespace Application.Features.UserFreaturesBO.Commands
 {
-    public class CreateAdminCommand : IRequest<Response<String>>
+    public class CreateUserCommand : IRequest<Response<String>>
     {
         public CreateUserDto CreateUserDto { get; set; }
-
-        public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Response<String>>
+        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public CreateAdminCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public CreateUserCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Response<String>> Handle(CreateAdminCommand command, CancellationToken cancellationToken)
+
+            public async Task<Response<String>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
             {
                 var dto = command.CreateUserDto;
 
@@ -37,7 +36,7 @@ namespace Application.Features.AdminFeatures.Commands
                     Obj = "",
                     Message = new List<String>()
                 };
-                var validator = new UserSignUpCommandValidator(_context);
+                var validator = new UserSignUpValidator(_context);
                 ValidationResult result = validator.Validate(dto);
 
                 if (!result.IsValid)
@@ -54,18 +53,15 @@ namespace Application.Features.AdminFeatures.Commands
 
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;
-                user.IsAdmin = true;
-                Console.WriteLine(user.IsAdmin);
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-
+                res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;
-                res.CodStatus = HttpStatusCode.OK;
-                var msg1 = "Admin ingresado correctamente";
+                var msg1 = "Usuario ingresado correctamente";
                 res.Message.Add(msg1);
                 return res;
             }
         }
-
     }
 }
+

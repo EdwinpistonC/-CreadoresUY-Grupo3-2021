@@ -21,8 +21,9 @@ namespace Persistence.Configuration
             builder.ToTable("Creator");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.CreatorName).IsRequired();
-            builder.Property(e => e.NickName).IsRequired();
-            builder.Property(e => e.CreatorDescription).IsRequired();
+            builder.Property(e => e.NickName).IsRequired().HasMaxLength(450);
+            builder.Property(e => e.ContentDescription).IsRequired();
+            builder.HasIndex(e => e.CreatorName).IsUnique();
 
             builder.HasOne<User>(c => c.User)
             .WithOne(u => u.Creator)
@@ -48,7 +49,7 @@ namespace Persistence.Configuration
             for (int i = 0; i < DataConstant.CreatorQuantity; i++)
             {
                 var name = datas.Names[r.Next(0, datas.Names.Count)];
-                Creator creator = new Creator { Id = i + 1, CreatorDescription = name, NickName = name, CreatorName = String.Concat(name, "Creator") };
+                Creator creator = new Creator { Id = i + 1, ContentDescription = name, NickName = name, CreatorName = String.Concat(name, "Creator") };
 
                 int cantPlan = r.Next(1, r.Next(3, DataConstant.MaxPlans));
                 ICollection<Plan> plans  = new Collection<Plan>();

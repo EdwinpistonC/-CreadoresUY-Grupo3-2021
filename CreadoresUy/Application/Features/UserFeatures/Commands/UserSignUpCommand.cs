@@ -1,4 +1,4 @@
-﻿using Application.Features.UserFeatures.Validators;
+﻿using Application.Features.Validators;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
@@ -55,7 +55,7 @@ namespace Application.Features.UserFeatures.Commands
                 user.Created = DateTime.Now;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-
+                res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";
                 res.Message.Add(msg1);

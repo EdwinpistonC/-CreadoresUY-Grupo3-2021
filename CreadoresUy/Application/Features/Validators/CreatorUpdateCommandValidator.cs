@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Features.CreatorFeatures.Validators
+namespace Application.Features.Validators
 {
     public class CreatorUpdateCommandValidator : AbstractValidator<CreatorRawDto>
     {

@@ -76,7 +76,6 @@ namespace Persistence.Context
 
 
 
-
             modelBuilder.Entity<ContentTag>().HasKey(ct => new { ct.IdTag, ct.IdContent });
 
             modelBuilder.Entity<ContentTag>()
@@ -187,11 +186,11 @@ namespace Persistence.Context
 
             for (int i = 0; i < DataConstant.CreatorQuantity; i++)
             {
-                var name = datas.Names[r.Next(0, datas.Names.Count)];
+                var name = datas.Names[r.Next(0, datas.Names.Count)]+i;
                 Creator creator =
                     new Creator {
                         Id = i + 1,
-                        CreatorDescription = name,
+                        ContentDescription = name,
                         NickName = name,
                         CreatorName = String.Concat(name, "Creator"),
                         Category1 = (TipoCategory)r.Next(0, 4),

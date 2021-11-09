@@ -1,4 +1,4 @@
-﻿using Application.Features.CreatorFeatures.Validators;
+﻿using Application.Features.Validators;
 using Application.Interface;
 using AutoMapper;
 using FluentValidation.Results;
@@ -54,12 +54,14 @@ namespace Application.Features.CreatorFeatures.Commands
                 var cre = new Creator
                 {
                     CreatorName = dto.CreatorName,
-                    CreatorCreated = DateTime.Today,
-                    CreatorDescription = dto.CreatorDescription,
                     NickName = dto.NickName,
+                    CreatorCreated = DateTime.Today,
+                    ContentDescription = dto.ContentDescription,
+                    //CreatorBiography = dto.Biography,
+                    //CreatorImage = dto.CreatorImage,
+                    //CoverImage = dto.CoverImage,
                     Plans = new List<Plan>(),
-                    YoutubeLink = dto.YoutubeLink,
-                    WelcomeMsg = dto.WelcomeMsg
+                    YoutubeLink = dto.YoutubeLink
                 };
 
                 if (dto.Category1 != 0) cre.Category1 = dto.Category1;
@@ -76,15 +78,6 @@ namespace Application.Features.CreatorFeatures.Commands
                 _context.Creators.Add(cre);
                 await _context.SaveChangesAsync();
                 u.CreatorId = cre.Id;
-                foreach (var item in dto.Plans)
-                {
-                    var plan = _mapper.Map<Plan>(item);
-                    plan.CreatorId = cre.Id;
-                    _context.Plans.Add(plan);
-                    cre.Plans.Add(plan);
-                    
-                }
-
                 await _context.SaveChangesAsync();
                 res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;
