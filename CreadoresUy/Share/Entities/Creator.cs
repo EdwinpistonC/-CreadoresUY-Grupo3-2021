@@ -16,20 +16,15 @@ namespace Share.Entities
     public class Creator : BaseEntity
     {
         public string CreatorName {  get; set; }
-        
         public string NickName {  get; set; }
-
         public string ContentDescription { get; set; }
         public string Biography { get; set; }
         public string YoutubeLink { get; set; }
         public string CreatorImage { get; set; }
         public string CoverImage { get; set; }
-
         public DateTime CreatorCreated {  get; set; }
-
         public string WelcomeMsg {  get; set; }
         public int Followers {  get; set; }
-
         public TipoCategory Category1 { get; set; }
         public TipoCategory Category2 { get; set; }
 

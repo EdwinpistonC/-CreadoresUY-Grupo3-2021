@@ -1,5 +1,6 @@
 ﻿using Application.Features.Validators;
 using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
@@ -21,11 +22,13 @@ namespace Application.Features.CreatorFeatures.Commands
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
+            private readonly ImagePostService _imagePost;
 
-            public CreatorSignUpCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public CreatorSignUpCommandHandler(ICreadoresUyDbContext context, IMapper mapper, ImagePostService imagePost)
             {
                 _context = context;
                 _mapper = mapper;
+                _imagePost = imagePost;
             }
 
             public async Task<Response<String>> Handle(CreatorSignUpCommand command, CancellationToken cancellationToken)
@@ -51,15 +54,20 @@ namespace Application.Features.CreatorFeatures.Commands
                     return res;
                 }
 
+                ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
+                ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
+                var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
+                var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
+
                 var cre = new Creator
                 {
                     CreatorName = dto.CreatorName,
                     NickName = dto.NickName,
                     CreatorCreated = DateTime.Today,
                     ContentDescription = dto.ContentDescription,
-                    //CreatorBiography = dto.Biography,
-                    //CreatorImage = dto.CreatorImage,
-                    //CoverImage = dto.CoverImage,
+                    Biography = dto.Biography,
+                    CreatorImage = urlCreatorImg,
+                    CoverImage = urlCreatorCoverImg,
                     Plans = new List<Plan>(),
                     YoutubeLink = dto.YoutubeLink
                 };
