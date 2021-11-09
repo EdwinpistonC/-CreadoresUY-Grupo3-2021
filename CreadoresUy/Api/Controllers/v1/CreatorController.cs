@@ -44,30 +44,6 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetAllCreatorQuery { }));
         }
 
-
-        /* TRAE los planes asociados a un creador
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPlansByIdUser(int id)
-        {
-            return Ok(await Mediator.Send(new GetPlansByIdCreatorQuery { IdCreator = id }));
-        }
-        
-        [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateUserCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            return Ok(await Mediator.Send(new DeleteUserCommand { Id = id }));
-        }
-
-        */
     }
 
 

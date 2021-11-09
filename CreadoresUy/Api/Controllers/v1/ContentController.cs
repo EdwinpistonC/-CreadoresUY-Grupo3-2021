@@ -19,9 +19,9 @@ namespace Api.Controllers.v1
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<IActionResult> Feed(int IdUser)
+        public async Task<IActionResult> Feed(int IdUser,int Page,int ContentPerPage)
         {
-            return Ok(await Mediator.Send(new GetFeedQuery { IdUser=IdUser}));
+            return Ok(await Mediator.Send(new GetFeedQuery { IdUser=IdUser,Page=Page, ContentPerPage = ContentPerPage }));
         }
     }
 }
