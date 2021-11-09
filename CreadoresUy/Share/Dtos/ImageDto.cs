@@ -7,6 +7,13 @@ namespace Share.Dtos
         public string Image {  get; set; }
         public string ImageName {  get; set; }
         public string FolderName {  get; set; }
-        //public Stream stream {  get; set; }
+
+        public ImageDto(string image, string imageName, string folderName)
+        {
+            Image = image;
+            ImageName = imageName;
+            FolderName = folderName;
+        }
     }
+
 }

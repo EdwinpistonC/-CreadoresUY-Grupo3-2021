@@ -44,6 +44,12 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetAllCreatorQuery { }));
         }
 
+        [HttpGet]
+        [Route("GetBool")]
+        public async Task<IActionResult> IsValidNickname(string nickname)
+        {
+            return Ok(await Mediator.Send(new IsValidNicknameQuery { Nickname = nickname}));
+        }
 
         /* TRAE los planes asociados a un creador
         [HttpGet("{id}")]

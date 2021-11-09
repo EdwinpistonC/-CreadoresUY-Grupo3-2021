@@ -21,7 +21,8 @@ namespace Application.Features.Validators
             RuleFor(x => x.Category1).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
             RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
             RuleFor(x => x.CreatorName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.NickName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
+            RuleFor(x => x.NickName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio")
+                .Must(NickNameValido).WithMessage("{PropertyName} No valido, ya existe un creador registrado");
             RuleFor(x => x.ContentDescription).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.Biography).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.YoutubeLink).NotEmpty().WithMessage("{PropertyName} es un campo requerido");
@@ -56,6 +57,16 @@ namespace Application.Features.Validators
         public bool CategoriaValida(TipoCategory nam)
         {
             if (((int)nam)==0 || nam.ToString() == "Arte" || nam.ToString() == "Comida" || nam.ToString() == "Trading" || nam.ToString() == "Música")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool NickNameValido(string nickname)
+        {
+            var c = _context.Creators.Where(c => c.NickName == nickname).FirstOrDefault();
+            if (c == null)
             {
                 return true;
             }
