@@ -130,19 +130,32 @@ namespace Persistence.Context
         public string GenerateJWT(User user)
         {
 
+            String signingKey = null;
 
-            
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             //claim is used to add identity to JWT token
             var claims = Array.Empty<Claim>();
+            var rol = "user";
+            if (user.CreatorId != null)
+            {
+                rol = "creator";
+            }
+
+            if (user.IsAdmin == true){
+                rol="admin";
+            }
+            
 
             claims.Append(new Claim(JwtRegisteredClaimNames.Sub, user.Name));
-            claims.Append(new Claim("roles", "User"));
+            claims.Append(new Claim(ClaimTypes.Role, rol));
             claims.Append(new Claim(JwtRegisteredClaimNames.Email, user.Email));
             claims.Append(new Claim("Date", DateTime.Now.ToString()));
             claims.Append(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(ISSUER,
               ISSUER,

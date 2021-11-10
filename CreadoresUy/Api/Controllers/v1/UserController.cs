@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Share.Dtos;
 using System.Threading.Tasks;
+using WebApi.Models;
 
 namespace Api.Controllers.v1
 {
@@ -76,6 +77,8 @@ namespace Api.Controllers.v1
                 new GetLogingUserQuery { User = new LoginDto() { Email = email, Password = password } }));
 
         }
+
+
     }
 
 }

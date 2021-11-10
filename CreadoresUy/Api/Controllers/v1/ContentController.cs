@@ -11,6 +11,7 @@ namespace Api.Controllers.v1
     public class ContentController : BaseApiController
     {
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(CreateContentCommand command)
         {
             return Ok(await Mediator.Send(command));

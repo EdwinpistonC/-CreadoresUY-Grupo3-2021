@@ -92,6 +92,9 @@ namespace Api
                 });
             });
 
+            // in ConfigureServices()
+
+            // config shown  for reference values
 
             services.AddAuthentication(option =>
             {
@@ -100,14 +103,15 @@ namespace Api
 
             }).AddJwtBearer(options =>
             {
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
+                    ValidateIssuer =true,
+                    ValidIssuer = "https://mysite.com",
                     ValidateAudience = true,
+                    ValidAudience = "https://mysite.com",
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("12345@43212345678")) //Configuration["JwtToken:SecretKey"]
                 };
             });
 
@@ -148,6 +152,8 @@ namespace Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseStatusCodePages();
+
 
             // Swagger Configuration in API
             app.UseSwagger();

@@ -28,8 +28,6 @@ namespace Share.Dtos
         public TipoContent Type { get; set; }
 
 
-        public int IdUser { get; set; }
-        public User User { get; set; }
 
         public ICollection<int> Plans { get; set; }
         public ICollection<TagDto> Tags { get; set; }

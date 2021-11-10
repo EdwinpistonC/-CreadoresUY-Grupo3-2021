@@ -36,8 +36,9 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new DeleteAdminCommand { Id = id }));
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAll")]
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllAdminQuery { }));
