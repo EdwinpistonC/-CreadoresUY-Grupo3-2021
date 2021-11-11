@@ -13,5 +13,14 @@ namespace Share.Dtos
         public string? Description { get; set; }
         public DateTime Created { get; set; }
         public string? ImgProfile { get; set; }
+
+        public void FixIfIsNull()
+        {
+            if (Name == null) Name = "";
+            if (Email == null) Email = "";
+            if (Description == null) Description = "";
+            if (Created == DateTime.MinValue) Created = DateTime.Now;
+            if (ImgProfile == null) ImgProfile = "";
+        }
     }
 }

@@ -37,8 +37,9 @@ namespace Application.Features.UserFeatures.Queries
                 }
 
                 if (user == null) return null;
-
-                return _mapper.Map<UserDto>(user);
+                var dto = _mapper.Map<UserDto>(user);
+                dto.FixIfIsNull();
+                return dto;
             }
         }
     }
