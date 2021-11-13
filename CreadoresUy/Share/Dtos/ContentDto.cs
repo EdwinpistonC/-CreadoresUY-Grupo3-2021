@@ -39,6 +39,7 @@ namespace Share.Dtos
         }
         public void NoNulls()
         {
+            if (NickName == null) NickName = "";
             if (Title == null)
             {
                 Title = "";

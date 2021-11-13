@@ -51,6 +51,15 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new IsValidNicknameQuery { Nickname = nickname}));
         }
 
+        [HttpGet]
+        [Route("GetProfile")]
+        public async Task<IActionResult> GetCreatorProfile(int id)
+        {
+            return Ok(await Mediator.Send(new GetCreatorProfile { IdCreator = id }));
+        }
+
+        //GetCreatorProfile
+
         /* TRAE los planes asociados a un creador
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlansByIdUser(int id)
