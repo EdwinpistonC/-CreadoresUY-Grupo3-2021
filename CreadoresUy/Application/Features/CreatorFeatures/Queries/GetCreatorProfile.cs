@@ -39,6 +39,9 @@ namespace Application.Features.CreatorFeatures.Queries
                     dtocre.CreatorImage = cre.CreatorImage;
                     dtocre.CoverImage = cre.CoverImage;
                     dtocre.CantSeguidores = cre.Followers;
+                    dtocre.Biography = cre.Biography;
+                    dtocre.ContentDescription = cre.ContentDescription;
+                    dtocre.YoutubeLink = cre.YoutubeLink;
                     int cantSubs = 0;
                     List<ContentDto> contens = new();
                     foreach(var pl in cre.Plans)
@@ -69,6 +72,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
                 else
                 {
+                    dtocre.FixIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.BadRequest;
                     resp.Success = false;

@@ -13,6 +13,9 @@ namespace Share.Dtos
         public string CoverImage { get; set; }
         public int CantSeguidores { get; set; }
         public int CantSubscriptores { get; set; }
+        public string ContentDescription { get; set; }
+        public string Biography { get; set; }
+        public string YoutubeLink { get; set; }
         public ICollection<ContentDto> Contens {  get; set; }
 
         public void FixIsNull()
@@ -20,7 +23,11 @@ namespace Share.Dtos
             if(CreatorName == null) CreatorName = "";
             if(CreatorImage == null) CreatorImage = "";
             if(CoverImage == null) CoverImage = "";
-            if(Contens == null) Contens = new List<ContentDto>();
+            if (ContentDescription == null) ContentDescription = "";
+            if (Biography == null) Biography = "";
+            if (YoutubeLink == null) YoutubeLink = "";
+            if (Contens == null) Contens = new List<ContentDto>();
+            
         }
 
     }
