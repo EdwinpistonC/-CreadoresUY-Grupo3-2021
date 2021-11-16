@@ -16,11 +16,13 @@ namespace WebApi.Models
         public DateTime? LasLogin { get; set; }
         public string? ImgProfile { get; set; }
         public int? CreatorId { get; set; }
+        public string Nickname { get; set; }
+
         public string Token { get; set; }
         public bool IsAdmin { get; set; }
 
 
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponse(User user, string token,string nickname)
         {
             UserId = user.Id;
             Name = user.Name;
@@ -68,6 +70,7 @@ namespace WebApi.Models
 
             Token = token;
             IsAdmin = (bool)user.IsAdmin;
+            Nickname = nickname;
         }
 
         public AuthenticateResponse(User user, JwtSecurityToken token)
