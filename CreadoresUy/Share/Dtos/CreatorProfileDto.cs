@@ -16,7 +16,6 @@ namespace Share.Dtos
         public string ContentDescription { get; set; }
         public string Biography { get; set; }
         public string YoutubeLink { get; set; }
-        public ICollection<ContentDto> Contens {  get; set; }
 
         public void FixIsNull()
         {
@@ -26,8 +25,6 @@ namespace Share.Dtos
             if (ContentDescription == null) ContentDescription = "";
             if (Biography == null) Biography = "";
             if (YoutubeLink == null) YoutubeLink = "";
-            if (Contens == null) Contens = new List<ContentDto>();
-            
         }
 
     }

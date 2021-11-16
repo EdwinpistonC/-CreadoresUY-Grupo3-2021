@@ -15,7 +15,8 @@ namespace Application.Features.CreatorFeatures.Queries
 {
     public class GetCreatorProfile : IRequest<Response<CreatorProfileDto>>
     {
-        public int IdCreator {  get; set; }
+        //public int IdCreator {  get; set; }
+        public string Nickname {  get; set; }
 
         public class GetCreatorProfileHandle : IRequestHandler<GetCreatorProfile, Response<CreatorProfileDto>>
         {
@@ -31,7 +32,7 @@ namespace Application.Features.CreatorFeatures.Queries
             public async Task<Response<CreatorProfileDto>> Handle(GetCreatorProfile query, CancellationToken cancellation)
             {
                 Response<CreatorProfileDto> resp = new();
-                var cre = _context.Creators.Where(c => c.Id == query.IdCreator)
+                var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
                             .Include(c => c.Plans).FirstOrDefault();
                 var dtocre = new CreatorProfileDto();
                 if (cre != null) { 
@@ -43,24 +44,13 @@ namespace Application.Features.CreatorFeatures.Queries
                     dtocre.ContentDescription = cre.ContentDescription;
                     dtocre.YoutubeLink = cre.YoutubeLink;
                     int cantSubs = 0;
-                    List<ContentDto> contens = new();
                     foreach(var pl in cre.Plans)
                     {
                         var plan = _context.Plans.Where(p => p.Id == pl.Id)
                         .Include(p => p.UserPlans).Include(p=> p.ContentPlans).FirstOrDefault();
-                        foreach(var contp in plan.ContentPlans)
-                        {
-                            var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
-                            var dto = _mapper.Map<ContentDto>(content);
-                            dto.NoNulls();
-                            dto.ReduceContent();
-                            contens.Add(dto);
-                        }
                         cantSubs += plan.UserPlans.Count;
-                        
                     }
                     dtocre.CantSubscriptores = cantSubs;
-                    dtocre.Contens = contens;
                     dtocre.FixIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.OK;
@@ -76,7 +66,10 @@ namespace Application.Features.CreatorFeatures.Queries
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.BadRequest;
                     resp.Success = false;
-                    resp.Message.Add("No se ha encontrado al creador ingresado");
+                    resp.Message = new List<string>
+                    {
+                        "No se ha encontrado al creador ingresado"
+                    };
                 }
                 return resp;
             }

@@ -53,9 +53,9 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetProfile")]
-        public async Task<IActionResult> GetCreatorProfile(int id)
+        public async Task<IActionResult> GetCreatorProfile(string nickname)
         {
-            return Ok(await Mediator.Send(new GetCreatorProfile { IdCreator = id }));
+            return Ok(await Mediator.Send(new GetCreatorProfile { Nickname = nickname }));
         }
 
         //GetCreatorProfile
