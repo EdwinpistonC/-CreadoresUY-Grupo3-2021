@@ -23,5 +23,11 @@ namespace Share.Dtos
             this.PageSize = size > 10 ? size : 10 ;
         }
 
+        public void RequestPageUser1(int number, int size)
+        {
+            this.PageNumber = number > 1 ? number : 1;
+            this.PageSize = size > 1 ? size : 10;
+        }
+
     }
 }
