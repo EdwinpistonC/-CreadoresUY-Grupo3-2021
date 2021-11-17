@@ -60,6 +60,20 @@ namespace Persistence.Constant
             "Desarrollo de videojuegos o de plataformas de aprendizaje",
             "El septimo arte"
         };
+        static readonly public List<String> ImageProfile = new List<string>()
+        {
+            "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/usuarios%2Fusu1?alt=media&token=150dcf3c-9b94-48c4-b3b0-15df78215526",
+            "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/usuarios%2Fusu2?alt=media&token=eae2ebd5-9f56-4b34-b0e4-c400ef4e9d83",
+            "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/creadores%2Fcre1?alt=media&token=2e98808e-e4ec-4b26-846b-e97b425ecaed",
+            "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/creadores%2Fcre2?alt=media&token=957cc0e3-6e4a-420a-8624-dd61d0680aff"
+        };
+
+        static readonly public String VideoPresentacion = "https://www.youtube.com/watch?v=eTvPWCLdGlo&ab_channel=julioprofe";
+
+
+
+        static readonly public String Banner = "https://images-ext-2.discordapp.net/external/2Rkmlz4OEy9QdrvMkXiPs5LcCa5F0tRz1hlqhdiVvvo/%3Falt%3Dmedia%26token%3D68e394d5-8d43-4c8d-b2cc-20b74c95d632/https/firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/PortadasCreadores%252Fcr1cover?width=960&height=320";
+
 
         public List<String> Names = new List<string>();
 

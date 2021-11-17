@@ -200,6 +200,7 @@ namespace Persistence.Context
             for (int i = 0; i < DataConstant.CreatorQuantity; i++)
             {
                 var name = datas.Names[r.Next(0, datas.Names.Count)]+i;
+                var imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
                 Creator creator =
                     new Creator {
                         Id = i + 1,
@@ -207,7 +208,12 @@ namespace Persistence.Context
                         NickName = name,
                         CreatorName = String.Concat(name, "Creator"),
                         Category1 = (TipoCategory)r.Next(0, 4),
-                        Category2 = (TipoCategory)r.Next(0, 4)
+                        Category2 = (TipoCategory)r.Next(0, 4),
+                        CreatorImage = imagen,
+                        YoutubeLink = DataConstant.VideoPresentacion,
+                        CoverImage = DataConstant.Banner,
+                        Biography = "Hola soy " + name + " pero me conocen por " + name,
+                        Followers = r.Next(0, 1000)
                     };
 
                 int cantPlan = r.Next(3, r.Next(3, DataConstant.MaxPlans));
@@ -306,6 +312,17 @@ namespace Persistence.Context
 
                 creadores.Add(creator);
             }
+            var userPlan = new Collection<UserPlan>();
+
+            userPlan.Add(new UserPlan(1, 10, DateTime.Now));
+            userPlan.Add(new UserPlan(3, 10, DateTime.Now));
+            userPlan.Add(new UserPlan(4, 10, DateTime.Now));
+            userPlan.Add(new UserPlan(5, 10, DateTime.Now));
+            userPlan.Add(new UserPlan(2, 1, DateTime.Now));
+            userPlan.Add(new UserPlan(3, 2, DateTime.Now));
+            userPlan.Add(new UserPlan(3, 5, DateTime.Now));
+            userPlan.Add(new UserPlan(4, 6, DateTime.Now));
+
 
             modelBuilder.Entity<Creator>().HasData(creadores);
             modelBuilder.Entity<Content>().HasData(contents);
@@ -317,7 +334,7 @@ namespace Persistence.Context
 
             modelBuilder.Entity<ContentPlan>().HasData(contentPlans);
             modelBuilder.Entity<ContentTag>().HasData(contentTags);
-
+            modelBuilder.Entity<UserPlan>().HasData(userPlan);
         }
 
         public async Task<int> SaveChangesAsync()

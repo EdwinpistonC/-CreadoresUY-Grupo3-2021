@@ -29,9 +29,6 @@ namespace Persistence.Configuration
             .WithOne(u => u.Creator)
             .HasForeignKey<User>(u => u.CreatorId);
 
-
-
-
         }
 
 
@@ -49,7 +46,10 @@ namespace Persistence.Configuration
             for (int i = 0; i < DataConstant.CreatorQuantity; i++)
             {
                 var name = datas.Names[r.Next(0, datas.Names.Count)];
-                Creator creator = new Creator { Id = i + 1, ContentDescription = name, NickName = name, CreatorName = String.Concat(name, "Creator") };
+                var imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
+                Creator creator = new Creator { Id = i + 1, ContentDescription = name, NickName = name, CreatorName = String.Concat(name, "Creator"),
+                    CreatorImage= imagen, YoutubeLink = DataConstant.VideoPresentacion, CoverImage= DataConstant.Banner, Biography="Hola soy "+ name + " pero me conocen por "+ name
+                };
 
                 int cantPlan = r.Next(1, r.Next(3, DataConstant.MaxPlans));
                 ICollection<Plan> plans  = new Collection<Plan>();
