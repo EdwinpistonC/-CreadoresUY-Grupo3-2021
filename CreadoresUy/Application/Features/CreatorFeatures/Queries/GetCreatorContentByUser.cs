@@ -70,6 +70,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                 authorized = true;
                             }
                         }
+                        if (user.CreatorId == cre.Id) authorized = true;
                         foreach (var contp in plan.ContentPlans)
                         {
                             var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
