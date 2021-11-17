@@ -58,6 +58,18 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCreatorProfile { Nickname = nickname }));
         }
 
+        [HttpGet]
+        [Route("GetContentByUser")]
+        public async Task<IActionResult> GetContentByUser(string nickname,int idUser, int pageNumber, int pageSize)
+        {
+            return Ok(await Mediator.Send(new GetCreatorContentByUser { 
+                                                Nickname = nickname, 
+                                                IdUser = idUser, 
+                                                PageNumber = pageNumber,
+                                                PageSize = pageSize
+                                            }));
+        }
+
         //GetCreatorProfile
 
         /* TRAE los planes asociados a un creador

@@ -15,7 +15,6 @@ namespace Application.Features.CreatorFeatures.Queries
 {
     public class GetCreatorProfile : IRequest<Response<CreatorProfileDto>>
     {
-        //public int IdCreator {  get; set; }
         public string Nickname {  get; set; }
 
         public class GetCreatorProfileHandle : IRequestHandler<GetCreatorProfile, Response<CreatorProfileDto>>
