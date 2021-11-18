@@ -312,16 +312,6 @@ namespace Persistence.Context
 
                 creadores.Add(creator);
             }
-            var userPlan = new Collection<UserPlan>();
-
-            userPlan.Add(new UserPlan(1, 10, DateTime.Now));
-            userPlan.Add(new UserPlan(3, 10, DateTime.Now));
-            userPlan.Add(new UserPlan(4, 10, DateTime.Now));
-            userPlan.Add(new UserPlan(5, 10, DateTime.Now));
-            userPlan.Add(new UserPlan(2, 1, DateTime.Now));
-            userPlan.Add(new UserPlan(3, 2, DateTime.Now));
-            userPlan.Add(new UserPlan(3, 5, DateTime.Now));
-            userPlan.Add(new UserPlan(4, 6, DateTime.Now));
 
 
             modelBuilder.Entity<Creator>().HasData(creadores);
@@ -334,7 +324,6 @@ namespace Persistence.Context
 
             modelBuilder.Entity<ContentPlan>().HasData(contentPlans);
             modelBuilder.Entity<ContentTag>().HasData(contentTags);
-            modelBuilder.Entity<UserPlan>().HasData(userPlan);
         }
 
         public async Task<int> SaveChangesAsync()
