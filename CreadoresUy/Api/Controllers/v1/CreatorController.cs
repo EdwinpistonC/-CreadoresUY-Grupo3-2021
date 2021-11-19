@@ -1,5 +1,6 @@
 ﻿using Application.Features.CreatorFeatures.Commands;
 using Application.Features.CreatorFeatures.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -69,6 +70,15 @@ namespace Api.Controllers.v1
                                                 PageSize = pageSize
                                             }));
         }
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("GetCreatorBySearch")]
+        public async Task<IActionResult> GetCreatorBySearch(string searchText)
+        {
+            return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText }));
+        }
+
+
 
         //GetCreatorProfile
 
