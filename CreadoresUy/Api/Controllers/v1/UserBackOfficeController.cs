@@ -1,6 +1,6 @@
-﻿using Application.Features.UserFeaturesBO.Queries;
-using Application.Features.UserFreaturesBO.Commands;
-using Application.Features.UserFreaturesBO.Queries;
+﻿using Application.Features.UserFeatures.Commands;
+using Application.Features.UserFeaturesBO.Commands;
+using Application.Features.UserFeaturesBO.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -11,43 +11,42 @@ namespace Api.Controllers.v1
     public class UserBackOfficeController : BaseApiController
     {
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<ActionResult<CreateUserCommand>> CreateUser(CreateUserCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+   
         [HttpGet("{id}")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetUserByIdBOQuery { Id = id }));
         }
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllUsersBOQuery()));
         }
-
+        /*
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteUserByIdCommand { Id = id }));
         }
-
-        [HttpPut("[action]")]
-        [Authorize]
-        public async Task<IActionResult> UpdateUser(int id, UpdateUserCommandBO command)
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<CreateUserCommand>> CreateUser(CreateUserCommand command)
         {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
             return Ok(await Mediator.Send(command));
         }
+        */
+
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser( UpdateUserCommandBO command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using MediatR;
 using Share.Dtos;
+using Share.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +11,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFreaturesBO.Commands
+namespace Application.Features.UserFeaturesBO.Commands
 {
     public class UpdateUserCommandBO : IRequest<Response<string>>
     {
-        public int Id {  get; set; }
-        public UpdateUserDto User {  get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string? Description { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? LasLogin { get; set; }
+        public string? ImgProfile { get; set; }
 
         public class UpdateUserCommandBOHandler : IRequestHandler<UpdateUserCommandBO, Response<string>>
         {
             private readonly ICreadoresUyDbContext _context;
-            private readonly IMapper _mapper;
 
-            public UpdateUserCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper )
+            public UpdateUserCommandBOHandler(ICreadoresUyDbContext context )
             {
                 _context = context;
-                _mapper = mapper;   
             }
             public async Task<Response<string>> Handle(UpdateUserCommandBO command, CancellationToken cancellationToken)
             {
@@ -42,11 +47,17 @@ namespace Application.Features.UserFreaturesBO.Commands
                     res.CodStatus = HttpStatusCode.BadRequest;
                     return res;
                 }
-                if (command.User.Name != "") user.Name = command.User.Name;
-                if (command.User.Email != "") user.Email = command.User.Email;
-                if (command.User.Description != "") user.Description = command.User.Description;
-                if (command.User.ImgProfile != "") user.ImgProfile = command.User.ImgProfile;
-                if(command.User.Deleted != null) user.Deleted = (bool)command.User.Deleted;
+
+
+
+                if (command.Name != "") user.Name = command.Name;
+                if (command.Email != "") user.Email = command.Email;
+                if (command.Description != "") user.Description = command.Description;
+                if (command.ImgProfile != "") user.ImgProfile = command.ImgProfile;
+                if (command.Password != "") user.Password = command.Password;
+                if (command.Created != DateTime.MinValue) user.Created = command.Created;
+                if (command.LasLogin !=  DateTime.MinValue) user.LasLogin = command.LasLogin;
+
                 await _context.SaveChangesAsync();
                 res.Message.Add("Exito");
                 res.Success = true;
