@@ -10,30 +10,28 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFreaturesBO.Queries
+namespace Application.Features.UserFeaturesBO.Queries
 {
-    public class GetAllUsersQuery : IRequest<Response<List<UserDto>>>
+    public class GetAllUsersBOQuery : IRequest<Response<List<UserBODto>>>
     {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
 
-        public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Response<List<UserDto>>>
+        public class GetAllUsersBOQueryQueryHandler : IRequestHandler<GetAllUsersBOQuery, Response<List<UserBODto>>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
-            public GetAllUsersQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public GetAllUsersBOQueryQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            public async Task<Response<List<UserDto>>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
+            public async Task<Response<List<UserBODto>>> Handle(GetAllUsersBOQuery query, CancellationToken cancellationToken)
             {
-                Response<List<UserDto>> res = new();
+                Response<List<UserBODto>> res = new();
                 res.Message = new List<string>();
-                var reqPage = new RequestPageUser(query.PageNumber, query.PageSize);
-                var skip = (reqPage.PageNumber - 1) * reqPage.PageSize;
-                List<User> usrs1 = await _context.Users.Skip(skip).Take(reqPage.PageSize).ToListAsync();
+
+
+                List<User> usrs1 = await _context.Users.ToListAsync();
                         //.Where(u => u.Deleted.Equals(false)) --En caso de no querer listar los eliminados logicamente
                 if (usrs1 == null)
                 {
@@ -45,10 +43,10 @@ namespace Application.Features.UserFreaturesBO.Queries
                     return res;
                 }
                 
-                List<UserDto> usuarios = new();
+                List<UserBODto> usuarios = new();
                 foreach(User u in usrs1)
                 {
-                    var usr = _mapper.Map<UserDto>(u);
+                    var usr = _mapper.Map<UserBODto>(u);
                     usuarios.Add(usr);
                 }
                

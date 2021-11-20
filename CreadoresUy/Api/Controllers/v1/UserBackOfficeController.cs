@@ -1,4 +1,5 @@
-﻿using Application.Features.UserFreaturesBO.Commands;
+﻿using Application.Features.UserFeaturesBO.Queries;
+using Application.Features.UserFreaturesBO.Commands;
 using Application.Features.UserFreaturesBO.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,12 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
         }
 
-        [HttpGet("{pageNumber},{pageSize}")]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await Mediator.Send(new GetAllUsersQuery { PageNumber = pageNumber, PageSize = pageSize}));
+            return Ok(await Mediator.Send(new GetAllUsersBOQuery()));
         }
 
         [HttpDelete("{id}")]
