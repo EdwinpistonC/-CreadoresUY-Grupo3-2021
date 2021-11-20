@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Share.Dtos;
 using System.Threading.Tasks;
-using WebApi.Models;
 
 namespace Api.Controllers.v1
 {
@@ -22,6 +21,7 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
 
         }
+
         [AllowAnonymous]
         [HttpPost(nameof(Token))]
         public async Task<ActionResult<GetTokenQuery>> Token(GetTokenQuery command)
@@ -77,7 +77,12 @@ namespace Api.Controllers.v1
                 new GetLogingUserQuery { User = new LoginDto() { Email = email, Password = password } }));
 
         }
+        [HttpGet("{idUser}")]
+        public async Task<IActionResult> GetCreatorsFromUser(int idUser)
+        {
+            return Ok(await Mediator.Send(new GetCreatorFromUserQuery { IdUser = idUser}));
 
+        }
 
     }
 
