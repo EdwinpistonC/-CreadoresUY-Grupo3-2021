@@ -1,5 +1,4 @@
-﻿using Application.Features.UserFeatures.Commands;
-using Application.Features.UserFeaturesBO.Commands;
+﻿using Application.Features.UserFeaturesBO.Commands;
 using Application.Features.UserFeaturesBO.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,20 +25,19 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetAllUsersBOQuery()));
         }
-        /*
+       
         [HttpDelete("{id}")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteUserByIdCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteUserByIdCommandBO { Id = id }));
         }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<CreateUserCommand>> CreateUser(CreateUserCommand command)
+        public async Task<ActionResult<CreateUserCommandBO>> CreateUser(CreateUserCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }
-        */
 
         [Authorize]
         [HttpPut]

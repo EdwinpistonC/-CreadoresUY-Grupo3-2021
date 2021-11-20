@@ -11,23 +11,23 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFreaturesBO.Commands
+namespace Application.Features.UserFeaturesBO.Commands
 {
-    public class CreateUserCommand : IRequest<Response<String>>
+    public class CreateUserCommandBO : IRequest<Response<String>>
     {
-        public CreateUserDto CreateUserDto { get; set; }
-        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<String>>
+        public UserBODto CreateUserDto { get; set; }
+        public class CreateUserCommandBOHandler : IRequestHandler<CreateUserCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public CreateUserCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public CreateUserCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            public async Task<Response<String>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(CreateUserCommandBO command, CancellationToken cancellationToken)
             {
                 var dto = command.CreateUserDto;
 
@@ -36,7 +36,7 @@ namespace Application.Features.UserFreaturesBO.Commands
                     Obj = "",
                     Message = new List<String>()
                 };
-                var validator = new UserSignUpValidator(_context);
+                var validator = new UserSignUpValidatorBO(_context);
                 ValidationResult result = validator.Validate(dto);
 
                 if (!result.IsValid)

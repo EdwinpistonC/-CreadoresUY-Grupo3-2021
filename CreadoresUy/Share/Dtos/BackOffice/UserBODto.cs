@@ -25,6 +25,8 @@ namespace Share.Entities
             if (Email == null) Email = "";
             if (Description == null) Description = "";
             if (ImgProfile == null) ImgProfile ="";
+            if (Created == null) Created = DateTime.MinValue;
+            if (LasLogin == null) LasLogin = DateTime.MinValue;
             if (CreatorId <=0) CreatorId = 0;
             Password = "";
         }

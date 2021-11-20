@@ -48,8 +48,6 @@ namespace Application.Features.UserFeaturesBO.Commands
                     return res;
                 }
 
-
-
                 if (command.Name != "") user.Name = command.Name;
                 if (command.Email != "") user.Email = command.Email;
                 if (command.Description != "") user.Description = command.Description;

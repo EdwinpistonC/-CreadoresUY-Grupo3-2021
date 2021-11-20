@@ -33,7 +33,7 @@ namespace Persistence.Configuration
 
         public Collection<User> SeedDatabase()
         {
-            var creadores = new Collection<User>();
+            var usuarios = new Collection<User>();
 
             var datas = new DataConstant();
             Random r = new Random();
@@ -46,6 +46,8 @@ namespace Persistence.Configuration
 
 
             int i = 0;
+            var imagen ="";
+
             for (i = 3; i < DataConstant.UserQuantity; i++)
             {
 
@@ -65,27 +67,31 @@ namespace Persistence.Configuration
 
                 string password = name + surname;
 
+                imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
                 if (i < DataConstant.CreatorQuantity-1)
                 {
-                    creadores.Add(
-                    new User { Id = i + 1,Created= DateTime.Now, CreatorId = i + 1, Name = name+ surname,Password= password, Email = email });
+                    usuarios.Add(
+                    new User { Id = i + 1,Created= DateTime.Now, CreatorId = i + 1, Name = name+ surname,Password= password, Email = email,ImgProfile=imagen });
                 }
                 else
                 {
-                    creadores.Add(
-                        new User { Id = i + 1, Created = DateTime.Now, Name = name + surname, Password = password, Email = email });
+                    usuarios.Add(
+                        new User { Id = i + 1, Created = DateTime.Now, Name = name + surname, Password = password, Email = email, ImgProfile = imagen });
                 }
            
             }
-            creadores.Add(
-             new User { Id = i+1, Created = DateTime.Now, Name = "admin", Password = "admin123", Email = "admin@admin", IsAdmin = true });
+            imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
 
-            creadores.Add(
-                    new User { Id = i+2, Created = DateTime.Now, Name = "usuario", Password = "usuario123", Email = "usuario@usuario" });
-            creadores.Add(
-                    new User { Id = i + 3, Created = DateTime.Now, CreatorId = DataConstant.CreatorQuantity - 1, Name = "creador", Password = "creador123", Email = "creador@creador" });
+            usuarios.Add(
+             new User { Id = i+1, Created = DateTime.Now, Name = "admin", Password = "admin123", Email = "admin@admin", IsAdmin = true, ImgProfile = imagen });
+            imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
+            usuarios.Add(
+                    new User { Id = i+2, Created = DateTime.Now, Name = "usuario", Password = "usuario123", Email = "usuario@usuario", ImgProfile = imagen });
+            imagen = DataConstant.ImageProfile[r.Next(0, DataConstant.ImageProfile.Count)];
+            usuarios.Add(
+                    new User { Id = i + 3, Created = DateTime.Now, CreatorId = DataConstant.CreatorQuantity - 1, Name = "creador", Password = "creador123", Email = "creador@creador", ImgProfile = imagen });
 
-            return creadores;
+            return usuarios;
         }
     }
 }
