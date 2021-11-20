@@ -40,6 +40,7 @@ namespace Api.Controllers.v1
         }
 
         [Authorize]
+        [AllowAnonymous]
         [HttpPut]
         public async Task<IActionResult> UpdateUser( UpdateUserCommandBO command)
         {
