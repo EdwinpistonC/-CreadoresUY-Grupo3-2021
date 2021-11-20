@@ -40,14 +40,10 @@ namespace Application.Features.UserFeatures.Queries
 
                 var u = _mapper.Map<User>(query.User);
                 var user = await _context.Users.Where(x => (x.Email == u.Email && x.Password == u.Password)).FirstOrDefaultAsync();
+                
+                
+                
                 var nickname = "";
-                if (user.CreatorId != null)
-                {
-                    var creador = await _context.Creators.Where(x => x.Id == user.CreatorId).FirstOrDefaultAsync();
-                    nickname = creador.NickName;
-                }
-
-
                 Response<AuthenticateResponse> res = new Response<AuthenticateResponse>();
                 res.Message = new List<string>();
 
@@ -60,6 +56,15 @@ namespace Application.Features.UserFeatures.Queries
                     return res;
 
                 }
+
+                if (user.CreatorId != null)
+                {
+                    var creador = await _context.Creators.Where(x => x.Id == user.CreatorId).FirstOrDefaultAsync();
+                    nickname = creador.NickName;
+                }
+
+
+                
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", user.Name));

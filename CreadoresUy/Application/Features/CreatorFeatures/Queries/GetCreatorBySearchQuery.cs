@@ -29,7 +29,8 @@ namespace Application.Features.CreatorFeatures.Queries
             }
             public async Task<Response<List<CreadorDatabaseDto>>> Handle(GetCreatorBySearchQuery query, CancellationToken cancellationToken)
             {
-                var creatorList = await _context.Creators.Where(c=> c.NickName.Contains(query.SearchText) || c.ContentDescription.Contains(query.SearchText)).ToListAsync();
+                var creatorList = await _context.Creators.Where(c => c.NickName.Contains(query.SearchText) || c.ContentDescription.Contains(query.SearchText)).ToListAsync();
+
 
 
                 List<CreadorDatabaseDto> list = new List<CreadorDatabaseDto>();
