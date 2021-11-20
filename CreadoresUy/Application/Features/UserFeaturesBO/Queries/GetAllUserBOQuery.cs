@@ -31,7 +31,7 @@ namespace Application.Features.UserFeaturesBO.Queries
                 res.Message = new List<string>();
 
 
-                List<User> usrs1 = await _context.Users..ToListAsync();
+                List<User> usrs1 = await _context.Users.ToListAsync();
                         //.Where(u => u.Deleted.Equals(false)) --En caso de no querer listar los eliminados logicamente
                 if (usrs1 == null)
                 {
