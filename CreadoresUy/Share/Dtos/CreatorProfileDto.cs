@@ -16,8 +16,8 @@ namespace Share.Dtos
         public string ContentDescription { get; set; }
         public string Biography { get; set; }
         public string YoutubeLink { get; set; }
-
-        public void FixIsNull()
+        public ICollection<PlanDto> Plans { get; set; }
+        public void FixIfIsNull()
         {
             if(CreatorName == null) CreatorName = "";
             if(CreatorImage == null) CreatorImage = "";

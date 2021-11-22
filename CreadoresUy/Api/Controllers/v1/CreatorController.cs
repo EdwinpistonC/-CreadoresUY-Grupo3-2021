@@ -54,6 +54,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetProfile")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCreatorProfile(string nickname)
         {
             return Ok(await Mediator.Send(new GetCreatorProfile { Nickname = nickname }));

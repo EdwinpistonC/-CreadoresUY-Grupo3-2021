@@ -30,27 +30,53 @@ namespace Application.Features.CreatorFeatures.Queries
 
             public async Task<Response<CreatorProfileDto>> Handle(GetCreatorProfile query, CancellationToken cancellation)
             {
-                Response<CreatorProfileDto> resp = new();
+                Response<CreatorProfileDto> resp = new Response<CreatorProfileDto>();
                 var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
-                            .Include(c => c.Plans).FirstOrDefault();
+                            .Include(c => c.Plans).ThenInclude(b => b.Benefits).Include(c => c.Plans).ThenInclude(up => up.UserPlans).FirstOrDefault();
                 var dtocre = new CreatorProfileDto();
-                if (cre != null) { 
+                int cantSubs = 0;
+                List<PlanDto> plans = new List<PlanDto>();
+                if (cre != null)
+                {
                     dtocre.CreatorName = cre.CreatorName;
                     dtocre.CreatorImage = cre.CreatorImage;
                     dtocre.CoverImage = cre.CoverImage;
                     dtocre.CantSeguidores = cre.Followers;
-                    dtocre.Biography = cre.Biography;
-                    dtocre.ContentDescription = cre.ContentDescription;
-                    dtocre.YoutubeLink = cre.YoutubeLink;
-                    int cantSubs = 0;
-                    foreach(var pl in cre.Plans)
+                    dtocre.Plans = new List<PlanDto>();
+                    //List<ContentDto> contens = new();
+
+                    foreach (var pl in cre.Plans)
                     {
-                        var plan = _context.Plans.Where(p => p.Id == pl.Id)
-                        .Include(p => p.UserPlans).Include(p=> p.ContentPlans).FirstOrDefault();
-                        cantSubs += plan.UserPlans.Count;
+                        PlanDto plDto = _mapper.Map<PlanDto>(pl);
+
+                        plDto.Benefits = new List<BenefitDTO>();
+
+                        foreach (var b in pl.Benefits)
+                        {
+                            plDto.Benefits.Add(_mapper.Map<BenefitDTO>(b));
+                        }
+
+                        plDto.FixIfIsNull();
+                        dtocre.Plans.Add(plDto);
+
+
+
+                        /*foreach(var contp in plan.ContentPlans)
+                        {
+                            var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
+                            var dto = _mapper.Map<ContentDto>(content);
+                            dto.NoNulls();
+                            dto.ReduceContent();
+                            contens.Add(dto);
+                        }
+                        */
+                        cantSubs += pl.UserPlans.Count;
+
                     }
+
+
                     dtocre.CantSubscriptores = cantSubs;
-                    dtocre.FixIsNull();
+                    dtocre.FixIfIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.OK;
                     resp.Success = true;
@@ -61,14 +87,10 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
                 else
                 {
-                    dtocre.FixIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.BadRequest;
                     resp.Success = false;
-                    resp.Message = new List<string>
-                    {
-                        "No se ha encontrado al creador ingresado"
-                    };
+                    resp.Message.Add("No se ha encontrado al creador ingresado");
                 }
                 return resp;
             }

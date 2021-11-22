@@ -41,6 +41,8 @@ namespace Api
 
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            CreateMap<Benefit, BenefitDTO>();
+            CreateMap<BenefitDTO, Benefit>();
 
             CreateMap<User, UserBODto>();
             CreateMap<UserBODto, User>();
