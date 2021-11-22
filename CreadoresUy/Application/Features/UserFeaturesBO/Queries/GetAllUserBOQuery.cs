@@ -47,6 +47,7 @@ namespace Application.Features.UserFeaturesBO.Queries
                 foreach(User u in usrs1)
                 {
                     var usr = _mapper.Map<UserBODto>(u);
+                    usr.NoNulls();
                     usuarios.Add(usr);
                 }
                

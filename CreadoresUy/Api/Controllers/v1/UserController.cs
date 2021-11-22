@@ -77,7 +77,8 @@ namespace Api.Controllers.v1
                 new GetLogingUserQuery { User = new LoginDto() { Email = email, Password = password } }));
 
         }
-        [HttpGet("{idUser}")]
+        [HttpGet("GetCreatorFromUser/{idUser}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCreatorsFromUser(int idUser)
         {
             return Ok(await Mediator.Send(new GetCreatorFromUserQuery { IdUser = idUser}));

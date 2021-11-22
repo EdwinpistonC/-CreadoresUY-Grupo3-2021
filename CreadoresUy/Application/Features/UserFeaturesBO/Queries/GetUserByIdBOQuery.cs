@@ -2,6 +2,7 @@
 using AutoMapper;
 using MediatR;
 using Share.Dtos;
+using Share.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +11,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFreaturesBO.Queries
+namespace Application.Features.UserFeaturesBO.Queries
 {
-    public class GetUserByIdQuery : IRequest<Response<UserDto>>
+    public class GetUserByIdBOQuery : IRequest<Response<UserBODto>>
     {
         public int Id {  get; set; }
 
-        public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Response<UserDto>>
+        public class GetUserByIdBOQueryHandler : IRequestHandler<GetUserByIdBOQuery, Response<UserBODto>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public GetUserByIdQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public GetUserByIdBOQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            public async Task<Response<UserDto>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
+            public async Task<Response<UserBODto>> Handle(GetUserByIdBOQuery query, CancellationToken cancellationToken)
             {
                 var user = _context.Users.Where(u => u.Id == query.Id).FirstOrDefault();
-                Response<UserDto> res = new();
+                Response<UserBODto> res = new();
                 res.Message = new List<string>();
                 //if (user == null || user.Deleted == true)
                 if (user == null)
@@ -42,7 +43,8 @@ namespace Application.Features.UserFreaturesBO.Queries
                     res.Message.Add(msj);
                     return res;
                 }
-                var dto = _mapper.Map<UserDto>(user);
+                var dto = _mapper.Map<UserBODto>(user);
+                dto.NoNulls();
                 res.Obj = dto;
                 res.CodStatus = HttpStatusCode.OK;
                 res.Success = true;
