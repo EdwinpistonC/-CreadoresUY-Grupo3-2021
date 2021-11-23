@@ -25,6 +25,20 @@ namespace Share.Dtos
             if (ContentDescription == null) ContentDescription = "";
             if (Biography == null) Biography = "";
             if (YoutubeLink == null) YoutubeLink = "";
+            if (Plans != null )
+            {
+                if (Plans.Count!=0)
+                {
+                    List<PlanDto> newPlans = new List<PlanDto>();
+                    foreach (PlanDto plan in Plans)
+                    {
+                        plan.FixIfIsNull();
+                        newPlans.Add(plan);
+                    }
+                    Plans = newPlans;
+                }
+                
+            }
         }
 
     }

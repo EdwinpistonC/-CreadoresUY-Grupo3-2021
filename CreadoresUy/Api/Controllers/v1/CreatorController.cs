@@ -74,9 +74,9 @@ namespace Api.Controllers.v1
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCreatorBySearch")]
-        public async Task<IActionResult> GetCreatorBySearch(string searchText)
+        public async Task<IActionResult> GetCreatorBySearch(string searchText, int pageNumber, int pageSize)
         {
-            return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText }));
+            return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));
         }
 
 

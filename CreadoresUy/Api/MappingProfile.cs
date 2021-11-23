@@ -30,6 +30,9 @@ namespace Api
             CreateMap<Creator, CreatorDto>();
             CreateMap<CreatorDto, Creator>();
 
+            CreateMap<Creator, CreatorProfileDto>();
+            CreateMap<CreatorProfileDto, Creator>();
+
             CreateMap<Creator, CreadorDatabaseDto>();
             CreateMap<CreadorDatabaseDto, Creator>();
 
