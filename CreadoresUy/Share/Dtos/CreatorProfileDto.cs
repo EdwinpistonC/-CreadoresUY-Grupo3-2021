@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Share.Dtos
         public string Biography { get; set; }
         public string YoutubeLink { get; set; }
         public ICollection<PlanDto> Plans { get; set; }
+
         public void FixIfIsNull()
         {
             if(CreatorName == null) CreatorName = "";
