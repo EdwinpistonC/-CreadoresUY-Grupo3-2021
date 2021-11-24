@@ -61,6 +61,8 @@ namespace Api.Controllers.v1
         }
 
         [HttpGet]
+        [AllowAnonymous]
+
         [Route("GetContentByUser")]
         public async Task<IActionResult> GetContentByUser(string nickname,int idUser, int pageNumber, int pageSize)
         {
