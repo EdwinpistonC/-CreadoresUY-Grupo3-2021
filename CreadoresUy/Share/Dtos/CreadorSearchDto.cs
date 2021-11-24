@@ -10,6 +10,8 @@ namespace Share.Dtos
     {
         public string Id { get; set; }
         public string CreatorName { get; set; }
+        public string NickName { get; set; }
+
         public string CreatorImage { get; set; }
         public string CoverImage { get; set; }
         public int CantSeguidores { get; set; }
