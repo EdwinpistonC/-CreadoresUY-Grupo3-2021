@@ -9,20 +9,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFeaturesBO.Commands
+namespace Application.Features.CreateFeaturesBO.Commands
 {
-    public class DeleteUserByIdCommandBO : IRequest<Response<String>>
+    public class DeleteAdminByIdCommandBO : IRequest<Response<String>>
     {
         public int Id {  get; set; }
 
-        public class DeleteUserByIdCommandBOHandler : IRequestHandler<DeleteUserByIdCommandBO, Response<String>>
+        public class DeleteAdminByIdCommandBOHandler : IRequestHandler<DeleteAdminByIdCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public DeleteUserByIdCommandBOHandler(ICreadoresUyDbContext context)
+            public DeleteAdminByIdCommandBOHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
-            public async Task<Response<String>> Handle(DeleteUserByIdCommandBO command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(DeleteAdminByIdCommandBO command, CancellationToken cancellationToken)
             {
                 var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();

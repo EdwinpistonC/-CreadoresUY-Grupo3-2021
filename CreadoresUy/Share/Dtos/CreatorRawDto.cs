@@ -18,7 +18,7 @@ namespace Share.Dtos
 
         public int Followers { get; set; }
 
-        public TipoCategory Category1 { get; set; }
-        public TipoCategory Category2 { get; set; }
+        public String Category1 { get; set; }
+        public String Category2 { get; set; }
     }
 }

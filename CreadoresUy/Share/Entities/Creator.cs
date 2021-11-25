@@ -25,8 +25,8 @@ namespace Share.Entities
         public DateTime CreatorCreated {  get; set; }
         public string WelcomeMsg {  get; set; }
         public int Followers {  get; set; }
-        public TipoCategory Category1 { get; set; }
-        public TipoCategory Category2 { get; set; }
+        public String Category1 { get; set; }
+        public String Category2 { get; set; }
 
 
 

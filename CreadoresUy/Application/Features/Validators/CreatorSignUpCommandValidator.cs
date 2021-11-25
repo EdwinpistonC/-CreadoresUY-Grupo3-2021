@@ -18,8 +18,6 @@ namespace Application.Features.Validators
             .Must(IdValido).WithMessage("No se a encontrado el usuario ingresado o el Id es invalido")
             .Must(ExisteCreador).WithMessage("El Id ya esta asociado a una cuenta de creador");
 
-            RuleFor(x => x.Category1).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
-            RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
             RuleFor(x => x.CreatorName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.NickName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio")
                 .Must(NickNameValido).WithMessage("{PropertyName} No valido, ya existe un creador registrado");
@@ -54,14 +52,7 @@ namespace Application.Features.Validators
             return true;
 
         }
-        public bool CategoriaValida(TipoCategory nam)
-        {
-            if (((int)nam)==0 || nam.ToString() == "Arte" || nam.ToString() == "Comida" || nam.ToString() == "Trading" || nam.ToString() == "Música")
-            {
-                return true;
-            }
-            return false;
-        }
+
 
         public bool NickNameValido(string nickname)
         {

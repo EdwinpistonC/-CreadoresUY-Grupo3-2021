@@ -72,9 +72,9 @@ namespace Application.Features.CreatorFeatures.Commands
                     YoutubeLink = dto.YoutubeLink
                 };
 
-                if (dto.Category1 != 0) cre.Category1 = dto.Category1;
-                if (dto.Category2 != 0) cre.Category2 = dto.Category2;
-                if(dto.Category1 == 0 && dto.Category2 == 0)
+                if (dto.Category1 != "") cre.Category1 = dto.Category1;
+                if (dto.Category2 != "") cre.Category2 = dto.Category2;
+                if(dto.Category1 == "" && dto.Category2 == "")
                 {
                     res.Success = false;
                     res.CodStatus = HttpStatusCode.BadRequest;

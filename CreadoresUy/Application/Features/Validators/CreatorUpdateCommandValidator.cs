@@ -24,14 +24,8 @@ namespace Application.Features.Validators
              RuleFor(x => x.UserId).MustAsync(async (UserId,cancellation) => ( await IdValido(UserId) )).WithMessage("No se a encontrado el usuario ingresado o el Id es invalido")
                  .MustAsync(async (UserId, cancellation) => (await ExisteCreador(UserId))).WithMessage("El Id ya esta asociado a una cuenta de creador");
              });
-            When(creator => creator.Category1 != null, () =>
-            {
-                RuleFor(x => x.Category1).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
-            });
-            When(creator => creator.Category2 != null, () =>
-            {
-                RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} Dato invalido");
-            });
+
+
             When(creator => creator.CreatorName != null, () =>
             {
                 RuleFor(x => x.CreatorName).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");

@@ -18,8 +18,17 @@ namespace Api
             CreateMap<Tag, TagDto>();
             CreateMap<TagDto, Tag>();
 
+            CreateMap<Tag, AdminBODto>();
+            CreateMap<AdminBODto, Tag>();
+
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+
+            CreateMap<User, AdminDto>();
+            CreateMap<AdminDto, User>();
+
+            CreateMap<User, AdminBODto>();
+            CreateMap<AdminBODto, User>();
 
             CreateMap<User, LoginDto>();
             CreateMap<LoginDto, User>();
@@ -27,7 +36,9 @@ namespace Api
             CreateMap<Creator, CreatorRawDto>();
             CreateMap<CreatorRawDto, Creator>();
 
-            
+            CreateMap<Creator, CreatorBODto>();
+            CreateMap<CreatorBODto, Creator>();
+
             CreateMap<Creator, CreadorSearchDto>();
             CreateMap<CreadorSearchDto, Creator>();
 

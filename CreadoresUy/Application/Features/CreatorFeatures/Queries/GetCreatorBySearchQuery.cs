@@ -57,8 +57,8 @@ namespace Application.Features.CreatorFeatures.Queries
                     creatorDataBaseDto.CantSeguidores = x.Followers;
                     creatorDataBaseDto.FixIfIsNull();
                     creatorDataBaseDto.Categorys = new List<string>();
-                    if(x.Category1 != null && x.Category1 != 0) creatorDataBaseDto.Categorys.Add(x.Category1.ToString());
-                    if (x.Category2 != null && x.Category2 != 0 && x.Category1 != x.Category2) creatorDataBaseDto.Categorys.Add(x.Category2.ToString());
+                    if(x.Category1 != null && x.Category1 != "") creatorDataBaseDto.Categorys.Add(x.Category1.ToString());
+                    if (x.Category2 != null && x.Category2 != "" && x.Category1 != x.Category2) creatorDataBaseDto.Categorys.Add(x.Category2.ToString());
                     list.Add(creatorDataBaseDto); 
                 });
 

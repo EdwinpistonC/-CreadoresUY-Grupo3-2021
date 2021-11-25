@@ -20,8 +20,8 @@ namespace Share.Dtos
         public string WelcomeMsg { get; set; }
         public int Followers { get; set; }
 
-        public TipoCategory Category1 { get; set; }
-        public TipoCategory Category2 { get; set; }
+        public String Category1 { get; set; }
+        public String Category2 { get; set; }
 
         public void FixIfIsNull()
         {
@@ -32,8 +32,8 @@ namespace Share.Dtos
             if (YoutubeLink == null) YoutubeLink = "";
             if (WelcomeMsg == null) WelcomeMsg = "";
             if (Followers == null) Followers = 0;
-            if (Category1 == null) Category1 = 0;
-            if (Category2 == null) Category2 = 0;
+            if (Category1 == null) Category1 = "";
+            if (Category2 == null) Category2 = "";
 
 
         }
