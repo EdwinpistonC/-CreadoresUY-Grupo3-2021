@@ -38,6 +38,10 @@ namespace Persistence.Context
         public DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<Content> Category { get; set; }
 
+        public DbSet<BanckAccount> BanckAccounts { get; set; }
+
+        public DbSet<FinancialEntity> FinancialEntities {  get; set; }
+
 
 
         public CreadoresUyDbContext()
@@ -60,7 +64,7 @@ namespace Persistence.Context
 
             modelBuilder.ApplyConfiguration(new BenefitConfiguration());
 
-
+            modelBuilder.ApplyConfiguration(new FinancialEntityConfiguration());
 
             modelBuilder.Entity<UserPlan>().HasKey(up => new { up.IdUser, up.IdPlan });
 
@@ -124,6 +128,18 @@ namespace Persistence.Context
             .HasOne<Creator>(c => c.Creator)
             .WithMany(cr => cr.Chats)
             .HasForeignKey(c => c.IdCreator);
+
+            //Relacion para finanzas
+
+            modelBuilder.Entity<Creator>()
+            .HasOne(c => c.BanckAccount)
+            .WithOne(p => p.Creator)
+            .HasForeignKey<BanckAccount>(b => b.CreatorId);
+
+            modelBuilder.Entity<BanckAccount>()
+            .HasOne<FinancialEntity>(ba => ba.FinancialEntity)
+            .WithMany(f => f.BanckAccounts)
+            .HasForeignKey(ba => ba.FinancialEntityId);
 
             Seed(modelBuilder);
         }

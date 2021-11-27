@@ -36,6 +36,9 @@ namespace Share.Entities
 
         public ICollection<Chat> Chats { get; set; }
 
+        public int BanckAccountId {  get; set; }
+        public BanckAccount BanckAccount {  get; set; }
+
 
 
     }

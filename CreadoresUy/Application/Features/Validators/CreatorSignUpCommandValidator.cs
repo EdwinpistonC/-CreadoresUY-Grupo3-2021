@@ -26,7 +26,14 @@ namespace Application.Features.Validators
             RuleFor(x => x.YoutubeLink).NotEmpty().WithMessage("{PropertyName} es un campo requerido");
             RuleFor(x => x.CreatorImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.CoverImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            
+            RuleFor(x => x.Category1).Must(CategoriaValida).WithMessage("{PropertyName} No es una categoria Valida");
+            RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} No es una categoria Valida");
+            //Validacion de datos bancarios
+            RuleFor(x => x.InfoPago.NombreEntidadFinanciera).NotEmpty().WithMessage("{PropertyName} No pude ser vacio")
+                .Must(EntidadFinancieraValida).WithMessage("{PropertyName} No es valida");
+            RuleFor(x => x.InfoPago.NombreTitular).NotEmpty().WithMessage("{PropertyName} No pude ser vacio");
+            RuleFor(x => x.InfoPago.NumeroDeCuenta).NotEmpty().WithMessage("{PropertyName} No pude ser vacio");
+
         }
 
         public bool IdValido(int id) 
@@ -58,6 +65,25 @@ namespace Application.Features.Validators
         {
             var c = _context.Creators.Where(c => c.NickName == nickname).FirstOrDefault();
             if (c == null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool EntidadFinancieraValida(string nombre)
+        {
+            var u = _context.FinancialEntities.Where(f => f.Name == nombre).FirstOrDefault();
+            if (u == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool CategoriaValida(string nomb)
+        {
+            string nom = nomb.ToLower();
+            if(nom == "" || nom == "arte" || nom == "comida" || nom == "trading" || nom == "musica")
             {
                 return true;
             }

@@ -53,7 +53,19 @@ namespace Application.Features.CreatorFeatures.Commands
                     }
                     return res;
                 }
+                //Datos FINANCIEROS del creador
+                var entidad = _context.FinancialEntities.Where(e => e.Name == dto.InfoPago.NombreEntidadFinanciera)
+                                                        .FirstOrDefault();
+                BanckAccount banck = new();
+                banck.AccountHolder = dto.InfoPago.NombreTitular;
+                banck.Date = DateTime.UtcNow;
+                banck.AccountNumber = dto.InfoPago.NumeroDeCuenta;
+                banck.FinancialEntity = entidad;
+                banck.FinancialEntityId = entidad.Id;
+                _context.BanckAccounts.Add(banck);
+                entidad.BanckAccounts.Add(banck);
 
+                //Almacenamiento externo de imagenes en FIREBASE
                 ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
                 ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
                 var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
@@ -63,17 +75,17 @@ namespace Application.Features.CreatorFeatures.Commands
                 {
                     CreatorName = dto.CreatorName,
                     NickName = dto.NickName,
-                    CreatorCreated = DateTime.Today,
+                    CreatorCreated = DateTime.UtcNow,
                     ContentDescription = dto.ContentDescription,
                     Biography = dto.Biography,
                     CreatorImage = urlCreatorImg,
                     CoverImage = urlCreatorCoverImg,
                     Plans = new List<Plan>(),
-                    YoutubeLink = dto.YoutubeLink
+                    YoutubeLink = dto.YoutubeLink,
+                    BanckAccountId = banck.Id,
+                    BanckAccount = banck
                 };
 
-                if (dto.Category1 != "") cre.Category1 = dto.Category1;
-                if (dto.Category2 != "") cre.Category2 = dto.Category2;
                 if(dto.Category1 == "" && dto.Category2 == "")
                 {
                     res.Success = false;
@@ -81,11 +93,15 @@ namespace Application.Features.CreatorFeatures.Commands
                     res.Message.Add("Al menos debe ingresar una categoria");
                     return res;
                 }
+                cre.Category1 = dto.Category1 != "" ? dto.Category1 : "";
+                cre.Category2 = dto.Category2 != "" ? dto.Category2 : "";
 
                 var u = _context.Users.Where(u => u.Id == dto.IdUser).FirstOrDefault();
                 _context.Creators.Add(cre);
                 await _context.SaveChangesAsync();
                 u.CreatorId = cre.Id;
+                banck.Creator = cre;
+                banck.CreatorId = cre.Id;
                 await _context.SaveChangesAsync();
                 res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;

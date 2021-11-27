@@ -17,9 +17,7 @@ namespace Share.Dtos
         public string YoutubeLink { get; set; }
         public string CreatorImage {  get; set; }
         public string CoverImage { get; set; }
-
-        //FALTA ESPECIFICAR LA INFO BANCARIA
-
+        public DtoPagoCreador InfoPago {  get; set; }  
 
     }
 }

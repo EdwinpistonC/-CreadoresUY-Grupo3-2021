@@ -23,6 +23,9 @@ namespace Application.Interface
         DbSet<Tag> Tags { get; set; }
 
         DbSet<UserPlan> UserPlans { get; set; }
+        public DbSet<BanckAccount> BanckAccounts { get; set; }
+
+        public DbSet<FinancialEntity> FinancialEntities { get; set; }
 
         Task<int> SaveChangesAsync();
         public string GenerateJWT(User user);

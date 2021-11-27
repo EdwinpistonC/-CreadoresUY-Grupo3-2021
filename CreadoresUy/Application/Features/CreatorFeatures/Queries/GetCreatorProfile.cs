@@ -43,7 +43,6 @@ namespace Application.Features.CreatorFeatures.Queries
                     dtocre.CoverImage = cre.CoverImage;
                     dtocre.CantSeguidores = cre.Followers;
                     dtocre.Plans = new List<PlanDto>();
-                    //List<ContentDto> contens = new();
 
                     foreach (var pl in cre.Plans)
                     {
@@ -58,20 +57,7 @@ namespace Application.Features.CreatorFeatures.Queries
 
                         plDto.FixIfIsNull();
                         dtocre.Plans.Add(plDto);
-
-
-
-                        /*foreach(var contp in plan.ContentPlans)
-                        {
-                            var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
-                            var dto = _mapper.Map<ContentDto>(content);
-                            dto.NoNulls();
-                            dto.ReduceContent();
-                            contens.Add(dto);
-                        }
-                        */
                         cantSubs += pl.UserPlans.Count;
-
                     }
 
 
