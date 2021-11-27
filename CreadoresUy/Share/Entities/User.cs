@@ -23,6 +23,8 @@ namespace Share.Entities
         public ICollection<UserPlan> UserPlans { get; set; }
         public ICollection<Chat> Chats { get; set; }
         public ICollection<Message> Messages { get; set; }
+        public ICollection<UserCreator> UserCreators { get; set; }
+
 
     }
 }

@@ -38,8 +38,7 @@ namespace Share.Entities
 
         public int BanckAccountId {  get; set; }
         public BanckAccount BanckAccount {  get; set; }
-
-
+        public ICollection<UserCreator> UserCreators { get; set; }
 
     }
 }

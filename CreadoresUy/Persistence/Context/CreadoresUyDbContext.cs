@@ -114,6 +114,22 @@ namespace Persistence.Context
             .WithMany(c => c.Messages)
             .HasForeignKey(m => m.IdChat);
 
+
+            modelBuilder.Entity<UserCreator>()
+            .HasKey(uc => new { uc.IdUser, uc.IdCreator });
+            modelBuilder.Entity<UserCreator>()
+                .HasOne(uc => uc.User)
+                .WithMany(b => b.UserCreators)
+                .HasForeignKey(bc => bc.IdUser);
+            modelBuilder.Entity<UserCreator>()
+                .HasOne(uc => uc.Creator)
+                .WithMany(b => b.UserCreators)
+                .HasForeignKey(bc => bc.IdCreator);
+
+
+
+
+
             modelBuilder.Entity<Message>()
             .HasOne<User>(m => m.User)
             .WithMany(u => u.Messages)
