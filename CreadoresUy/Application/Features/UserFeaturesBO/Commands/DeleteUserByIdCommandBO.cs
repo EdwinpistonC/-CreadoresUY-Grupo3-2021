@@ -27,7 +27,7 @@ namespace Application.Features.UserFeaturesBO.Commands
                 var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();
                 res.Message = new List<string>();
-                if(usr == null || usr.Deleted == true)
+                if(usr == null )
                 {
                     res.Obj = "";
                     res.CodStatus = HttpStatusCode.BadRequest;

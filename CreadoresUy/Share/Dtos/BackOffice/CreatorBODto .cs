@@ -21,8 +21,8 @@ namespace Share.Entities
         public DateTime CreatorCreated { get; set; }
         public string WelcomeMsg { get; set; }
         public int Followers { get; set; }
-        public TipoCategory Category1 { get; set; }
-        public TipoCategory Category2 { get; set; }
+        public String Category1 { get; set; }
+        public String Category2 { get; set; }
         public void NoNulls()
         {
             if (CreatorName == null) CreatorName = "";
@@ -35,8 +35,8 @@ namespace Share.Entities
             if (CreatorCreated == null) CreatorCreated = DateTime.MinValue;
             if (WelcomeMsg == null) WelcomeMsg = "";
             if (Followers == null) Followers = 0;
-            if (Category1 == null) Category1 = 0;
-            if (Category2 == null) Category2 = 0;
+            if (Category1 == null) Category1 = "";
+            if (Category2 == null) Category2 ="" ;
         }
 
     }
