@@ -51,6 +51,8 @@ namespace Application.Features.UserFeatures.Commands
                     return res;
                 }
 
+                
+
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;
                 _context.Users.Add(user);

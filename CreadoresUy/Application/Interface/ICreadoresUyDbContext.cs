@@ -21,7 +21,9 @@ namespace Application.Interface
         DbSet<Plan> Plans { get; set; }
 
         DbSet<Tag> Tags { get; set; }
-
+        DbSet<DefaultBenefit> DefaultBenefits { get; set; }
+        DbSet<DefaultPlan> DefaultPlans { get; set; }
+        DbSet<Category> Categorys { get; set; }
         DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<BanckAccount> BanckAccounts { get; set; }
 

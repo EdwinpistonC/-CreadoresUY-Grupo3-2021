@@ -53,6 +53,7 @@ namespace Application.Features.CreatorFeatures.Commands
                     }
                     return res;
                 }
+
                 //Datos FINANCIEROS del creador
                 var entidad = _context.FinancialEntities.Where(e => e.Name == dto.InfoPago.NombreEntidadFinanciera)
                                                         .FirstOrDefault();

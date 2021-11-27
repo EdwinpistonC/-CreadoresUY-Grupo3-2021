@@ -82,8 +82,8 @@ namespace Application.Features.Validators
 
         public bool CategoriaValida(string nomb)
         {
-            string nom = nomb.ToLower();
-            if(nom == "" || nom == "arte" || nom == "comida" || nom == "trading" || nom == "musica")
+            var c = _context.Categorys.Where(u => u.Name == nomb).FirstOrDefault();
+            if (c != null)
             {
                 return true;
             }

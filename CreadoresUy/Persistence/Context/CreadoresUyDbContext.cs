@@ -35,6 +35,9 @@ namespace Persistence.Context
 
         public DbSet<Tag> Tags { get; set; }
 
+        public DbSet<DefaultBenefit> DefaultBenefits { get; set; }
+        public DbSet<DefaultPlan> DefaultPlans { get; set; }
+        public DbSet<Category> Categorys { get; set; }
         public DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<Content> Category { get; set; }
 
