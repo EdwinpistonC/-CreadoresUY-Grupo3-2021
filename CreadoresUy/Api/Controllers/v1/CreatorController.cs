@@ -11,9 +11,18 @@ namespace Api.Controllers.v1
     public class CreatorController : BaseApiController
     {
         [HttpPost]
+        [Route("SignUp")]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        [HttpGet]
+        [Route("GetCategoryes")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategoryes()
+        {
+            return Ok(await Mediator.Send(new GetCategoryes { }));
         }
 
 
@@ -80,8 +89,6 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));
         }
-
-
 
         //GetCreatorProfile
 

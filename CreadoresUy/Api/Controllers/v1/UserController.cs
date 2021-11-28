@@ -85,6 +85,22 @@ namespace Api.Controllers.v1
 
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route("Follow")]
+        public async Task<ActionResult<FollowCommand>> FollowCreator(FollowCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("Unfollow")]
+        public async Task<ActionResult<UnfollowCommand>> UnfollowCreator(UnfollowCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
     }
 
 }

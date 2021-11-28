@@ -28,7 +28,7 @@ namespace Application.Interface
         public DbSet<BanckAccount> BanckAccounts { get; set; }
 
         public DbSet<FinancialEntity> FinancialEntities { get; set; }
-
+        public DbSet<UserCreator> UserCreators { get; set; }
         Task<int> SaveChangesAsync();
         public string GenerateJWT(User user);
         public User GetById(int id);

@@ -82,12 +82,15 @@ namespace Application.Features.Validators
 
         public bool CategoriaValida(string nomb)
         {
+            if(nomb != "") { 
             var c = _context.Categorys.Where(u => u.Name == nomb).FirstOrDefault();
             if (c != null)
             {
                 return true;
             }
             return false;
+            }
+            return true;
         }
     }
 }

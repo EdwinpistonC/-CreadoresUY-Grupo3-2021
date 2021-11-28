@@ -37,6 +37,7 @@ namespace Persistence.Context
 
         public DbSet<DefaultBenefit> DefaultBenefits { get; set; }
         public DbSet<DefaultPlan> DefaultPlans { get; set; }
+        public DbSet<UserCreator> UserCreators { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<Content> Category { get; set; }
@@ -68,6 +69,7 @@ namespace Persistence.Context
             modelBuilder.ApplyConfiguration(new BenefitConfiguration());
 
             modelBuilder.ApplyConfiguration(new FinancialEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
             modelBuilder.Entity<UserPlan>().HasKey(up => new { up.IdUser, up.IdPlan });
 
