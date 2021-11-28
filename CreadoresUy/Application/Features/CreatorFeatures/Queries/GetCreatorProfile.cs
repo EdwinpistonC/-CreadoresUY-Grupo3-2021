@@ -30,7 +30,10 @@ namespace Application.Features.CreatorFeatures.Queries
 
             public async Task<Response<CreatorProfileDto>> Handle(GetCreatorProfile query, CancellationToken cancellation)
             {
-                Response<CreatorProfileDto> resp = new Response<CreatorProfileDto>();
+                Response<CreatorProfileDto> resp = new Response<CreatorProfileDto>
+                {
+                    Message = new List<string>()
+                };
                 var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
                             .Include(c => c.Plans).ThenInclude(b => b.Benefits).Include(c => c.Plans).ThenInclude(up => up.UserPlans).FirstOrDefault();
                 var dtocre = new CreatorProfileDto();
@@ -66,13 +69,11 @@ namespace Application.Features.CreatorFeatures.Queries
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.OK;
                     resp.Success = true;
-                    resp.Message = new List<string>
-                    {
-                        "Exito"
-                    };
+                    resp.Message.Add("Exito");
                 }
                 else
                 {
+                    dtocre.FixIfIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.BadRequest;
                     resp.Success = false;
