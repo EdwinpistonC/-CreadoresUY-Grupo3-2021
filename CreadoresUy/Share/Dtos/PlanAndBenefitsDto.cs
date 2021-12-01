@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Entities
+namespace Share.Dtos
 {
-    public class DefaultPlan : BaseEntity
+    public class PlanAndBenefitsDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -14,6 +14,6 @@ namespace Share.Entities
         public string Image { get; set; }
         public string SubscriptionMsg { get; set; }
         public string WelcomeVideoLink { get; set; }
-        public ICollection<DefaultBenefit> Benefits { get; set; }
+        public ICollection<string> Benefits {  get; set; }
     }
 }

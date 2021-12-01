@@ -42,6 +42,7 @@ namespace Persistence.Context
         public DbSet<UserPlan> UserPlans { get; set; }
         public DbSet<Content> Category { get; set; }
 
+        public DbSet<Benefit> Benefits { get; set; }
         public DbSet<BanckAccount> BanckAccounts { get; set; }
 
         public DbSet<FinancialEntity> FinancialEntities {  get; set; }
@@ -162,7 +163,13 @@ namespace Persistence.Context
             .WithMany(f => f.BanckAccounts)
             .HasForeignKey(ba => ba.FinancialEntityId);
 
+            modelBuilder.Entity<DefaultBenefit>()
+                .HasOne(db => db.DefaultPlan)
+                .WithMany(b => b.Benefits)
+                .HasForeignKey(bc => bc.IdDefaultPlan);
+
             Seed(modelBuilder);
+            Seed1(modelBuilder);
         }
         public string GenerateJWT(User user)
         {
@@ -213,6 +220,10 @@ namespace Persistence.Context
         {
 
             CreatorSeed(modelBuilder);
+        }
+        public void Seed1(ModelBuilder modelBuilder)
+        {
+            DefaultPlanSeed(modelBuilder);
         }
 
         public void CreatorSeed(ModelBuilder modelBuilder)
@@ -362,6 +373,69 @@ namespace Persistence.Context
 
             modelBuilder.Entity<ContentPlan>().HasData(contentPlans);
             modelBuilder.Entity<ContentTag>().HasData(contentTags);
+        }
+
+        public void DefaultPlanSeed(ModelBuilder modelBuilder)
+        {
+            var planes = new Collection<DefaultPlan>();
+            ICollection<DefaultBenefit> beneficios = new Collection<DefaultBenefit>();
+
+            var plan1 = new DefaultPlan
+            {
+                Id = 1,
+                Name = "Basico",
+                Description = "Plan Basico Free",
+                Price = 0,
+                Image = "",
+                SubscriptionMsg = "Bienvenidos a tod@s",
+                WelcomeVideoLink = "tuVideo.com"
+            };
+
+            var plan2 = new DefaultPlan
+            {
+                Id = 2,
+                Name = "Basico Plus",
+                Description = "Plan Basico Plus",
+                Price = 150,
+                Image = "",
+                SubscriptionMsg = "Bienvenidos a tod@s",
+                WelcomeVideoLink = "tuVideo.com"
+            };
+
+            var plan3 = new DefaultPlan
+            {
+                Id = 3,
+                Name = "Premium",
+                Description = "Plan Premium",
+                Price = 350,
+                Image = "",
+                SubscriptionMsg = "Bienvenidos a tod@s",
+                WelcomeVideoLink = "tuVideo.com"
+            };
+            planes.Add(plan1); planes.Add(plan2); planes.Add(plan3);
+
+            var dfb = new DefaultBenefit
+            {
+                Id = 1,
+                Description = "Contenidos Libres",
+                IdDefaultPlan = plan1.Id,
+            };
+            var dfb1 = new DefaultBenefit
+            {
+                Id = 2,
+                Description = "Plan Basico Free +Contenidos Exclusivos",
+                IdDefaultPlan = plan2.Id,
+            };
+            var dfb2 = new DefaultBenefit
+            {
+                Id = 3,
+                Description = "Todas las semanas contenidos nuevos",
+                IdDefaultPlan = plan3.Id,
+            };
+            beneficios.Add(dfb); beneficios.Add(dfb1); beneficios.Add(dfb2);
+            modelBuilder.Entity<DefaultPlan>().HasData(planes);
+            modelBuilder.Entity<DefaultBenefit>().HasData(beneficios);
+
         }
 
         public async Task<int> SaveChangesAsync()

@@ -25,6 +25,19 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCategoryes { }));
         }
 
+        [HttpPost]
+        [Route("SetPlansAndBenefits")]
+        public async Task<ActionResult<SetPlanAndBenefitsCommand>> SetPlansAndBenefits(SetPlanAndBenefitsCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Route("UpdatePlansAndBenefits")]
+        public async Task<IActionResult> Update(UpdatePlanAndBenefitsCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
 
         [HttpPost]
         [Route("Basic")]

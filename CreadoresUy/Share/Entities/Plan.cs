@@ -21,6 +21,20 @@ namespace Share.Entities
         public ICollection<UserPlan> UserPlans { get; set; }
         public ICollection<ContentPlan> ContentPlans { get; set; }
 
-
+        public Plan() { }
+        public Plan(string name, string description, float price, string image, string subscriptionMsg, string welcomeVideoLink, int creatorId, Creator creator)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+            Image = image;
+            SubscriptionMsg = subscriptionMsg;
+            WelcomeVideoLink = welcomeVideoLink;
+            CreatorId = creatorId;
+            Creator = creator;
+            Benefits = new List<Benefit>();
+            UserPlans = new List<UserPlan>();
+            ContentPlans = new List<ContentPlan>();
+        }
     }
 }

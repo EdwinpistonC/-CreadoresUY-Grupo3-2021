@@ -67,11 +67,11 @@ namespace Application.Features.CreatorFeatures.Commands
                 entidad.BanckAccounts.Add(banck);
 
                 //Almacenamiento externo de imagenes en FIREBASE
-                ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
+               /* ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
                 ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
                 var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
                 var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
-
+               */
                 var cre = new Creator
                 {
                     CreatorName = dto.CreatorName,
@@ -79,8 +79,8 @@ namespace Application.Features.CreatorFeatures.Commands
                     CreatorCreated = DateTime.UtcNow,
                     ContentDescription = dto.ContentDescription,
                     Biography = dto.Biography,
-                    CreatorImage = urlCreatorImg,
-                    CoverImage = urlCreatorCoverImg,
+                    CreatorImage = "imagen1",//urlCreatorImg,
+                    CoverImage = "imagen2",//urlCreatorCoverImg,
                     Plans = new List<Plan>(),
                     YoutubeLink = dto.YoutubeLink,
                     BanckAccountId = banck.Id,

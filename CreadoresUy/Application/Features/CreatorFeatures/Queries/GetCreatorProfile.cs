@@ -45,6 +45,9 @@ namespace Application.Features.CreatorFeatures.Queries
                     dtocre.CreatorImage = cre.CreatorImage;
                     dtocre.CoverImage = cre.CoverImage;
                     dtocre.CantSeguidores = cre.Followers;
+                    dtocre.ContentDescription = cre.ContentDescription;
+                    dtocre.Biography = cre.Biography;
+                    dtocre.YoutubeLink = cre.YoutubeLink;   
                     dtocre.Plans = new List<PlanDto>();
 
                     foreach (var pl in cre.Plans)

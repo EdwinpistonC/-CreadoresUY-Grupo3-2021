@@ -85,6 +85,7 @@ namespace Application.Features.CreatorFeatures.Queries
                         List<ContentAndBoolDto> contenidosResult = new();
                         contenidosResult = contenidos.Skip(skip).Take(reqPage.PageSize).ToList();
 
+                        userpc.Follower = false;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
                         res.Message.Add("Exito");
@@ -146,6 +147,9 @@ namespace Application.Features.CreatorFeatures.Queries
                         List<ContentAndBoolDto> contenidosResult = new();
                         contenidosResult = contenidos.Skip(skip).Take(reqPage.PageSize).ToList();
 
+                        var siguiendo = _context.UserCreators.Where(u => u.IdUser == query.IdUser).
+                            Where(c => c.IdCreator == cre.Id).FirstOrDefault();
+                        if (siguiendo != null) userpc.Follower = true;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
                         res.Message.Add("Exito");

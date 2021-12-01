@@ -13,6 +13,12 @@ namespace Share.Entities
         public int IdPlan { get; set; }
         public Plan Plan { get; set; }
 
-        
+        public Benefit() { }
+        public Benefit(string description, int idPlan, Plan plan)
+        {
+            Description = description;
+            IdPlan = idPlan;
+            Plan = plan;
+        }
     }
 }
