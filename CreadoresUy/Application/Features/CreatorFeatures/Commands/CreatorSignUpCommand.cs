@@ -15,10 +15,10 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CreatorFeatures.Commands
 {
-    public class CreatorSignUpCommand : IRequest<Response<String>>
+    public class CreatorSignUpCommand : IRequest<Response<int>>
     {
         public CreatorDto CreatorDto { get; set; }
-        public class CreatorSignUpCommandHandler : IRequestHandler<CreatorSignUpCommand, Response<String>>
+        public class CreatorSignUpCommandHandler : IRequestHandler<CreatorSignUpCommand, Response<int>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
@@ -31,12 +31,11 @@ namespace Application.Features.CreatorFeatures.Commands
                 _imagePost = imagePost;
             }
 
-            public async Task<Response<String>> Handle(CreatorSignUpCommand command, CancellationToken cancellationToken)
+            public async Task<Response<int>> Handle(CreatorSignUpCommand command, CancellationToken cancellationToken)
             {
                 var dto = command.CreatorDto;
-                Response<string> res = new Response<String>
+                Response<int> res = new Response<int>
                 {
-                    Obj = "",
                     Message = new List<String>()
                 };
                 
@@ -44,6 +43,7 @@ namespace Application.Features.CreatorFeatures.Commands
                 ValidationResult result = validator.Validate(dto);
                 if (!result.IsValid)
                 {
+                    res.Obj = 0;
                     res.Success = false;
                     res.CodStatus = HttpStatusCode.BadRequest;
                     foreach(var error in result.Errors)
@@ -66,12 +66,6 @@ namespace Application.Features.CreatorFeatures.Commands
                 _context.BanckAccounts.Add(banck);
                 entidad.BanckAccounts.Add(banck);
 
-                //Almacenamiento externo de imagenes en FIREBASE
-                ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
-                ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
-                var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
-                var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
-
                 var cre = new Creator
                 {
                     CreatorName = dto.CreatorName,
@@ -79,13 +73,32 @@ namespace Application.Features.CreatorFeatures.Commands
                     CreatorCreated = DateTime.UtcNow,
                     ContentDescription = dto.ContentDescription,
                     Biography = dto.Biography,
-                    CreatorImage = urlCreatorImg,
-                    CoverImage = urlCreatorCoverImg,
                     Plans = new List<Plan>(),
                     YoutubeLink = dto.YoutubeLink,
                     BanckAccountId = banck.Id,
                     BanckAccount = banck
                 };
+
+                //Almacenamiento externo de imagenes en FIREBASE
+                if (dto.CreatorImage != string.Empty) {
+                    ImageDto dtoImgCre = new(dto.CreatorImage, dto.NickName + "photo", "Creadores");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
+                    cre.CreatorImage = urlCreatorImg;
+                }
+                else
+                {
+                    cre.CreatorImage = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/creadores%2Fdefaultimage.jpg?alt=media&token=20acde1a-b875-43dd-a68c-e36a6e8c2abc";
+                }
+                if (dto.CreatorImage != string.Empty)
+                {
+                    ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
+                    var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
+                    cre.CoverImage = urlCreatorCoverImg;
+                }
+                else
+                {
+                    cre.CoverImage = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/PortadasCreadores%2FCreado1cover?alt=media&token=20b0460f-94e2-499a-9528-5fd880e37ef8";
+                }
 
                 if(dto.Category1 == "" && dto.Category2 == "")
                 {
@@ -126,6 +139,7 @@ namespace Application.Features.CreatorFeatures.Commands
                         await _context.SaveChangesAsync();
                     }
                 }
+                res.Obj = cre.Id;
                 res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";
