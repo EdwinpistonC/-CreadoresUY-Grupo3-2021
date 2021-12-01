@@ -89,7 +89,7 @@ namespace Application.Features.CreatorFeatures.Commands
                 {
                     cre.CreatorImage = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/creadores%2Fdefaultimage.jpg?alt=media&token=20acde1a-b875-43dd-a68c-e36a6e8c2abc";
                 }
-                if (dto.CreatorImage != string.Empty)
+                if (dto.CoverImage != string.Empty)
                 {
                     ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
                     var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
