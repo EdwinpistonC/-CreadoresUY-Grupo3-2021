@@ -386,7 +386,7 @@ namespace Persistence.Context
                 Name = "Basico",
                 Description = "Plan Basico Free",
                 Price = 0,
-                Image = "",
+                Image = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/Planes%2Fplan%20b.png?alt=media&token=e843ca33-19d8-4cd4-ba4d-342d9c798572",
                 SubscriptionMsg = "Bienvenidos a tod@s",
                 WelcomeVideoLink = "tuVideo.com"
             };
@@ -394,10 +394,10 @@ namespace Persistence.Context
             var plan2 = new DefaultPlan
             {
                 Id = 2,
-                Name = "Basico Plus",
-                Description = "Plan Basico Plus",
+                Name = "Estandar",
+                Description = "Plan Estandar ",
                 Price = 150,
-                Image = "",
+                Image = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/Planes%2Fplan%20e.png?alt=media&token=1525fdd8-8bcc-4666-b000-65de46fbdda9",
                 SubscriptionMsg = "Bienvenidos a tod@s",
                 WelcomeVideoLink = "tuVideo.com"
             };
@@ -408,31 +408,62 @@ namespace Persistence.Context
                 Name = "Premium",
                 Description = "Plan Premium",
                 Price = 350,
-                Image = "",
+                Image = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/Planes%2Fplan%20p.jfif?alt=media&token=a5d3cfa1-864e-4e4a-9831-caa1b2ea83a6",
                 SubscriptionMsg = "Bienvenidos a tod@s",
                 WelcomeVideoLink = "tuVideo.com"
             };
             planes.Add(plan1); planes.Add(plan2); planes.Add(plan3);
 
-            var dfb = new DefaultBenefit
+            var dfb1 = new DefaultBenefit
             {
                 Id = 1,
                 Description = "Contenidos Libres",
                 IdDefaultPlan = plan1.Id,
             };
-            var dfb1 = new DefaultBenefit
-            {
-                Id = 2,
-                Description = "Plan Basico Free +Contenidos Exclusivos",
-                IdDefaultPlan = plan2.Id,
-            };
             var dfb2 = new DefaultBenefit
             {
+                Id = 2,
+                Description = "Todas los meses un contenido libre ",
+                IdDefaultPlan = plan1.Id,
+            };
+
+
+            var dfb3 = new DefaultBenefit
+            {
                 Id = 3,
+                Description = "Plan Basico Free + Contenidos Exclusivos",
+                IdDefaultPlan = plan2.Id,
+            };
+            var dfb4 = new DefaultBenefit
+            {
+                Id = 4,
                 Description = "Todas las semanas contenidos nuevos",
+                IdDefaultPlan = plan2.Id,
+            };
+
+
+            var dfb5 = new DefaultBenefit
+            {
+                Id = 5,
+                Description = "Todos los dias contenidos nuevos",
                 IdDefaultPlan = plan3.Id,
             };
-            beneficios.Add(dfb); beneficios.Add(dfb1); beneficios.Add(dfb2);
+            var dfb6 = new DefaultBenefit
+            {
+                Id = 6,
+                Description = "Plan Estandar + Contenidos Exclusivos",
+                IdDefaultPlan = plan3.Id,
+            };
+            var dfb7 = new DefaultBenefit
+            {
+                Id = 7,
+                Description = "Chat",
+                IdDefaultPlan = plan3.Id,
+            };
+
+            beneficios.Add(dfb1); beneficios.Add(dfb2); beneficios.Add(dfb3);
+            beneficios.Add(dfb4); beneficios.Add(dfb5); beneficios.Add(dfb6);
+            beneficios.Add(dfb7);
             modelBuilder.Entity<DefaultPlan>().HasData(planes);
             modelBuilder.Entity<DefaultBenefit>().HasData(beneficios);
 

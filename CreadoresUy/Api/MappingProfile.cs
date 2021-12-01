@@ -68,6 +68,9 @@ namespace Api
 
             CreateMap<Plan, BasePlanDto>();
             CreateMap<BasePlanDto, Plan>();
+
+            CreateMap<UpdatePlanAndBenefitsDto, Plan>();
+            CreateMap<Plan, UpdatePlanAndBenefitsDto>();
         }
     }
 }

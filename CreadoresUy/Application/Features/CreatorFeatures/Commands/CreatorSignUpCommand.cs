@@ -67,11 +67,11 @@ namespace Application.Features.CreatorFeatures.Commands
                 entidad.BanckAccounts.Add(banck);
 
                 //Almacenamiento externo de imagenes en FIREBASE
-               /* ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
+                ImageDto dtoImgCre = new(dto.CreatorImage,dto.NickName+"photo","Creadores");
                 ImageDto dtoImgCreCover = new(dto.CoverImage, dto.NickName + "cover", "PortadasCreadores");
                 var urlCreatorImg = await _imagePost.postImage(dtoImgCre);
                 var urlCreatorCoverImg = await _imagePost.postImage(dtoImgCreCover);
-               */
+
                 var cre = new Creator
                 {
                     CreatorName = dto.CreatorName,
@@ -79,8 +79,8 @@ namespace Application.Features.CreatorFeatures.Commands
                     CreatorCreated = DateTime.UtcNow,
                     ContentDescription = dto.ContentDescription,
                     Biography = dto.Biography,
-                    CreatorImage = "imagen1",//urlCreatorImg,
-                    CoverImage = "imagen2",//urlCreatorCoverImg,
+                    CreatorImage = urlCreatorImg,
+                    CoverImage = urlCreatorCoverImg,
                     Plans = new List<Plan>(),
                     YoutubeLink = dto.YoutubeLink,
                     BanckAccountId = banck.Id,
@@ -104,6 +104,28 @@ namespace Application.Features.CreatorFeatures.Commands
                 banck.Creator = cre;
                 banck.CreatorId = cre.Id;
                 await _context.SaveChangesAsync();
+                //Setear los planes por defecto
+                var listplan = _context.DefaultPlans.ToList();
+                var listdb = _context.DefaultBenefits.ToList();
+                if (listplan.Count != 0) { 
+                    foreach(var item in listplan)
+                    {
+                        var plan = new Plan(item.Name, item.Description, item.Price, item.Image, item.SubscriptionMsg, item.WelcomeVideoLink, cre.Id, cre);
+                        _context.Plans.Add(plan);
+                        await _context.SaveChangesAsync();
+                        foreach (var b in listdb)
+                        {
+                            if(b.IdDefaultPlan== item.Id) { 
+                                var ben = new Benefit(b.Description, plan.Id, plan);
+                                _context.Benefits.Add(ben);
+                                await _context.SaveChangesAsync();
+                                plan.Benefits.Add(ben);
+                            }
+                        }
+                        cre.Plans.Add(plan);
+                        await _context.SaveChangesAsync();
+                    }
+                }
                 res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;
                 var msg1 = "Usuario ingresado correctamente";

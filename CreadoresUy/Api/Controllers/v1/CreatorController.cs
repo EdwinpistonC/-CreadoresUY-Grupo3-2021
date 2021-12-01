@@ -39,6 +39,22 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpGet]
+        [Route("GetCreatorPlansById")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategGetCreatorPlansoryesById(int id)
+        {
+            return Ok(await Mediator.Send(new GetCreatorPlansByIdQuery { CreatorId = id }));
+        }
+
+        [HttpGet]
+        [Route("GetCreatorPlansByNickname")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategGetCreatorPlansoryesByNickname(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { Nickname = nickname }));
+        }
+
         [HttpPost]
         [Route("Basic")]
         public async Task<ActionResult<CreateCreatorCommand>> CreateCreator(CreateCreatorCommand command)
