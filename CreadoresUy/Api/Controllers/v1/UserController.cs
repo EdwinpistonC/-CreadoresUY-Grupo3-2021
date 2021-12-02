@@ -110,6 +110,14 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route("SubscribeTo")]
+        public async Task<ActionResult<SubscribeToCommand>> SubscribeTo(SubscribeToCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
     }
 
 }

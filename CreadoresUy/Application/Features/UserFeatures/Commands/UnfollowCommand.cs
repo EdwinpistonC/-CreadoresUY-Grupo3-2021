@@ -45,7 +45,7 @@ namespace Application.Features.UserFeatures.Commands
                 var exist = _context.UserCreators.Where(uc => uc.IdCreator == cre.Id)
                     .Where(uc => uc.IdUser == command.IdUser).FirstOrDefault();
 
-                if (exist == null)
+                if (exist == null || exist.Unfollow == true)
                 {
                     resp.Message.Add("No se ha encontrado relacion entre usr y cre");
                     resp.CodStatus = HttpStatusCode.BadRequest;

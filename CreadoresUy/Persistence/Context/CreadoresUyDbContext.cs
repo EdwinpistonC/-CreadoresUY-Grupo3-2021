@@ -46,6 +46,7 @@ namespace Persistence.Context
         public DbSet<BanckAccount> BanckAccounts { get; set; }
 
         public DbSet<FinancialEntity> FinancialEntities {  get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
 
 
@@ -167,6 +168,11 @@ namespace Persistence.Context
                 .HasOne(db => db.DefaultPlan)
                 .WithMany(b => b.Benefits)
                 .HasForeignKey(bc => bc.IdDefaultPlan);
+
+            modelBuilder.Entity<Payment>()
+            .HasOne<UserPlan>(py => py.UserPlan)
+            .WithMany(p => p.Payments)
+            .HasForeignKey(py => new { py.UserPlanId, py.IdUser});
 
             Seed(modelBuilder);
             Seed1(modelBuilder);

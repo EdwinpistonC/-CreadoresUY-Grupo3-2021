@@ -13,6 +13,7 @@ namespace Share.Entities
             IdPlan = idPlan;
             IdUser = idUser;
             DateTime = dateTime;
+            Deleted = false;
         }
 
         public int IdPlan {  get; set; }
@@ -21,5 +22,7 @@ namespace Share.Entities
         public User User {  get; set; }
 
         public DateTime DateTime {  get; set; }
+        public ICollection<Payment> Payments { get; set; }
+        public bool Deleted {  get; set; }
     }
 }

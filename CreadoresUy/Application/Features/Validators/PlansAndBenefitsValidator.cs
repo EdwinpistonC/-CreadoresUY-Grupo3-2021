@@ -37,11 +37,14 @@ namespace Application.Features.Validators
         {
             var cre = _context.Creators.Where(c => c.NickName == Nickname)
                                             .Include(c => c.Plans).FirstOrDefault();
-            if(cre != null)
-            {
-                foreach(var plan in cre.Plans)
+            if(Nickname != string.Empty) { 
+                if(cre != null)
                 {
-                    if (plan.Name == name) return false;
+                    foreach(var plan in cre.Plans)
+                    {
+                        if (plan.Name == name) return false;
+                    }
+                    return true;
                 }
                 return true;
             }

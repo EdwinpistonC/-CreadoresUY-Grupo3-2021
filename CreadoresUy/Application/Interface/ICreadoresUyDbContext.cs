@@ -33,6 +33,6 @@ namespace Application.Interface
         Task<int> SaveChangesAsync();
         public string GenerateJWT(User user);
         public User GetById(int id);
-
+        public DbSet<Payment> Payments { get; set; }
     }
 }
