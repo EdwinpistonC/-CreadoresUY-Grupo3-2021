@@ -38,7 +38,9 @@ namespace Application.Features.UserFeatures.Queries
                     foreach(var item in usr.UserPlans)
                     {
                         var cre = _context.Creators.Where(c => c.Id == item.Plan.CreatorId).FirstOrDefault();
-                        var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateTime);
+                        var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateTime) {
+                            Id = cre.Id
+                        };
                         list.Add(creador);
                     }
                     if (list.Count > 0)

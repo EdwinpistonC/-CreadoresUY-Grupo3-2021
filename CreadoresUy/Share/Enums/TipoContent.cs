@@ -8,10 +8,10 @@ namespace Share.Enums
 {
     public enum TipoContent
     {
-        Text,
-        Image,
-        Video,
-        Audio,
-        Link
+        Text = 1,
+        Image =2,
+        Video = 3,
+        Audio = 4,
+        Link = 5
     }
 }

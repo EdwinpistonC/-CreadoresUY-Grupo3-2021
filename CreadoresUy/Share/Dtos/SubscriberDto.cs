@@ -9,6 +9,7 @@ namespace Share.Dtos
     public class SubscriberDto
     {
         public string Name {  get; set; }
+        public int Id { get; set; }
         public string ProfileImage { get; set; }    
         public DateTime SubscriberDate { get; set; }
 
