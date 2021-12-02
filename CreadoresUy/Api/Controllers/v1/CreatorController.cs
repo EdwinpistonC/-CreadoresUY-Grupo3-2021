@@ -55,6 +55,14 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { Nickname = nickname }));
         }
 
+        [HttpGet]
+        [Route("GetSubscribers")]
+        //[Authorize]
+        public async Task<IActionResult> GetSubscribers(int idCreator)
+        {
+            return Ok(await Mediator.Send(new GetSubscribersQuery { IdCreator = idCreator }));
+        }
+
         [HttpPost]
         [Route("Basic")]
         public async Task<ActionResult<CreateCreatorCommand>> CreateCreator(CreateCreatorCommand command)
