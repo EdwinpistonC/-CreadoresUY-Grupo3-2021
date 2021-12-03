@@ -24,8 +24,6 @@ namespace Application.Features.Validators
             RuleFor(x => x.ContentDescription).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.Biography).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.YoutubeLink).NotEmpty().WithMessage("{PropertyName} es un campo requerido");
-            RuleFor(x => x.CreatorImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.CoverImage).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.Category1).Must(CategoriaValida).WithMessage("{PropertyName} No es una categoria Valida");
             RuleFor(x => x.Category2).Must(CategoriaValida).WithMessage("{PropertyName} No es una categoria Valida");
             //Validacion de datos bancarios
@@ -82,12 +80,15 @@ namespace Application.Features.Validators
 
         public bool CategoriaValida(string nomb)
         {
+            if(nomb != "") { 
             var c = _context.Categorys.Where(u => u.Name == nomb).FirstOrDefault();
             if (c != null)
             {
                 return true;
             }
             return false;
+            }
+            return true;
         }
     }
 }

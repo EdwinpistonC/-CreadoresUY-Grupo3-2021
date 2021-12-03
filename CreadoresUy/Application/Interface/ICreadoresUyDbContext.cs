@@ -28,10 +28,11 @@ namespace Application.Interface
         public DbSet<BanckAccount> BanckAccounts { get; set; }
 
         public DbSet<FinancialEntity> FinancialEntities { get; set; }
-
+        public DbSet<UserCreator> UserCreators { get; set; }
+        public DbSet<Benefit> Benefits { get; set; }
         Task<int> SaveChangesAsync();
         public string GenerateJWT(User user);
         public User GetById(int id);
-
+        public DbSet<Payment> Payments { get; set; }
     }
 }

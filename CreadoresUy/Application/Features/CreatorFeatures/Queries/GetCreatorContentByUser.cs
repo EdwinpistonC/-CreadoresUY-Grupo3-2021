@@ -85,6 +85,7 @@ namespace Application.Features.CreatorFeatures.Queries
                         List<ContentAndBoolDto> contenidosResult = new();
                         contenidosResult = contenidos.Skip(skip).Take(reqPage.PageSize).ToList();
 
+                        userpc.Follower = false;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
                         res.Message.Add("Exito");
@@ -119,12 +120,13 @@ namespace Application.Features.CreatorFeatures.Queries
                             .Include(p => p.UserPlans).Include(p => p.ContentPlans).FirstOrDefault();
                             foreach (var usu in plan.UserPlans)
                             {
-                                if (usu.IdUser == user.Id)
+                                if (usu.IdUser == user.Id && usu.Deleted == false)
                                 {
                                     authorized = true;
                                 }
                             }
                             if (user.CreatorId == cre.Id) authorized = true;
+                            bool EraFalse = false;
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
@@ -132,9 +134,19 @@ namespace Application.Features.CreatorFeatures.Queries
                                 dtoplan.IdCreator = cre.Id;
                                 dtoplan.NickName = cre.NickName;
                                 dtoplan.NoNulls();
+                                if (dtoplan.Public == true)
+                                {
+                                    if(authorized == false) EraFalse = true;
+                                    authorized = true;
+                                }
                                 if (authorized == false) dtoplan.ReduceContent();
                                 ContentAndBoolDto dto = new(dtoplan, authorized);
                                 contenidos.Add(dto);
+                                if (EraFalse == true)
+                                {
+                                    authorized = false;
+                                    EraFalse = false;
+                                }
                             }
                         }
                         contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
@@ -146,6 +158,9 @@ namespace Application.Features.CreatorFeatures.Queries
                         List<ContentAndBoolDto> contenidosResult = new();
                         contenidosResult = contenidos.Skip(skip).Take(reqPage.PageSize).ToList();
 
+                        var siguiendo = _context.UserCreators.Where(u => u.IdUser == query.IdUser).
+                            Where(c => c.IdCreator == cre.Id).FirstOrDefault();
+                        if (siguiendo != null && siguiendo.Unfollow != true) userpc.Follower = true;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
                         res.Message.Add("Exito");

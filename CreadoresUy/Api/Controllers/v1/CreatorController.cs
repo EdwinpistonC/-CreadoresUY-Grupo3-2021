@@ -11,11 +11,57 @@ namespace Api.Controllers.v1
     public class CreatorController : BaseApiController
     {
         [HttpPost]
+        [Route("SignUp")]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpGet]
+        [Route("GetCategoryes")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategoryes()
+        {
+            return Ok(await Mediator.Send(new GetCategoryes { }));
+        }
+
+        [HttpPost]
+        [Route("SetPlansAndBenefits")]
+        public async Task<ActionResult<SetPlanAndBenefitsCommand>> SetPlansAndBenefits(SetPlanAndBenefitsCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut]
+        [Route("UpdatePlansAndBenefits")]
+        public async Task<IActionResult> Update(UpdatePlanAndBenefitsCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpGet]
+        [Route("GetCreatorPlansById")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategGetCreatorPlansoryesById(int id)
+        {
+            return Ok(await Mediator.Send(new GetCreatorPlansByIdQuery { CreatorId = id }));
+        }
+
+        [HttpGet]
+        [Route("GetCreatorPlansByNickname")]
+        //[Authorize]
+        public async Task<IActionResult> GetCategGetCreatorPlansoryesByNickname(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { Nickname = nickname }));
+        }
+
+        [HttpGet]
+        [Route("GetSubscribers")]
+        //[Authorize]
+        public async Task<IActionResult> GetSubscribers(int idCreator)
+        {
+            return Ok(await Mediator.Send(new GetSubscribersQuery { IdCreator = idCreator }));
+        }
 
         [HttpPost]
         [Route("Basic")]
@@ -80,8 +126,6 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));
         }
-
-
 
         //GetCreatorProfile
 

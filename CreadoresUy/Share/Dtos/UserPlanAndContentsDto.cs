@@ -8,6 +8,7 @@ namespace Share.Dtos
 {
     public class UserPlanAndContentsDto
     {
+        public bool Follower {  get; set; }
         public int Results {  get; set; }
         public ICollection<ContentAndBoolDto> ContentsAndBool {  get; set; }
 

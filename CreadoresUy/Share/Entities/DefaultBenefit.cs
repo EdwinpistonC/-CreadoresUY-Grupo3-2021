@@ -9,8 +9,10 @@ namespace Share.Entities
     public class DefaultBenefit : BaseEntity
     {
 
-        public string Description;
-        public int IdPlan { get; set; }
-        public DefaultPlan Plan { get; set; }
-    }
+
+        public string Description { get; set; }
+
+        public int IdDefaultPlan { get; set; }
+        public DefaultPlan DefaultPlan { get; set; }
+
 }

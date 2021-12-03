@@ -39,7 +39,11 @@ namespace Share.Dtos
                     }
                     Plans = newPlans;
                 }
-                
+
+            }
+            else
+            {
+                Plans = new List<PlanDto>();
             }
         }
 
