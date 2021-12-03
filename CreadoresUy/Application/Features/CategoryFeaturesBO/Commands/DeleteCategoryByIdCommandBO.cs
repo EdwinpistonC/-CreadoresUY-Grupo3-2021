@@ -9,25 +9,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.CreateFeaturesBO.Commands
+namespace Application.Features.CategoryFeaturesBO.Commands
 {
-    public class DeleteAdminByIdCommandBO : IRequest<Response<String>>
+    public class DeleteCategoryByIdCommandBO : IRequest<Response<String>>
     {
         public int Id {  get; set; }
 
-        public class DeleteAdminByIdCommandBOHandler : IRequestHandler<DeleteAdminByIdCommandBO, Response<String>>
+        public class DeleteCategoryByIdCommandBOHandler : IRequestHandler<DeleteCategoryByIdCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public DeleteAdminByIdCommandBOHandler(ICreadoresUyDbContext context)
+            public DeleteCategoryByIdCommandBOHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
-            public async Task<Response<String>> Handle(DeleteAdminByIdCommandBO command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(DeleteCategoryByIdCommandBO command, CancellationToken cancellationToken)
             {
-                var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
+                var category = _context.Categorys.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();
                 res.Message = new List<string>();
-                if(usr == null )
+                if(category == null )
                 {
                     res.Obj = "";
                     res.CodStatus = HttpStatusCode.BadRequest;
@@ -36,7 +36,7 @@ namespace Application.Features.CreateFeaturesBO.Commands
                     res.Message.Add(msj);
                     return res;
                 }
-                usr.Deleted = !usr.Deleted;
+                category.Deleted = !category.Deleted;
                 await _context.SaveChangesAsync();
                 res.Obj = "";
                 res.CodStatus = HttpStatusCode.OK;

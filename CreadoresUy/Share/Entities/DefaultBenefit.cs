@@ -10,8 +10,7 @@ namespace Share.Entities
     {
 
         public string Description;
-
         public int IdPlan { get; set; }
-        public Plan Plan { get; set; }
+        public DefaultPlan Plan { get; set; }
     }
 }

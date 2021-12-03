@@ -14,7 +14,6 @@ namespace Share.Entities
         public string Image { get; set; }
         public string SubscriptionMsg { get; set; }
         public string WelcomeVideoLink { get; set; }
-        public int CreatorId { get; set; }
         public ICollection<DefaultBenefit> Benefits { get; set; }
     }
 }

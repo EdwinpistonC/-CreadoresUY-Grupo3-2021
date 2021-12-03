@@ -15,12 +15,21 @@ namespace Api
             CreateMap<Plan, PlanDto>();
             CreateMap<PlanDto, Plan>();
 
+            CreateMap<DefaultPlan, DefaultPlanBODto>();
+            CreateMap<DefaultPlanBODto, DefaultPlan>();
+
+            CreateMap<Benefit, BenefitBODto>();
+            CreateMap<BenefitBODto, Benefit>();
+
             CreateMap<Tag, TagDto>();
             CreateMap<TagDto, Tag>();
 
             CreateMap<Tag, AdminBODto>();
             CreateMap<AdminBODto, Tag>();
 
+            CreateMap<Category, CategoryBODto>();
+            CreateMap<CategoryBODto, Category>();
+            
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
 

@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CreateFeaturesBO.Commands
 {
-    public class DeleteAdminByIdCommandBO : IRequest<Response<String>>
+    public class DisableAdminByIdCommandBO : IRequest<Response<String>>
     {
         public int Id {  get; set; }
 
-        public class DeleteAdminByIdCommandBOHandler : IRequestHandler<DeleteAdminByIdCommandBO, Response<String>>
+        public class DisableAdminByIdCommandBOHandler : IRequestHandler<DisableAdminByIdCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public DeleteAdminByIdCommandBOHandler(ICreadoresUyDbContext context)
+            public DisableAdminByIdCommandBOHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
-            public async Task<Response<String>> Handle(DeleteAdminByIdCommandBO command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(DisableAdminByIdCommandBO command, CancellationToken cancellationToken)
             {
                 var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();
@@ -36,7 +36,7 @@ namespace Application.Features.CreateFeaturesBO.Commands
                     res.Message.Add(msj);
                     return res;
                 }
-                usr.Deleted = !usr.Deleted;
+                usr.IsAdmin = false;
                 await _context.SaveChangesAsync();
                 res.Obj = "";
                 res.CodStatus = HttpStatusCode.OK;

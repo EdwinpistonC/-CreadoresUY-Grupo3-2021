@@ -9,25 +9,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.CreateFeaturesBO.Commands
+namespace Application.Features.DefaultPlanFeaturesBO.Commands
 {
-    public class DeleteAdminByIdCommandBO : IRequest<Response<String>>
+    public class DeleteDefaultPlanByIdCommandBO : IRequest<Response<String>>
     {
         public int Id {  get; set; }
 
-        public class DeleteAdminByIdCommandBOHandler : IRequestHandler<DeleteAdminByIdCommandBO, Response<String>>
+        public class DeleteDefaultPlanByIdCommandBOHandler : IRequestHandler<DeleteDefaultPlanByIdCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public DeleteAdminByIdCommandBOHandler(ICreadoresUyDbContext context)
+            public DeleteDefaultPlanByIdCommandBOHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
-            public async Task<Response<String>> Handle(DeleteAdminByIdCommandBO command, CancellationToken cancellationToken)
+            public async Task<Response<String>> Handle(DeleteDefaultPlanByIdCommandBO command, CancellationToken cancellationToken)
             {
-                var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
+                var usr = _context.DefaultPlans.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();
                 res.Message = new List<string>();
-                if(usr == null )
+                if(usr == null || usr.Deleted == true)
                 {
                     res.Obj = "";
                     res.CodStatus = HttpStatusCode.BadRequest;

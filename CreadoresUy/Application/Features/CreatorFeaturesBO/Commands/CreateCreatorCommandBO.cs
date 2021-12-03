@@ -1,12 +1,15 @@
 ﻿using Application.Features.Validators;
 using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,45 +18,54 @@ namespace Application.Features.CreatorFeaturesBO.Commands
 {
     public class CreateCreatorCommandBO : IRequest<Response<String>>
     {
-        public AdminBODto CreateAdminDto { get; set; }
+        public CreatorBODto CreatorBODto { get; set; }
         public class CreateCreatorCommandBOHandler : IRequestHandler<CreateCreatorCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
+            private readonly ImagePostService _imagePost;
 
-            public CreateCreatorCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public CreateCreatorCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper, ImagePostService imagePost)
             {
                 _context = context;
                 _mapper = mapper;
+                _imagePost = imagePost;
             }
 
             public async Task<Response<String>> Handle(CreateCreatorCommandBO command, CancellationToken cancellationToken)
             {
-                var dto = command.CreateAdminDto;
+                var dto = command.CreatorBODto;
+                var user = await _context.Users.Where(u => u.Id == dto.UserId).FirstOrDefaultAsync();
 
                 Response<string> res = new Response<String>
                 {
                     Obj = "",
                     Message = new List<String>()
                 };
-                var validator = new AdminSignUpValidatorBO(_context);
-                ValidationResult result = validator.Validate(dto);
 
-                if (!result.IsValid)
+
+                var creator = _mapper.Map<Creator>(dto);
+
+                if (creator.CoverImage != "")
                 {
-                    res.CodStatus = HttpStatusCode.BadRequest;
-                    res.Success = false;
-                    foreach (var error in result.Errors)
-                    {
-                        var msg = error.ErrorMessage;
-                        res.Message.Add(msg);
-                    }
-                    return res;
+                    ImageDto dtoImgPrf = new(creator.CoverImage, creator.NickName + DateTime.Now.ToString() + "photo", "PortadasCreadores");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    creator.CoverImage = urlCreatorImg;
                 }
 
-                var user = _mapper.Map<User>(dto);
-                user.Created = DateTime.Now;
-                _context.Users.Add(user);
+                if (creator.CreatorImage != "")
+                {
+                    ImageDto dtoImgPrf = new(creator.CreatorImage, creator.NickName + DateTime.Now.ToString() + "photo", "Creadores");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    creator.CreatorImage = urlCreatorImg;
+                }
+
+                creator.CreatorCreated = DateTime.Now;
+                creator.User = user;
+                _context.Creators.Add(creator);
+
+                
+
                 await _context.SaveChangesAsync();
                 res.CodStatus = HttpStatusCode.Created;
                 res.Success = true;

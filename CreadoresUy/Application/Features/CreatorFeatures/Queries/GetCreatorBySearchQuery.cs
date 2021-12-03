@@ -28,20 +28,14 @@ namespace Application.Features.CreatorFeatures.Queries
             {
                 _context = context;
                 _mapper = mapper;
-
             }
             public async Task<Response<List<CreadorSearchDto>>> Handle(GetCreatorBySearchQuery query, CancellationToken cancellationToken)
             {
 
-
-
                 var creatorList = await _context.Creators.Where(c => c.NickName.Contains(query.SearchText) || c.CreatorName.Contains(query.SearchText)||
                  c.ContentDescription.Contains(query.SearchText) && c.Deleted==false).Include(c =>  c.Plans).ThenInclude(c=>c.UserPlans).Skip(query.Page * query.SizePage).Take(query.SizePage).ToListAsync();
 
-
-
                 List<CreadorSearchDto> list = new List<CreadorSearchDto>();
-
 
                 var subs=0;
                 creatorList.ForEach(x => {

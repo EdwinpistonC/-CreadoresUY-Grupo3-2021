@@ -1,5 +1,6 @@
 ﻿using Application.Features.Validators;
 using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
@@ -15,43 +16,38 @@ namespace Application.Features.UserFeaturesBO.Commands
 {
     public class CreateUserCommandBO : IRequest<Response<String>>
     {
-        public UserBODto CreateUserDto { get; set; }
+        public String Name { get; set; }
+        public String Image { get; set; }
+        public String Password { get; set; }
+        public String Email { get; set; }
         public class CreateUserCommandBOHandler : IRequestHandler<CreateUserCommandBO, Response<String>>
         {
             private readonly ICreadoresUyDbContext _context;
-            private readonly IMapper _mapper;
 
-            public CreateUserCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper)
+            private readonly ImagePostService _imagePost;
+            public CreateUserCommandBOHandler(ICreadoresUyDbContext context, ImagePostService imagePost)
             {
                 _context = context;
-                _mapper = mapper;
+                _imagePost = imagePost;
             }
 
             public async Task<Response<String>> Handle(CreateUserCommandBO command, CancellationToken cancellationToken)
             {
-                var dto = command.CreateUserDto;
 
                 Response<string> res = new Response<String>
                 {
                     Obj = "",
                     Message = new List<String>()
                 };
-                var validator = new UserSignUpValidatorBO(_context);
-                ValidationResult result = validator.Validate(dto);
 
-                if (!result.IsValid)
-                {
-                    res.CodStatus = HttpStatusCode.BadRequest;
-                    res.Success = false;
-                    foreach (var error in result.Errors)
-                    {
-                        var msg = error.ErrorMessage;
-                        res.Message.Add(msg);
-                    }
-                    return res;
-                }
+                var user = new User();
+                user.Name = command.Name;
+                user.Email = command.Email;
 
-                var user = _mapper.Map<User>(dto);
+                ImageDto dtoImgPrf = new(command.Image, user.Name+  DateTime.Now.ToString() + "photo", "Usuarios");
+                var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+
+                user.ImgProfile = urlCreatorImg;
                 user.Created = DateTime.Now;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

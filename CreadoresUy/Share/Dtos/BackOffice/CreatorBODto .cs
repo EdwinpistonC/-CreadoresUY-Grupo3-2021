@@ -10,7 +10,10 @@ namespace Share.Entities
     public class CreatorBODto 
     {
         public int Id {  get; set; }
+
         public bool Deleted { get; set; }
+
+        public int UserId { get; set; }
         public string CreatorName { get; set; }
         public string NickName { get; set; }
         public string ContentDescription { get; set; }

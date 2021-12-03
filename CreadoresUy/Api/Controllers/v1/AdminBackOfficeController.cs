@@ -29,8 +29,15 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetAllAdminBOQuery()));
         }
-       
-        [HttpDelete("{id}")]
+
+        [HttpDelete("Disable/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DisableAdmin(int id)
+        {
+            return Ok(await Mediator.Send(new DisableAdminByIdCommandBO { Id = id }));
+        }
+
+        [HttpDelete("Remove/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
         {
@@ -46,7 +53,7 @@ namespace Api.Controllers.v1
         [Authorize]
         [AllowAnonymous]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser( UpdateAdminCommandBO command)
+        public async Task<IActionResult> UpdateAdmin( UpdateAdminCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }

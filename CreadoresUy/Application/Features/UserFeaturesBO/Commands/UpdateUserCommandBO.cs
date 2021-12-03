@@ -1,4 +1,5 @@
 ﻿using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using MediatR;
 using Share.Dtos;
@@ -27,10 +28,12 @@ namespace Application.Features.UserFeaturesBO.Commands
         public class UpdateUserCommandBOHandler : IRequestHandler<UpdateUserCommandBO, Response<string>>
         {
             private readonly ICreadoresUyDbContext _context;
+            private readonly ImagePostService _imagePost;
 
-            public UpdateUserCommandBOHandler(ICreadoresUyDbContext context )
+            public UpdateUserCommandBOHandler(ICreadoresUyDbContext context, ImagePostService imagePost)
             {
                 _context = context;
+                _imagePost = imagePost;
             }
             public async Task<Response<string>> Handle(UpdateUserCommandBO command, CancellationToken cancellationToken)
             {
@@ -51,7 +54,15 @@ namespace Application.Features.UserFeaturesBO.Commands
                 if (command.Name != "") user.Name = command.Name;
                 if (command.Email != "") user.Email = command.Email;
                 if (command.Description != "") user.Description = command.Description;
-                if (command.ImgProfile != "") user.ImgProfile = command.ImgProfile;
+                if (command.ImgProfile != "")
+                {
+                    ImageDto dtoImgPrf = new(command.ImgProfile, user.Name + DateTime.Now.ToString() + "photo", "Usuarios");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    user.ImgProfile = urlCreatorImg;
+
+                }
+
+
                 if (command.Password != "") user.Password = command.Password;
                 if (command.Created != DateTime.MinValue) user.Created = command.Created;
                 if (command.LasLogin !=  DateTime.MinValue) user.LasLogin = command.LasLogin;
