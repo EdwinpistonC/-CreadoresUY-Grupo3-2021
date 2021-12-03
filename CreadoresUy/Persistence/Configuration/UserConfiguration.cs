@@ -48,7 +48,7 @@ namespace Persistence.Configuration
             int i = 0;
             var imagen ="";
 
-            for (i = 3; i < DataConstant.UserQuantity; i++)
+            for (i = 0; i < DataConstant.UserQuantity; i++)
             {
 
                 string name;

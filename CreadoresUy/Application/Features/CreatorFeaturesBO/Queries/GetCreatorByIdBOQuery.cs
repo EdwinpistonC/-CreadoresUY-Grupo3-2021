@@ -31,7 +31,9 @@ namespace Application.Features.CreatorFeaturesBO.Queries
 
             public async Task<Response<CreatorBODto>> Handle(GetCreatorByIdBOQuery query, CancellationToken cancellationToken)
             {
-                var creator = _context.Creators.Include(c => c.User).Where(u => u.Id == query.Id).FirstOrDefault();
+                var creator = _context.Creators.Where(u => u.Id == query.Id ).FirstOrDefault();
+
+                var usuario = _context.Users.Where(u => u.CreatorId == query.Id).FirstOrDefault();
 
                 Response<CreatorBODto> res = new();
                 res.Message = new List<string>();
@@ -46,7 +48,7 @@ namespace Application.Features.CreatorFeaturesBO.Queries
                     return res;
                 }
                 var dto = _mapper.Map<CreatorBODto>(creator);
-                dto.UserId = creator.User.Id;
+                dto.UserId = usuario.Id;
                 dto.NoNulls();
                 res.Obj = dto;
                 res.CodStatus = HttpStatusCode.OK;

@@ -43,7 +43,7 @@ namespace Application.Features.CreatorFeatures.Queries
 
 
                 //TODO   orderby
-                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).Where(c => c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan)) ).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators).Where(c => c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan))  ||  (c.Public && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser))) ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
