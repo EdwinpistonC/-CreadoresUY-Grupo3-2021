@@ -48,7 +48,7 @@ namespace Application.Features.CategoryFeaturesBO.Commands
 
 
 
-                Category category = new Category() { Name = command.Name };
+                Category category = new Category(command.Name);
                 _context.Categorys.Add(category);
                 await _context.SaveChangesAsync();
                 res.CodStatus = HttpStatusCode.Created;

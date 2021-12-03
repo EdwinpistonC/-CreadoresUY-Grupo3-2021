@@ -14,5 +14,6 @@ namespace Share.Entities
 
         public int IdDefaultPlan { get; set; }
         public DefaultPlan DefaultPlan { get; set; }
+    }
 
 }
