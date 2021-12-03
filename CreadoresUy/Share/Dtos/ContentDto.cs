@@ -17,6 +17,7 @@ namespace Share.Dtos
         public int IdCreator { get; set; }
         public string NickName { get; set; }
 
+        public string CreatorImage { get; set; }
 
         public DateTime AddedDate { get; set; }
         public bool Draft { get; set; }
@@ -77,7 +78,10 @@ namespace Share.Dtos
             {
                 Tags = new Collection<TagDto>();
             }
-
+            if (CreatorImage == null)
+            {
+                CreatorImage = "";
+            }
         }
     }
 }

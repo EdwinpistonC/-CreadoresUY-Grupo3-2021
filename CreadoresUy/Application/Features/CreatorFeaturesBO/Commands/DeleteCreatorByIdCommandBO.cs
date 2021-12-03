@@ -24,10 +24,10 @@ namespace Application.Features.CreatorFeaturesBO.Commands
             }
             public async Task<Response<String>> Handle(DeleteCreatorByIdCommandBO command, CancellationToken cancellationToken)
             {
-                var usr = _context.Users.Where(u => u.Id == command.Id).FirstOrDefault();
+                var usr = _context.Creators.Where(u => u.Id == command.Id).FirstOrDefault();
                 Response<string> res = new();
                 res.Message = new List<string>();
-                if(usr == null || usr.Deleted == true)
+                if(usr == null )
                 {
                     res.Obj = "";
                     res.CodStatus = HttpStatusCode.BadRequest;

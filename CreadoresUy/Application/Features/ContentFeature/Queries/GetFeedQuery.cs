@@ -51,6 +51,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     ContentDto contentDataBaseDto = _mapper.Map<ContentDto>(x);
                     contentDataBaseDto.IdCreator = creadorId;
                     contentDataBaseDto.NickName = creator.NickName;
+                    contentDataBaseDto.CreatorImage = creator.CreatorImage;
                     contentDataBaseDto.NoNulls();
                     list.Add(contentDataBaseDto); 
                 });
