@@ -9,12 +9,12 @@ namespace Share.Entities
     public class BenefitBODto 
     {
         public int? Id { get; set; }
-        public string Name { get; set; }
-
+        public string Description { get; set; }
+        public bool? Deleted { get; set; }
 
         public void NoNulls()
         {
-            if (Name == null) Name = "";
+            if (Description == null) Description = "";
             if (Id == null) Id = 0;
         }
 

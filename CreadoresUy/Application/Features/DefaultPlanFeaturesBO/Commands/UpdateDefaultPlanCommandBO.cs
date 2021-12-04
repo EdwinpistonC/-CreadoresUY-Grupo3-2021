@@ -1,6 +1,8 @@
 ﻿using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
 using Share.Entities;
 using System;
@@ -29,15 +31,17 @@ namespace Application.Features.DefaultPlanFeaturesBO.Commands
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
+            private readonly ImagePostService _imagePost;
 
-            public UpdateDefaultPlanCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public UpdateDefaultPlanCommandBOHandler(ICreadoresUyDbContext context, IMapper mapper, ImagePostService imagePost)
             {
                 _context = context;
                 _mapper = mapper;
+                _imagePost = imagePost;
             }
             public async Task<Response<string>> Handle(UpdateDefaultPlanCommandBO command, CancellationToken cancellationToken)
             {
-                var defaultPlan = _context.DefaultPlans.Where(c => c.Id == command.Id).FirstOrDefault();
+                var defaultPlan = _context.DefaultPlans.Include(c=>c.Benefits).Where(c => c.Id == command.Id ).FirstOrDefault();
                 Response<string> res = new()
                 {
                     Message = new List<string>(),
@@ -54,12 +58,25 @@ namespace Application.Features.DefaultPlanFeaturesBO.Commands
                 defaultPlan.Name = command.Name;
                 defaultPlan.Description = command.Description;
                 defaultPlan.Price = command.Price;
-                defaultPlan.Image = command.Image;
+                if (defaultPlan.Image != command.Image)
+                {
+                    ImageDto dtoImgPrf = new(command.Image, "defaultPlan" + DateTime.Now.ToString() + "photo", "Planes");
+                        var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    defaultPlan.Image = urlCreatorImg;
+                }
+
                 defaultPlan.SubscriptionMsg = command.SubscriptionMsg;
                 defaultPlan.WelcomeVideoLink = command.WelcomeVideoLink;
 
+                foreach (var b in defaultPlan.Benefits)
+                {
+                    _context.DefaultBenefits.Remove(b);
+                }
+
+
                 foreach (var b in command.Benefits)
                 {
+
                     if (defaultPlan.Benefits == null) defaultPlan.Benefits = new List<DefaultBenefit>();
 
                     defaultPlan.Benefits.Add(_mapper.Map<DefaultBenefit>(b));

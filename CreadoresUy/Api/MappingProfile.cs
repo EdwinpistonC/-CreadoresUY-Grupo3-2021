@@ -18,6 +18,9 @@ namespace Api
             CreateMap<DefaultPlan, DefaultPlanBODto>();
             CreateMap<DefaultPlanBODto, DefaultPlan>();
 
+            CreateMap<DefaultBenefit, BenefitBODto>();
+            CreateMap<BenefitBODto, DefaultBenefit>();
+
             CreateMap<Benefit, BenefitBODto>();
             CreateMap<BenefitBODto, Benefit>();
 
