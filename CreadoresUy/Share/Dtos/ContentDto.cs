@@ -8,7 +8,7 @@ namespace Share.Dtos
 {
     public class ContentDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Title { get; set; }
 
@@ -19,12 +19,10 @@ namespace Share.Dtos
 
 
         public DateTime AddedDate { get; set; }
-        public bool Draft { get; set; }
-        public DateTime DatePublish { get; set; }
         public bool Public { get; set; }
-        public string Compositor { get; set; }
-        public string Link { get; set; }
-        public string Img { get; set; }
+        public string Dato { get; set; }
+        public bool Draft { get; set; }
+        public DateTime PublishDate { get; set; }
         public TipoContent Type { get; set; }
 
 
@@ -32,10 +30,11 @@ namespace Share.Dtos
         public ICollection<int> Plans { get; set; }
         public ICollection<TagDto> Tags { get; set; }
 
-
         public void ReduceContent()
         {
-            Description = Description.Substring(0, 500);
+            int tam = 500;
+            if(Description.Length < tam) { tam = Description.Length; }
+            Description = Description.Substring(0, tam);
         }
         public void NoNulls()
         {
@@ -48,26 +47,9 @@ namespace Share.Dtos
             {
                 Description = "";
             }
-            if (Draft == null)
-            {
-                Draft = false;
-            }
             if (Public == null)
             {
                 Public = false;
-            }
-            if (Compositor == null)
-            {
-                Compositor = "";
-            }
-            if (Link == null)
-            {
-                Link = "";
-            }
-
-            if (Img == null)
-            {
-                Img = "";
             }
             if (Plans == null)
             {
@@ -76,6 +58,10 @@ namespace Share.Dtos
             if (Tags == null)
             {
                 Tags = new Collection<TagDto>();
+            }
+            if (Dato == null)
+            {
+                Dato = string.Empty;
             }
 
         }

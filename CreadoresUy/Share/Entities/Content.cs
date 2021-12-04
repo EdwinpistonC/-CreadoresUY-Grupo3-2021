@@ -17,12 +17,10 @@ namespace Share.Entities
         public string Description {  get; set; }
 
         public DateTime AddedDate {  get; set; }
-        public bool Draft {  get; set; }
-        public DateTime DatePublish {  get; set; }
         public bool Public { get; set; }
-        public string Compositor {  get; set; }
-        public string Link {  get; set; }
-        public string Img {  get; set; }
+        public string Dato {  get; set; }
+        public bool Draft { get; set; }
+        public DateTime PublishDate {  get; set; }
 
         public TipoContent Type { get; set; }
 

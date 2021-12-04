@@ -12,5 +12,14 @@ namespace Share.Entities
 
         public ICollection<ContentTag> ContentTags { get; set; }
 
+        public Tag()
+        {
+            ContentTags = new List<ContentTag>();
+        }
+        public Tag(string name)
+        {
+            Name = name;
+            ContentTags = new List<ContentTag>();
+        }
     }
 }
