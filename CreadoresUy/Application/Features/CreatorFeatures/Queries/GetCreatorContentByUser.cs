@@ -66,7 +66,7 @@ namespace Application.Features.CreatorFeatures.Queries
 
                             foreach (var contp in plan.ContentPlans)
                             {
-                                var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
+                                var content = _context.Contents.Where(c => c.Id == contp.IdContent && c.Deleted == false && c.Draft == false && c.PublishDate <= DateTime.Now).FirstOrDefault();
                                 var dtoplan = _mapper.Map<ContentDto>(content);
                                 dtoplan.IdCreator = cre.Id;
                                 dtoplan.NickName = cre.NickName;
@@ -74,6 +74,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                 if (authorized == false) dtoplan.ReduceContent();
                                 ContentAndBoolDto dto = new(dtoplan, authorized);
                                 contenidos.Add(dto);
+                                
                             }
                         }
                         contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
@@ -129,7 +130,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             bool EraFalse = false;
                             foreach (var contp in plan.ContentPlans)
                             {
-                                var content = _context.Contents.Where(c => c.Id == contp.IdContent).FirstOrDefault();
+                                var content = _context.Contents.Where(c => c.Id == contp.IdContent && c.Deleted == false && c.Draft == false && c.PublishDate <= DateTime.Now).FirstOrDefault();
                                 var dtoplan = _mapper.Map<ContentDto>(content);
                                 dtoplan.IdCreator = cre.Id;
                                 dtoplan.NickName = cre.NickName;

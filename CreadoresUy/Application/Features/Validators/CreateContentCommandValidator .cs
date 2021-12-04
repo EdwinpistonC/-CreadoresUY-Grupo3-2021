@@ -16,7 +16,7 @@ namespace Application.Features.Validators
             RuleFor(x => x.Title).NotEmpty().WithMessage("{PropertyName} No puede ser vacio")
                 .MaximumLength(50).WithMessage("{PropertyName} Excede el limite de caracteres permitido {MaxLength} ");
 
-            RuleFor(x => x.Link).NotEmpty().When(x => x.Type == TipoContent.Link || x.Type == TipoContent.Audio || x.Type == TipoContent.Video).WithMessage("{PropertyName} No puede ser vacio");
+            RuleFor(x => x.Dato).NotEmpty().When(x => x.Type == TipoContent.Link || x.Type == TipoContent.Audio || x.Type == TipoContent.Video).WithMessage("{PropertyName} No puede ser vacio");
 
             RuleFor(x => x.Plans).Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("{PropertyName} No puede ser vacio")

@@ -1,5 +1,6 @@
 ﻿using Application.Features.Validators;
 using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using FluentValidation.Results;
 using MediatR;
@@ -21,11 +22,12 @@ namespace Application.Features.UserFeatures.Commands
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
-
-            public UserSignUpCommandHandler(ICreadoresUyDbContext context, IMapper mapper)
+            private readonly ImagePostService _imagePost;
+            public UserSignUpCommandHandler(ICreadoresUyDbContext context, IMapper mapper, ImagePostService image)
             {
                 _context = context;
                 _mapper = mapper;
+                _imagePost = image;
             }
             public async Task<Response<String>> Handle(UserSignUpCommand command, CancellationToken cancellationToken)
             {
@@ -51,7 +53,12 @@ namespace Application.Features.UserFeatures.Commands
                     return res;
                 }
 
-                
+                if (dto.ImgProfile != string.Empty)
+                {
+                    ImageDto dtoImgUser = new(dto.ImgProfile, dto.Name + "photo", "Usuarios");
+                    var urlUserImg = await _imagePost.postImage(dtoImgUser);
+                    dto.ImgProfile = urlUserImg;
+                }
 
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;

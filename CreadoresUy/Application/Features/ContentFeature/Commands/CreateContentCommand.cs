@@ -56,10 +56,6 @@ namespace Application.Features.ContentFeature.Commands
 
                 content.ContentTags = new List<ContentTag>();
 
-                if (content.Draft == false)
-                {
-                    content.DatePublish = DateTime.Now;
-                }
                 _context.Contents.Add(content);
                 await _context.SaveChangesAsync();
 

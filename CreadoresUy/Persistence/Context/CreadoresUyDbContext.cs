@@ -48,7 +48,7 @@ namespace Persistence.Context
         public DbSet<FinancialEntity> FinancialEntities {  get; set; }
         public DbSet<Payment> Payments { get; set; }
 
-
+        public DbSet<ContentTag> ContentTags { get; set; }
 
         public CreadoresUyDbContext()
         {

@@ -16,6 +16,13 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(command));
         }
+        [HttpPost]
+        [Authorize]
+        [Route("CreateNewContent")]
+        public async Task<IActionResult> CreateNewContent(CreateNewContentCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
 
         [AllowAnonymous]
         [HttpGet("[action]")]

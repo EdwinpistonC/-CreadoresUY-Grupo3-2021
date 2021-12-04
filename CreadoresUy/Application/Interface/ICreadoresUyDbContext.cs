@@ -34,5 +34,6 @@ namespace Application.Interface
         public string GenerateJWT(User user);
         public User GetById(int id);
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<ContentTag> ContentTags { get; set; }
     }
 }
