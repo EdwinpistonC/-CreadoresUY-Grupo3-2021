@@ -62,6 +62,14 @@ namespace Api.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetSubscribersQuery { IdCreator = idCreator }));
         }
+        [HttpGet]
+        [Route("GetCreatorsByCategory")]
+        //[Authorize]
+        public async Task<IActionResult> GetCreatorsByCategory(string category)
+        {
+            return Ok(await Mediator.Send(new GetCreatorByCategoryQuery { SearchCategory = category }));
+        }
+
 
         [HttpPost]
         [Route("Basic")]

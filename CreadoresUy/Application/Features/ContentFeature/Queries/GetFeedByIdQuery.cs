@@ -13,41 +13,36 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CreatorFeatures.Queries
 {
-    public class GetFeedQuery : IRequest<Response<List<ContentDto>>>
+    public class GetFeedByIdQuery : IRequest<Response<List<ContentDto>>>
     {
         public int IdUser {  get; set; }
+        public int IdCreator { get; set; }
+
         public int Page { get; set; }
         public int ContentPerPage { get; set; }
 
 
-        public class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, Response<List<ContentDto>>>
+        public class GetFeedByIdQueryHandler : IRequestHandler<GetFeedByIdQuery, Response<List<ContentDto>>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public GetFeedQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public GetFeedByIdQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
 
             }
-            public async Task<Response<List<ContentDto>>> Handle(GetFeedQuery query, CancellationToken cancellationToken)
+            public async Task<Response<List<ContentDto>>> Handle(GetFeedByIdQuery query, CancellationToken cancellationToken)
             {
-                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser ).ToListAsync();
+                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser).ToListAsync();
                 var listPlans = new List<int>();
                 foreach (var idPlan in idPlans) {
 
                     listPlans.Add(idPlan.IdPlan);
                 }
-
-
-
-                //TODO   orderby
-                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators)
-                    .Where(c =>c.Deleted == false && c.Draft == false && c.PublishDate<= DateTime.Now &&
-                    c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan))  ||  
-                    (c.Public && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false)))
-                    ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).Include(c=> c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator)
+                    .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan)) || c.Public).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
@@ -55,7 +50,6 @@ namespace Application.Features.CreatorFeatures.Queries
                     ContentDto contentDataBaseDto = _mapper.Map<ContentDto>(x);
                     contentDataBaseDto.IdCreator = creadorId;
                     contentDataBaseDto.NickName = creator.NickName;
-                    contentDataBaseDto.CreatorImage = creator.CreatorImage;
                     contentDataBaseDto.NoNulls();
                     list.Add(contentDataBaseDto); 
                 });
