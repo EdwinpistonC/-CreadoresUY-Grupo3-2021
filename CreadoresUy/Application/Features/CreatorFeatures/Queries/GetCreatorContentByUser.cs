@@ -69,25 +69,27 @@ namespace Application.Features.CreatorFeatures.Queries
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = contp.Content;
-                                var dtoplan = _mapper.Map<ContentDto>(content);
-                                dtoplan.Tags = new List<TagDto>();
-                                dtoplan.Plans = new List<int>();
-                                foreach(var tag in content.ContentTags)
+                                if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Today.Date)
                                 {
-                                    var a = _mapper.Map<TagDto>(tag.Tag);
-                                    dtoplan.Tags.Add(a);
+                                    var dtoplan = _mapper.Map<ContentDto>(content);
+                                    dtoplan.Tags = new List<TagDto>();
+                                    dtoplan.Plans = new List<int>();
+                                    foreach (var tag in content.ContentTags)
+                                    {
+                                        var a = _mapper.Map<TagDto>(tag.Tag);
+                                        dtoplan.Tags.Add(a);
+                                    }
+                                    foreach (var p in content.ContentPlans)
+                                    {
+                                        dtoplan.Plans.Add(p.IdPlan);
+                                    }
+                                    dtoplan.IdCreator = cre.Id;
+                                    dtoplan.NickName = cre.NickName;
+                                    dtoplan.NoNulls();
+                                    if (authorized == false) dtoplan.ReduceContent();
+                                    ContentAndBoolDto dto = new(dtoplan, authorized);
+                                    contenidos.Add(dto);
                                 }
-                                foreach(var p in content.ContentPlans)
-                                {
-                                    dtoplan.Plans.Add(p.IdPlan);
-                                }
-                                dtoplan.IdCreator = cre.Id;
-                                dtoplan.NickName = cre.NickName;
-                                dtoplan.NoNulls();
-                                if (authorized == false) dtoplan.ReduceContent();
-                                ContentAndBoolDto dto = new(dtoplan, authorized);
-                                contenidos.Add(dto);
-                                
                             }
                         }
                         contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
@@ -145,33 +147,36 @@ namespace Application.Features.CreatorFeatures.Queries
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = contp.Content;
-                                var dtoplan = _mapper.Map<ContentDto>(content);
-                                dtoplan.Tags = new List<TagDto>();
-                                dtoplan.Plans = new List<int>();
-                                foreach (var tag in content.ContentTags)
+                                if (content.Deleted == false && content.Draft == false)
                                 {
-                                    var a = _mapper.Map<TagDto>(tag.Tag);
-                                    dtoplan.Tags.Add(a);
-                                }
-                                foreach (var p in content.ContentPlans)
-                                {
-                                    dtoplan.Plans.Add(p.IdPlan);
-                                }
-                                dtoplan.IdCreator = cre.Id;
-                                dtoplan.NickName = cre.NickName;
-                                dtoplan.NoNulls();
-                                if (dtoplan.Public == true)
-                                {
-                                    if(authorized == false) EraFalse = true;
-                                    authorized = true;
-                                }
-                                if (authorized == false) dtoplan.ReduceContent();
-                                ContentAndBoolDto dto = new(dtoplan, authorized);
-                                contenidos.Add(dto);
-                                if (EraFalse == true)
-                                {
-                                    authorized = false;
-                                    EraFalse = false;
+                                    var dtoplan = _mapper.Map<ContentDto>(content);
+                                    dtoplan.Tags = new List<TagDto>();
+                                    dtoplan.Plans = new List<int>();
+                                    foreach (var tag in content.ContentTags)
+                                    {
+                                        var a = _mapper.Map<TagDto>(tag.Tag);
+                                        dtoplan.Tags.Add(a);
+                                    }
+                                    foreach (var p in content.ContentPlans)
+                                    {
+                                        dtoplan.Plans.Add(p.IdPlan);
+                                    }
+                                    dtoplan.IdCreator = cre.Id;
+                                    dtoplan.NickName = cre.NickName;
+                                    dtoplan.NoNulls();
+                                    if (dtoplan.Public == true)
+                                    {
+                                        if (authorized == false) EraFalse = true;
+                                        authorized = true;
+                                    }
+                                    if (authorized == false) dtoplan.ReduceContent();
+                                    ContentAndBoolDto dto = new(dtoplan, authorized);
+                                    contenidos.Add(dto);
+                                    if (EraFalse == true)
+                                    {
+                                        authorized = false;
+                                        EraFalse = false;
+                                    }
                                 }
                             }
                         }

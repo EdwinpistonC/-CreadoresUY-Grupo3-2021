@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
 using Share.Enums;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,17 +11,20 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Validators
 {
-    public class CreateNewContentCommandValidator : AbstractValidator<ContentDto>
+    public class UpdateContentCommandValidator : AbstractValidator<ContentDto>
     {
         private readonly ICreadoresUyDbContext _context;
         public string Nickname { get; set; }
         public int IdCre { get; set; }
-        public CreateNewContentCommandValidator(ICreadoresUyDbContext context, string n, int i)
+        public int IdContent {  get; set; }
+
+        public UpdateContentCommandValidator(ICreadoresUyDbContext context, string nickname, int idCre, int idc)
         {
             _context = context;
-            Nickname = n;
-            IdCre = i;
-            
+            Nickname = nickname;
+            IdCre = idCre;
+            IdContent = idc;
+            RuleFor(x => x.Id).Must(IdContentValido).WithMessage("{PropertyName} el Id ingresado no fue encontrado en relacion al creador o ingreso Id 0");
             RuleFor(x => x.Dato).NotEmpty().WithMessage("{PropertyName} no puede ser vacio");
             RuleFor(x => x.Description).NotEmpty().WithMessage("{PropertyName} no puede ser vacio");
             RuleFor(x => x.IdCreator).Must(IsValid1).WithMessage("{PropertyName} No se ha encontrado el creador de id: {PropertyValue} o el id ingresado fue 0")
@@ -35,6 +37,21 @@ namespace Application.Features.Validators
             RuleFor(x => x.Type).Must(IsValid2).WithMessage("{PropertyName} no es un valido");
             RuleFor(x => x.Draft).Must(ExisteDraft).WithMessage("Ya existe un contenido almacenado como Borrador");
         }
+        public bool IdContentValido(int id)
+        {
+            var cre = _context.Creators.Where(c => c.Id == IdCre && c.NickName == Nickname).Include(x => x.Plans).ThenInclude(p => p.ContentPlans).ThenInclude(p => p.Content).FirstOrDefault();
+            foreach(var pl in cre.Plans)
+            {
+                foreach (var contp in pl.ContentPlans)
+                {
+                    if (contp.Content.Id == id && contp.Content.Deleted == false)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public bool IsValid(ICollection<int> col)
         {
             if (col.Count == 0) return false;
@@ -44,12 +61,12 @@ namespace Application.Features.Validators
         {
             if (id == 0) return false;
             var cre = _context.Creators.Where(c => c.Id == id).FirstOrDefault();
-            if(cre == null) return false;
+            if (cre == null) return false;
             return true;
         }
         public bool IsValid2(TipoContent d)
         {
-            if((int)d <= 0 || (int)d > 5) return false;
+            if ((int)d <= 0 || (int)d > 5) return false;
             return true;
         }
         public bool IsValid3(string ni)
@@ -66,7 +83,7 @@ namespace Application.Features.Validators
         {
             var cre = _context.Creators.Where(c => c.Id == IdCre && c.NickName == Nickname).Include(x => x.Plans).ThenInclude(p => p.ContentPlans).ThenInclude(p => p.Content).FirstOrDefault();
             if (cre == null) return false;
-            
+
             return true;
         }
 
@@ -100,7 +117,7 @@ namespace Application.Features.Validators
                 {
                     foreach (var contp in pl.ContentPlans)
                     {
-                        if (contp.Content.Draft == true && contp.Content.Deleted == false)
+                        if (contp.Content.Draft == true && contp.Content.Id != IdContent &&  contp.Content.Deleted == false)
                         {
                             return false;
                         }
