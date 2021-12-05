@@ -63,11 +63,12 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetSubscribersQuery { IdCreator = idCreator }));
         }
         [HttpGet]
+        [AllowAnonymous]
         [Route("GetCreatorsByCategory")]
         //[Authorize]
-        public async Task<IActionResult> GetCreatorsByCategory(string category)
+        public async Task<IActionResult> GetCreatorsByCategory(string category, int pageNumber, int pageSize)
         {
-            return Ok(await Mediator.Send(new GetCreatorByCategoryQuery { SearchCategory = category }));
+            return Ok(await Mediator.Send(new GetCreatorByCategoryQuery { SearchCategory = category, Page = pageNumber, SizePage = pageSize }));
         }
 
 
