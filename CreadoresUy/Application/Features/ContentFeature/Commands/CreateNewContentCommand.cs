@@ -38,58 +38,43 @@ namespace Application.Features.ContentFeature.Commands
                     Message = new List<string>()
                 };
                 var dto = command.Content;
-                if (dto.Public == true) {
-                    var val = new CreateNewContentCommandBasicValidator(_context);
-                    ValidationResult result = val.Validate(dto);
-                    if (!result.IsValid)
+            
+                var val = new CreateNewContentCommandValidator(_context);
+                ValidationResult result = val.Validate(dto);
+                if (!result.IsValid)
+                {
+                    foreach (var error in result.Errors)
                     {
-                        foreach (var error in result.Errors)
-                        {
-                            resp.Message.Add(error.ErrorMessage);
-                        }
-                        resp.Obj = "Error";
-                        resp.Success = false;
-                        resp.CodStatus = HttpStatusCode.BadRequest;
-                        return resp;
+                        resp.Message.Add(error.ErrorMessage);
+                    }
+                    resp.Obj = "Error";
+                    resp.Success = false;
+                    resp.CodStatus = HttpStatusCode.BadRequest;
+                    return resp;
+                }
+                var cre = _context.Creators.Where(c => c.Id == dto.IdCreator && c.NickName == dto.NickName).Include(x => x.Plans).ThenInclude(p => p.ContentPlans).FirstOrDefault();
+                var aux = new List<int>();
+                foreach (var item in cre.Plans)
+                {
+                    aux.Add(item.Id);
+                }
+                bool err = false;
+                foreach (var item in dto.Plans)
+                {
+                    if (!aux.Contains(item))
+                    {
+                        err = true;
                     }
                 }
-                else {
-                    var val = new CreateNewContentCommandValidator(_context);
-                    ValidationResult result = val.Validate(dto);
-                    if (!result.IsValid)
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            resp.Message.Add(error.ErrorMessage);
-                        }
-                        resp.Obj = "Error";
-                        resp.Success = false;
-                        resp.CodStatus = HttpStatusCode.BadRequest;
-                        return resp;
-                    }
-                    var cre = _context.Creators.Where(c => c.Id == dto.IdCreator).Where(c => c.NickName == dto.NickName).Include(x => x.Plans).FirstOrDefault();
-                    var aux = new List<int>();
-                    foreach (var item in cre.Plans)
-                    {
-                        aux.Add(item.Id);
-                    }
-                    bool err = false;
-                    foreach (var item in dto.Plans)
-                    {
-                        if (!aux.Contains(item))
-                        {
-                            err = true;
-                        }
-                    }
-                    if (err == true)
-                    {
-                        resp.Message.Add("No se ha encontrado alguno/s de los planes ingresados");
-                        resp.Obj = "Error";
-                        resp.Success = false;
-                        resp.CodStatus = HttpStatusCode.BadRequest;
-                        return resp;
-                    }
+                if (err == true)
+                {
+                    resp.Message.Add("No se ha encontrado alguno/s de los planes ingresados");
+                    resp.Obj = "Error";
+                    resp.Success = false;
+                    resp.CodStatus = HttpStatusCode.BadRequest;
+                    return resp;
                 }
+
                 var content = _mapper.Map<Content>(dto);
                 content.AddedDate = DateTime.Now;
 
@@ -112,27 +97,27 @@ namespace Application.Features.ContentFeature.Commands
 
                 content.ContentPlans = new List<ContentPlan>();
                 content.ContentTags = new List<ContentTag>();
-
                 _context.Contents.Add(content);
                 await _context.SaveChangesAsync();
-
-                if (dto.Plans != null)
-                {
-                    foreach (var planId in dto.Plans)
-                    {
-                        var pl = _context.Plans.Where(p => p.Id == planId).FirstOrDefault();
-                        var contentPlan = new ContentPlan
-                        {
-                            IdPlan = planId,
-                            IdContent = content.Id
-                        };
-                        content.ContentPlans.Add(contentPlan);
-                        await _context.SaveChangesAsync();
-                        pl.ContentPlans.Add(contentPlan);
-                        await _context.SaveChangesAsync();
-                    }
-                }
                 
+                foreach (var planId in dto.Plans)
+                {
+                    var pl = _context.Plans.Where(p => p.Id == planId && p.Deleted == false).FirstOrDefault();
+                    var contentPlan = new ContentPlan
+                    {
+                        IdPlan = pl.Id,
+                        IdContent = content.Id
+                    };
+                    
+                    _context.ContentPlans.Add(contentPlan);
+                    await _context.SaveChangesAsync();
+                    contentPlan.Plan = pl;
+                    contentPlan.Content = content;
+                    content.ContentPlans.Add(contentPlan);
+                    pl.ContentPlans.Add(contentPlan);
+                    await _context.SaveChangesAsync();
+                }
+                                
                 if (dto.Tags != null)
                 {
                     foreach (var t in dto.Tags)
@@ -142,7 +127,7 @@ namespace Application.Features.ContentFeature.Commands
 
                         if (findTag != null)
                         {
-                            tag.Id = findTag.Id;
+                            tag = findTag;
                         }
                         else
                         {
@@ -155,6 +140,7 @@ namespace Application.Features.ContentFeature.Commands
                             IdTag = tag.Id,
                             IdContent = content.Id
                         };
+                        tagContent.Tag = tag;
                         _context.ContentTags.Add(tagContent);
                         await _context.SaveChangesAsync();
                         content.ContentTags.Add(tagContent);
