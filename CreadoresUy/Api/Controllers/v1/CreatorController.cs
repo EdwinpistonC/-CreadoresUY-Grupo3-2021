@@ -135,6 +135,13 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));
         }
 
+        [HttpGet]
+        [Route("GetCreatorPlansBasic")]
+        public async Task<IActionResult> GetCreatorPlansQuery(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetCreatorPlansQuery { Nickname = nickname}));
+        }
+
         //GetCreatorProfile
 
         /* TRAE los planes asociados a un creador

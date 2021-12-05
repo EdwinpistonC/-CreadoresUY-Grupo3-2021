@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
+using Share.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,14 +61,26 @@ namespace Application.Features.CreatorFeatures.Queries
                         List<ContentAndBoolDto> contenidos = new();
                         foreach (var pl in cre.Plans)
                         {
-                            bool authorized = false;
+                            bool authorized = true;
                             var plan = _context.Plans.Where(p => p.Id == pl.Id)
-                            .Include(p => p.UserPlans).Include(p => p.ContentPlans).FirstOrDefault();
+                           .Include(p => p.UserPlans).Include(p => p.ContentPlans)
+                           .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
 
                             foreach (var contp in plan.ContentPlans)
                             {
-                                var content = _context.Contents.Where(c => c.Id == contp.IdContent && c.Deleted == false && c.Draft == false && c.PublishDate <= DateTime.Now).FirstOrDefault();
+                                var content = contp.Content;
                                 var dtoplan = _mapper.Map<ContentDto>(content);
+                                dtoplan.Tags = new List<TagDto>();
+                                dtoplan.Plans = new List<int>();
+                                foreach(var tag in content.ContentTags)
+                                {
+                                    var a = _mapper.Map<TagDto>(tag.Tag);
+                                    dtoplan.Tags.Add(a);
+                                }
+                                foreach(var p in content.ContentPlans)
+                                {
+                                    dtoplan.Plans.Add(p.IdPlan);
+                                }
                                 dtoplan.IdCreator = cre.Id;
                                 dtoplan.NickName = cre.NickName;
                                 dtoplan.NoNulls();
@@ -118,7 +131,8 @@ namespace Application.Features.CreatorFeatures.Queries
                         {
                             bool authorized = false;
                             var plan = _context.Plans.Where(p => p.Id == pl.Id)
-                            .Include(p => p.UserPlans).Include(p => p.ContentPlans).FirstOrDefault();
+                            .Include(p => p.UserPlans).Include(p => p.ContentPlans)
+                            .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
                             foreach (var usu in plan.UserPlans)
                             {
                                 if (usu.IdUser == user.Id && usu.Deleted == false)
@@ -130,8 +144,19 @@ namespace Application.Features.CreatorFeatures.Queries
                             bool EraFalse = false;
                             foreach (var contp in plan.ContentPlans)
                             {
-                                var content = _context.Contents.Where(c => c.Id == contp.IdContent && c.Deleted == false && c.Draft == false && c.PublishDate <= DateTime.Now).FirstOrDefault();
+                                var content = contp.Content;
                                 var dtoplan = _mapper.Map<ContentDto>(content);
+                                dtoplan.Tags = new List<TagDto>();
+                                dtoplan.Plans = new List<int>();
+                                foreach (var tag in content.ContentTags)
+                                {
+                                    var a = _mapper.Map<TagDto>(tag.Tag);
+                                    dtoplan.Tags.Add(a);
+                                }
+                                foreach (var p in content.ContentPlans)
+                                {
+                                    dtoplan.Plans.Add(p.IdPlan);
+                                }
                                 dtoplan.IdCreator = cre.Id;
                                 dtoplan.NickName = cre.NickName;
                                 dtoplan.NoNulls();

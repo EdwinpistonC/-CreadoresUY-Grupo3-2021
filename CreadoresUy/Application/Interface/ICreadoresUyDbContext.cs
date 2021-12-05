@@ -35,5 +35,6 @@ namespace Application.Interface
         public User GetById(int id);
         public DbSet<Payment> Payments { get; set; }
         public DbSet<ContentTag> ContentTags { get; set; }
+        public DbSet<ContentPlan> ContentPlans { get; set; }
     }
 }

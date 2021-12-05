@@ -49,6 +49,7 @@ namespace Persistence.Context
         public DbSet<Payment> Payments { get; set; }
 
         public DbSet<ContentTag> ContentTags { get; set; }
+        public DbSet<ContentPlan> ContentPlans { get; set; }
 
         public CreadoresUyDbContext()
         {
