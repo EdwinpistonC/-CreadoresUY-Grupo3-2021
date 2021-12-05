@@ -19,6 +19,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
+        [AllowAnonymous]
         //[Authorize]
         public async Task<IActionResult> GetCategoryes()
         {
