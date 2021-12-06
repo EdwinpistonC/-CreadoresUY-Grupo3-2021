@@ -10,41 +10,41 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFeatures.Queries
+namespace Application.Features.CreatorFeatures.Queries
 {
-    public class SubscribedToQuery : IRequest<Response<List<SubscriberDto>>>
+    public class GetFollowersQuery : IRequest<Response<List<SubscriberDto>>>
     {
-        public int IdUser { get; set; }
-        public class SubscribedToQueryHandler : IRequestHandler<SubscribedToQuery, Response<List<SubscriberDto>>>
+        public int IdCreator { get; set; }
+        public class GetFollowersQueryHandler : IRequestHandler<GetFollowersQuery, Response<List<SubscriberDto>>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public SubscribedToQueryHandler(ICreadoresUyDbContext context)
+
+            public GetFollowersQueryHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<Response<List<SubscriberDto>>> Handle(SubscribedToQuery request, CancellationToken cancellationToken)
+            public async Task<Response<List<SubscriberDto>>> Handle(GetFollowersQuery request, CancellationToken cancellationToken)
             {
                 var res = new Response<List<SubscriberDto>>()
                 {
                     Message = new List<string>()
                 };
+                var cre = _context.Creators.Where(c => c.Id == request.IdCreator)
+                               .Include(c => c.UserCreators).ThenInclude(uc => uc.User).FirstOrDefault();
                 var list = new List<SubscriberDto>();
-                var usr = _context.Users.Where(u => u.Id == request.IdUser).Include(up => up.UserPlans)
-                  .ThenInclude(p => p.Plan).FirstOrDefault();
 
-                if (usr != null)
+                if (cre != null)
                 {
-                    foreach(var item in usr.UserPlans)
+                    foreach (var item in cre.UserCreators)
                     {
-                        if (item.Deleted != false)
-                        {
-                            var cre = _context.Creators.Where(c => c.Id == item.Plan.CreatorId).FirstOrDefault();
-                            var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateTime)
+                        if(item.Unfollow != true) { 
+                            var usr = item.User;
+                            var usuario = new SubscriberDto(usr.Name, usr.Name, item.DateFollow)
                             {
-                                Id = cre.Id
+                                Id = 0
                             };
-                            list.Add(creador);
+                            list.Add(usuario);
                         }
                     }
                     if (list.Count > 0)
@@ -58,7 +58,7 @@ namespace Application.Features.UserFeatures.Queries
                     {
                         res.CodStatus = HttpStatusCode.OK;
                         res.Success = true;
-                        res.Message.Add("El usuario no se encuentra suscripto a ningun plan");
+                        res.Message.Add("El Creador no tiene ningun seguidor");
                         res.Obj = list;
                     }
                 }
@@ -66,7 +66,7 @@ namespace Application.Features.UserFeatures.Queries
                 {
                     res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
-                    res.Message.Add("No se ha encontrado el usuario de id " + request.IdUser);
+                    res.Message.Add("No se ha encontrado el Creador de id " + request.IdCreator);
                     res.Obj = list;
                 }
                 return res;

@@ -38,14 +38,6 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpGet]
-        [Route("SubscribedTo")]
-        //[Authorize]
-        public async Task<IActionResult> SubscribedTo(int idUser)
-        {
-            return Ok(await Mediator.Send(new SubscribedToQuery { IdUser = idUser }));
-        }
-
         [AllowAnonymous]
         [HttpPut("[action]")]
         public async Task<IActionResult> Update(int id, UpdateUserCommand command)
@@ -110,6 +102,27 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
+
+        // A que esta suscripto
+        [HttpGet]
+        [Route("SubscribedTo")]
+        //[Authorize]
+        public async Task<IActionResult> SubscribedTo(int idUser)
+        {
+            return Ok(await Mediator.Send(new SubscribedToQuery { IdUser = idUser }));
+        }
+
+        // A que esta suscripto
+        [HttpGet]
+        [Route("FollowingTo")]
+        //[Authorize]
+        public async Task<IActionResult> FollowingTo(int idUser)
+        {
+            return Ok(await Mediator.Send(new FollowingToQuery { IdUser = idUser }));
+        }
+
+
+        //Suscribirse a
         [HttpPost]
         [Authorize]
         [Route("SubscribeTo")]

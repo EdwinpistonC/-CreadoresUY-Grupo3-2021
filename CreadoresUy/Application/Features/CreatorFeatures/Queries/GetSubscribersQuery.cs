@@ -39,8 +39,11 @@ namespace Application.Features.CreatorFeatures.Queries
                         .Include(p => p.UserPlans).ThenInclude(p => p.User).Include(p => p.ContentPlans).FirstOrDefault();
                         foreach (var usu in plan.UserPlans)
                         {
-                            var usr = new SubscriberDto(usu.User.Name, usu.User.ImgProfile, usu.DateTime);
-                            list.Add(usr);
+                            if (usu.Deleted != true)
+                            {
+                                var usr = new SubscriberDto(usu.User.Name, usu.User.ImgProfile, usu.DateTime);
+                                list.Add(usr);
+                            }
                         }
                     }
                     if(list.Count > 0)

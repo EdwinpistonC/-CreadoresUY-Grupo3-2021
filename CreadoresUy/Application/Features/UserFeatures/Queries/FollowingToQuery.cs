@@ -12,35 +12,37 @@ using System.Threading.Tasks;
 
 namespace Application.Features.UserFeatures.Queries
 {
-    public class SubscribedToQuery : IRequest<Response<List<SubscriberDto>>>
+   public class FollowingToQuery : IRequest<Response<List<SubscriberDto>>>
     {
         public int IdUser { get; set; }
-        public class SubscribedToQueryHandler : IRequestHandler<SubscribedToQuery, Response<List<SubscriberDto>>>
+
+        public class FollowingToQueryHandler : IRequestHandler<FollowingToQuery, Response<List<SubscriberDto>>>
         {
             private readonly ICreadoresUyDbContext _context;
-            public SubscribedToQueryHandler(ICreadoresUyDbContext context)
+
+            public FollowingToQueryHandler(ICreadoresUyDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<Response<List<SubscriberDto>>> Handle(SubscribedToQuery request, CancellationToken cancellationToken)
+            public async Task<Response<List<SubscriberDto>>> Handle(FollowingToQuery request, CancellationToken cancellation )
             {
                 var res = new Response<List<SubscriberDto>>()
                 {
                     Message = new List<string>()
                 };
                 var list = new List<SubscriberDto>();
-                var usr = _context.Users.Where(u => u.Id == request.IdUser).Include(up => up.UserPlans)
-                  .ThenInclude(p => p.Plan).FirstOrDefault();
+                var usr = _context.Users.Where(u => u.Id == request.IdUser).Include(u => u.UserCreators)
+                  .ThenInclude(uc => uc.Creator).FirstOrDefault();
 
                 if (usr != null)
                 {
-                    foreach(var item in usr.UserPlans)
+                    foreach (var item in usr.UserCreators)
                     {
-                        if (item.Deleted != false)
+                        if (item.Unfollow != true)
                         {
-                            var cre = _context.Creators.Where(c => c.Id == item.Plan.CreatorId).FirstOrDefault();
-                            var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateTime)
+                            var cre = item.Creator;
+                            var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateFollow)
                             {
                                 Id = cre.Id
                             };
@@ -58,7 +60,7 @@ namespace Application.Features.UserFeatures.Queries
                     {
                         res.CodStatus = HttpStatusCode.OK;
                         res.Success = true;
-                        res.Message.Add("El usuario no se encuentra suscripto a ningun plan");
+                        res.Message.Add("El usuario no sigue a ningun Creador");
                         res.Obj = list;
                     }
                 }

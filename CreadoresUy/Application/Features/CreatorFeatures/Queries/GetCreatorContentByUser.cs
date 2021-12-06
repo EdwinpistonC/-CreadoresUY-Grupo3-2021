@@ -69,7 +69,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = contp.Content;
-                                if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Today.Date)
+                                if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
                                 {
                                     var dtoplan = _mapper.Map<ContentDto>(content);
                                     dtoplan.Tags = new List<TagDto>();
@@ -147,7 +147,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = contp.Content;
-                                if (content.Deleted == false && content.Draft == false)
+                                if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
                                 {
                                     var dtoplan = _mapper.Map<ContentDto>(content);
                                     dtoplan.Tags = new List<TagDto>();
