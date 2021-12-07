@@ -40,19 +40,22 @@ namespace Application.Features.ContentFeature.Commands
                     Message = new List<string>()
                 };
                 var dto = request.Content;
-                var validator = new UpdateContentCommandValidator(_context, dto.NickName, dto.IdCreator, dto.Id);
+                
+                var validator = new UpdateContentCommandValidator(_context, dto.NickName, dto.IdCreator, dto.Id, dto.Public);
                 ValidationResult result = validator.Validate(dto);
-
-                if (!result.IsValid)
-                {
-                    foreach (var error in result.Errors)
+                if(dto.Draft == false) 
+                { 
+                    if (!result.IsValid)
                     {
-                        resp.Message.Add(error.ErrorMessage);
+                        foreach (var error in result.Errors)
+                        {
+                            resp.Message.Add(error.ErrorMessage);
+                        }
+                        resp.Obj = "Error";
+                        resp.Success = false;
+                        resp.CodStatus = HttpStatusCode.BadRequest;
+                        return resp;
                     }
-                    resp.Obj = "Error";
-                    resp.Success = false;
-                    resp.CodStatus = HttpStatusCode.BadRequest;
-                    return resp;
                 }
                 //Si la validacion fue exitosa
                 var cre = _context.Creators.Where(c => c.Id == dto.IdCreator && c.NickName == dto.NickName).Include(x => x.Plans)
@@ -71,8 +74,9 @@ namespace Application.Features.ContentFeature.Commands
                 }
 
                 //Verifico si hubo cambios en el contenido
-                if (contentAux.AddedDate != dto.AddedDate) contentAux.AddedDate = dto.AddedDate;
+                contentAux.AddedDate = DateTime.Today;
                 if (contentAux.PublishDate != dto.PublishDate) contentAux.PublishDate = dto.PublishDate;
+                if (contentAux.PublishDate.Date < DateTime.Today.Date) contentAux.PublishDate = DateTime.Today;
                 if (contentAux.Title != dto.Title) contentAux.Title = dto.Title;
                 if (contentAux.Description != dto.Description) contentAux.Description = dto.Description;
                 if (contentAux.Draft != dto.Draft) contentAux.Draft = dto.Draft;

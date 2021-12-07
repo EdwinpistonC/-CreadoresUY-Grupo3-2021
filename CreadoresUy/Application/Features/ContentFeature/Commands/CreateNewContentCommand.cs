@@ -56,7 +56,7 @@ namespace Application.Features.ContentFeature.Commands
                 //Si Todo fue valido da de alta al contenido
                 var content = _mapper.Map<Content>(dto);
                 content.AddedDate = DateTime.Now;
-                
+                if(content.Dato != string.Empty)
                 //Almacenamiento externo de Contendios de acuerdo al tipo
                 if ((int)content.Type == 2) // Imagen
                 {

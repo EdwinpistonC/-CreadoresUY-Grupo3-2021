@@ -44,9 +44,12 @@ namespace Application.Features.UserFeatures.Commands
                     resp.Obj = "Error";
                     return resp;
                 }
-                var cre = _context.Creators.Where(c => c.NickName == dto.NickName).Include(c => c.Plans).FirstOrDefault();
+                var cre = _context.Creators.Where(c => c.NickName == dto.NickName).Include(c => c.Plans)
+                    .ThenInclude(p => p.UserPlans).FirstOrDefault();
                 var usr = _context.Users.Where(u => u.Id == dto.IdUser).FirstOrDefault();
                 var plan = cre.Plans.Where(p => p.Id == dto.IdPlan).FirstOrDefault();
+                bool resultado = CambiarPlan(_context, cre, plan, usr);
+                
                 var userp = new UserPlan(dto.IdPlan, dto.IdUser, DateTime.Now)
                 {
                     Plan = plan
@@ -70,6 +73,22 @@ namespace Application.Features.UserFeatures.Commands
                 resp.Success = true;
                 resp.Obj = "Te has suscripto exitosamente al plan: "+plan.Name;
                 return resp;
+            }
+
+            public bool CambiarPlan(ICreadoresUyDbContext _context, Creator creator, Plan pl, User user)
+            {
+                foreach(var plan in creator.Plans)
+                {
+                    foreach(var us in pl.UserPlans)
+                    {
+                        if(us.IdUser == user.Id && us.IdPlan != pl.Id)
+                        {
+                            
+                        }
+                    }
+                }
+
+                return true;
             }
         }
     }

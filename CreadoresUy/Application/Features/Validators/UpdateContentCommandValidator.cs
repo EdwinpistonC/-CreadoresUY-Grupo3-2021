@@ -17,13 +17,16 @@ namespace Application.Features.Validators
         public string Nickname { get; set; }
         public int IdCre { get; set; }
         public int IdContent {  get; set; }
+        public bool Publico { get; set; }
 
-        public UpdateContentCommandValidator(ICreadoresUyDbContext context, string nickname, int idCre, int idc)
+        public UpdateContentCommandValidator(ICreadoresUyDbContext context, string nickname, int idCre, int idc, bool publico)
         {
             _context = context;
             Nickname = nickname;
             IdCre = idCre;
             IdContent = idc;
+            Publico = publico;
+
             RuleFor(x => x.Id).Must(IdContentValido).WithMessage("{PropertyName} el Id ingresado no fue encontrado en relacion al creador o ingreso Id 0");
             RuleFor(x => x.Dato).NotEmpty().WithMessage("{PropertyName} no puede ser vacio");
             RuleFor(x => x.Description).NotEmpty().WithMessage("{PropertyName} no puede ser vacio");
@@ -89,6 +92,7 @@ namespace Application.Features.Validators
 
         public bool CorrespondePlan(ICollection<int> dto)
         {
+            if(Publico == false) { 
             var cre = _context.Creators.Where(c => c.Id == IdCre && c.NickName == Nickname).Include(x => x.Plans).ThenInclude(p => p.ContentPlans).ThenInclude(p => p.Content).FirstOrDefault();
             var aux = new List<int>();
             if (cre != null)
@@ -104,6 +108,8 @@ namespace Application.Features.Validators
                         return false;
                     }
                 }
+            }
+            return true;
             }
             return true;
         }
