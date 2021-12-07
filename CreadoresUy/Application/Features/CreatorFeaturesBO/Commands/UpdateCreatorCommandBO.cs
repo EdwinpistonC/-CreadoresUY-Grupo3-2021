@@ -64,12 +64,11 @@ namespace Application.Features.CreatorFeaturesBO.Commands
                     var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
                     user.CreatorImage = urlCreatorImg;
                 }
-                if (command.CoverImage == "") {
+                if (command.CoverImage != "") {
                     ImageDto dtoImgPrf = new(command.CoverImage, command.NickName + DateTime.Now.ToString() + "photo", "PortadasCreadores");
                     var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
                     user.CoverImage = urlCreatorImg;
                 }
-                user.CreatorCreated = DateTime.Now;
                 if (command.WelcomeMsg != "") user.WelcomeMsg = command .WelcomeMsg;
                 if (command.Category1 != "") user.Category1 = command.Category1;
                 if (command.Category2 != "") user.Category2 = command.Category2;
