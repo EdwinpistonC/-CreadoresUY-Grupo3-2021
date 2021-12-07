@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Share\Share.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\StatisticsFeaturesBO\Commands\" />
+  </ItemGroup>
+
 </Project>
