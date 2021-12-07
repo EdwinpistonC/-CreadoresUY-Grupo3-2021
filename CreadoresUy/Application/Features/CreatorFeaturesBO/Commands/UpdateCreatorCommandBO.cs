@@ -1,4 +1,5 @@
 ﻿using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using MediatR;
 using Share.Dtos;
@@ -30,10 +31,12 @@ namespace Application.Features.CreatorFeaturesBO.Commands
         public class UpdateCreatorCommandBOHandler : IRequestHandler<UpdateCreatorCommandBO, Response<string>>
         {
             private readonly ICreadoresUyDbContext _context;
+            private readonly ImagePostService _imagePost;
 
-            public UpdateCreatorCommandBOHandler(ICreadoresUyDbContext context )
+            public UpdateCreatorCommandBOHandler(ICreadoresUyDbContext context, ImagePostService imagePost)
             {
                 _context = context;
+                _imagePost = imagePost;
             }
             public async Task<Response<string>> Handle(UpdateCreatorCommandBO command, CancellationToken cancellationToken)
             {
@@ -56,15 +59,15 @@ namespace Application.Features.CreatorFeaturesBO.Commands
                 if (command.ContentDescription != "") user.ContentDescription = command.ContentDescription;
                 if (command.Biography != "") user.Biography = command.Biography;
                 if (command.YoutubeLink != "") user.YoutubeLink = command.YoutubeLink;
-                if (command.CreatorImage != "") { 
-
-
-                    user.CreatorImage = ""; 
+                if (command.CreatorImage != "") {
+                    ImageDto dtoImgPrf = new(command.CreatorImage, command.NickName + DateTime.Now.ToString() + "photo", "Creadores");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    user.CreatorImage = urlCreatorImg;
                 }
                 if (command.CoverImage == "") {
-                    
-
-                    user.CoverImage = ""; 
+                    ImageDto dtoImgPrf = new(command.CoverImage, command.NickName + DateTime.Now.ToString() + "photo", "PortadasCreadores");
+                    var urlCreatorImg = await _imagePost.postImage(dtoImgPrf);
+                    user.CoverImage = urlCreatorImg;
                 }
                 user.CreatorCreated = DateTime.Now;
                 if (command.WelcomeMsg != "") user.WelcomeMsg = "";
