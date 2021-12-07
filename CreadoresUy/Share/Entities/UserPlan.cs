@@ -8,21 +8,22 @@ namespace Share.Entities
 {
     public class UserPlan 
     {
-        public UserPlan(int idPlan, int idUser, DateTime dateTime)
-        {
-            IdPlan = idPlan;
-            IdUser = idUser;
-            DateTime = dateTime;
-            Deleted = false;
-        }
-
+        
         public int IdPlan {  get; set; }
         public Plan Plan {  get; set; }
         public int IdUser {  get; set; }
         public User User {  get; set; }
 
-        public DateTime DateTime {  get; set; }
+        public DateTime SusbscriptionDate {  get; set; }
+        public DateTime ExpirationDate { get; set; }
         public ICollection<Payment> Payments { get; set; }
         public bool Deleted {  get; set; }
+
+        public UserPlan(int idPlan, int idUser, DateTime susbscriptionDate)
+        {
+            IdPlan = idPlan;
+            IdUser = idUser;
+            SusbscriptionDate = susbscriptionDate;
+        }
     }
 }

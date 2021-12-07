@@ -36,5 +36,7 @@ namespace Application.Interface
         public DbSet<Payment> Payments { get; set; }
         public DbSet<ContentTag> ContentTags { get; set; }
         public DbSet<ContentPlan> ContentPlans { get; set; }
+        public DbSet<PagoCreador> PagosCreador { get; set; }
+        public DbSet<PagoPlataforma> PagosPlataforma { get; set; }
     }
 }

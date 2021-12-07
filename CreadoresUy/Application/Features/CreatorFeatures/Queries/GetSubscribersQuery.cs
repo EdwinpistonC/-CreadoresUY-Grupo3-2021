@@ -41,7 +41,7 @@ namespace Application.Features.CreatorFeatures.Queries
                         {
                             if (usu.Deleted != true)
                             {
-                                var usr = new SubscriberDto(usu.User.Name, usu.User.ImgProfile, usu.DateTime);
+                                var usr = new SubscriberDto(usu.User.Name, usu.User.ImgProfile, usu.SusbscriptionDate);
                                 list.Add(usr);
                             }
                         }

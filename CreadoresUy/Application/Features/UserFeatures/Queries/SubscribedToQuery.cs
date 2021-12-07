@@ -40,7 +40,7 @@ namespace Application.Features.UserFeatures.Queries
                         if (item.Deleted != false)
                         {
                             var cre = _context.Creators.Where(c => c.Id == item.Plan.CreatorId).FirstOrDefault();
-                            var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.DateTime)
+                            var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.SusbscriptionDate)
                             {
                                 Id = cre.Id
                             };

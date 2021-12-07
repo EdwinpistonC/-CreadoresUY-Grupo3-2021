@@ -51,6 +51,10 @@ namespace Persistence.Context
         public DbSet<ContentTag> ContentTags { get; set; }
         public DbSet<ContentPlan> ContentPlans { get; set; }
 
+        public DbSet<PagoCreador> PagosCreador { get; set; }
+
+        public DbSet<PagoPlataforma> PagosPlataforma { get; set; }
+
         public CreadoresUyDbContext()
         {
         }
@@ -86,6 +90,7 @@ namespace Persistence.Context
             .WithMany(p => p.UserPlans)
             .HasForeignKey(up => up.IdPlan);
 
+            modelBuilder.Entity<UserPlan>().Property(up => up.SusbscriptionDate);
 
 
             modelBuilder.Entity<ContentTag>().HasKey(ct => new { ct.IdTag, ct.IdContent });
@@ -174,6 +179,17 @@ namespace Persistence.Context
             .HasOne<UserPlan>(py => py.UserPlan)
             .WithMany(p => p.Payments)
             .HasForeignKey(py => new { py.UserPlanId, py.IdUser});
+
+            modelBuilder.Entity<PagoCreador>()
+                .HasOne(p => p.Payment)
+                .WithMany(py => py.GananciasCreador)
+                .HasForeignKey(p => p.IdPayment);
+
+            modelBuilder.Entity<PagoPlataforma>()
+                .HasOne(p => p.Payment)
+                .WithMany(py => py.GananciasPlataforma)
+                .HasForeignKey(p => p.IdPayment);
+
 
             Seed(modelBuilder);
             Seed1(modelBuilder);

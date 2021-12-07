@@ -11,9 +11,13 @@ namespace Share.Entities
         public string ExternalPaymentId { get; set; }
         public string NickName {  get; set; }
         public int IdUser { get; set; }
+        public double PaymentAmount { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public bool Expired { get; set; }
         public int UserPlanId { get; set; }
         public UserPlan UserPlan{ get; set; }
-        public DateTime PaymentDate { get; set; }
+        public ICollection<PagoCreador> GananciasCreador {  get; set; }
+        public ICollection<PagoPlataforma> GananciasPlataforma { get; set; }
 
         public Payment(string externalPaymentId, string nickName)
         {

@@ -47,7 +47,6 @@ namespace Application.Features.UserFeatures.Commands
                 var cre = _context.Creators.Where(c => c.NickName == dto.NickName).Include(c => c.Plans).FirstOrDefault();
                 var usr = _context.Users.Where(u => u.Id == dto.IdUser).FirstOrDefault();
                 var plan = cre.Plans.Where(p => p.Id == dto.IdPlan).FirstOrDefault();
-                var payment = new Payment(dto.ExternalPaymentId,dto.NickName);
                 var userp = new UserPlan(dto.IdPlan, dto.IdUser, DateTime.Now)
                 {
                     Plan = plan
@@ -55,9 +54,12 @@ namespace Application.Features.UserFeatures.Commands
                 _context.UserPlans.Add(userp);
                 await _context.SaveChangesAsync();
                 plan.UserPlans.Add(userp);
-                payment.UserPlanId = userp.IdPlan;
-                payment.UserPlan = userp;
-                payment.IdUser = userp.IdUser;
+                var payment = new Payment(dto.ExternalPaymentId, dto.NickName)
+                {
+                    IdUser = dto.IdUser,
+                    UserPlanId = userp.IdPlan,
+                    UserPlan = userp
+                };
                 _context.Payments.Add(payment);
                 await _context.SaveChangesAsync();
                 userp.Payments.Add(payment);
