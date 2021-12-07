@@ -37,7 +37,7 @@ namespace Application.Features.UserFeatures.Queries
                 {
                     foreach(var item in usr.UserPlans)
                     {
-                        if (item.Deleted != false)
+                        if (!item.Deleted)
                         {
                             var cre = _context.Creators.Where(c => c.Id == item.Plan.CreatorId).FirstOrDefault();
                             var creador = new SubscriberDto(cre.CreatorName, cre.CreatorImage, item.SusbscriptionDate)
