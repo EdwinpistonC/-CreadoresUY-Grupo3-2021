@@ -38,9 +38,8 @@ namespace Application.Features.ContentFeature.Queries
                     .ThenInclude(p => p.ContentPlans).ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags)
                     .ThenInclude(t => t.Tag).FirstOrDefault();
                 var cont = new Content();
+                var plaux = cre.Plans.FirstOrDefault();
                 var dto = new ContentDto();
-                bool ingCero = false;
-                if (dto.Plans.Count == 1 && dto.Plans.Contains(0)) ingCero = true;
                 bool encontre = false;
                 if (cre != null)
                 {
@@ -81,9 +80,17 @@ namespace Application.Features.ContentFeature.Queries
                     }
                     if (cont.ContentPlans != null) 
                     {
-                        if (ingCero == true)
+                        if (cont.ContentPlans.Count == 1)
                         {
-                            dto.Plans.Add(0);
+                            var co = cont.ContentPlans.FirstOrDefault();
+                            if(co.IdPlan == plaux.Id)
+                            {
+                                dto.Plans.Add(0);
+                            }
+                            else
+                            {
+                                dto.Plans.Add(co.IdPlan);
+                            }
                         }
                         else
                         {

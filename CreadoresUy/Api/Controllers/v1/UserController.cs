@@ -131,7 +131,13 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-
+        [HttpPost]
+        [Authorize]
+        [Route("Unsubscribed")]
+        public async Task<ActionResult<UnsubscribeCommand>> Unsubscribed(UnsubscribeCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
 
     }
 
