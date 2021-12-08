@@ -4,6 +4,7 @@ using Share.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,9 +35,21 @@ namespace Application.Features.UserFeatures.Commands
                                 .FirstOrDefault();
                 if (userPla == null || userPla.Deleted == true)
                 {
-
+                    resp.Success = false;
+                    resp.Message.Add("Error");
+                    resp.Obj = "No se ha encontrado plan al cual desuscribirse";
+                    resp.CodStatus = HttpStatusCode.BadRequest;
                 }
-                throw new NotImplementedException();
+                else
+                {
+                    userPla.Deleted = true;
+                    await _context.SaveChangesAsync();
+                    resp.Success = true;
+                    resp.Message.Add("Exito");
+                    resp.Obj = "Exito ";
+                    resp.CodStatus = HttpStatusCode.OK;
+                }
+                return resp;
             }
         } 
     }

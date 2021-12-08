@@ -39,6 +39,8 @@ namespace Application.Features.ContentFeature.Queries
                     .ThenInclude(t => t.Tag).FirstOrDefault();
                 var cont = new Content();
                 var dto = new ContentDto();
+                bool ingCero = false;
+                if (dto.Plans.Count == 1 && dto.Plans.Contains(0)) ingCero = true;
                 bool encontre = false;
                 if (cre != null)
                 {
@@ -79,12 +81,18 @@ namespace Application.Features.ContentFeature.Queries
                     }
                     if (cont.ContentPlans != null) 
                     {
-                        /*
-                        foreach (var p in cont.ContentPlans)
+                        if (ingCero == true)
                         {
-                            dto.Plans.Add(p.IdPlan);
-                        }*/
-                        dto.Plans.Add(0);
+                            dto.Plans.Add(0);
+                        }
+                        else
+                        {
+                            foreach (var p in cont.ContentPlans)
+                            {
+                                dto.Plans.Add(p.IdPlan);
+                            }
+                        }
+
                     }
                     res.Success = true;
                     res.CodStatus = HttpStatusCode.OK;
