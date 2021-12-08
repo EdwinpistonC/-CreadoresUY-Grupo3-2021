@@ -72,7 +72,7 @@ namespace Application.Features.UserFeatures.Commands
 
 
             //Funciones Externas 
-            public async Task<bool> CrearSuscripcion(ICreadoresUyDbContext _context, SubscribeToDto dto, Plan plan, User usr)
+            public async Task CrearSuscripcion(ICreadoresUyDbContext _context, SubscribeToDto dto, Plan plan, User usr)
             {
                 var userp = new UserPlan(dto.IdPlan, dto.IdUser, DateTime.Now)
                 {
@@ -84,10 +84,10 @@ namespace Application.Features.UserFeatures.Commands
                 await _context.SaveChangesAsync();
 
                 await CrearPago(_context, dto, userp, plan.Name);
-                return true;
+                
             }
 
-            public async Task<bool> CrearPago(ICreadoresUyDbContext _context, SubscribeToDto dto, UserPlan userp, string nomp)
+            public async Task CrearPago(ICreadoresUyDbContext _context, SubscribeToDto dto, UserPlan userp, string nomp)
             {
                 var payment = new Payment(dto.ExternalPaymentId, dto.NickName, dto.PaymentAmount, userp.IdUser, userp.IdPlan);
                 _context.Payments.Add(payment);
@@ -103,7 +103,6 @@ namespace Application.Features.UserFeatures.Commands
                 _context.PagosCreador.Add(pagoCre);
                 _context.PagosPlataforma.Add(pagoPlat);
                 await _context.SaveChangesAsync();
-                return true;
             }
             public bool ExisteSuscripcion(ICreadoresUyDbContext _context, Creator creator, User user)
             {
@@ -120,10 +119,10 @@ namespace Application.Features.UserFeatures.Commands
                 return false;
             }
 
-            public async Task<bool> ActualizarSuscripcion(ICreadoresUyDbContext _context, SubscribeToDto dto, Plan plan, User usr, Creator cre)
+            public async Task ActualizarSuscripcion(ICreadoresUyDbContext _context, SubscribeToDto dto, Plan plan, User usr, Creator cre)
             {
                 var userp = new UserPlan();
-                bool encontre = false
+                bool encontre = false;
                 foreach (var pl in cre.Plans)
                 {
                     foreach (var us in pl.UserPlans)
@@ -146,12 +145,10 @@ namespace Application.Features.UserFeatures.Commands
                     userp.ExpirationDate = DateTime.Now.AddDays(30);
                     await _context.SaveChangesAsync();
                     await CrearPago(_context, dto, userp, plan.Name);
-                    return true;
                 }
                 else //Tiene una suscripcion que quiere cambiar o que expiro y quiere cambiar 
                 {
                     await CrearSuscripcion(_context, dto, plan, usr);
-                    return true;
                 }
             }
 

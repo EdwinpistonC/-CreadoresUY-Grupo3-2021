@@ -72,10 +72,11 @@ namespace Application.Features.ContentFeature.Commands
                 }
                 if (content.ContentPlans != null)
                 {
-                    foreach (var p in content.ContentPlans)
+                    dtores.Plans.Add(0);
+                    /*foreach (var p in content.ContentPlans)
                     {
                         dtores.Plans.Add(p.IdPlan);
-                    }
+                    }*/
                 }
                 dtores.NoNulls();
                 resp.CodStatus = HttpStatusCode.Created;

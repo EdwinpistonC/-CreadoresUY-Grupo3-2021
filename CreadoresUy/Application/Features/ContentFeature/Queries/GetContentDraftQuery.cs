@@ -78,11 +78,13 @@ namespace Application.Features.ContentFeature.Queries
                         }
                     }
                     if (cont.ContentPlans != null) 
-                    { 
+                    {
+                        /*
                         foreach (var p in cont.ContentPlans)
                         {
                             dto.Plans.Add(p.IdPlan);
-                        }
+                        }*/
+                        dto.Plans.Add(0);
                     }
                     res.Success = true;
                     res.CodStatus = HttpStatusCode.OK;
