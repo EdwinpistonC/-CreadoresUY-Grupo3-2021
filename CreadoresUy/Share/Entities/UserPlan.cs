@@ -24,6 +24,11 @@ namespace Share.Entities
             IdPlan = idPlan;
             IdUser = idUser;
             SusbscriptionDate = susbscriptionDate;
+            ExpirationDate = DateTime.Now.AddDays(30);
+        }
+
+        public UserPlan()
+        {
         }
     }
 }
