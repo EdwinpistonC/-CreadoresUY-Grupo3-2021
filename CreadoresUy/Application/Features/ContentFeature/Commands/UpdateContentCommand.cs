@@ -129,10 +129,18 @@ namespace Application.Features.ContentFeature.Commands
                 //Actualizo los nuevos links
                 if (dto.Public != true)
                 {
-                    foreach (var planId in dto.Plans)
+                    if (dto.Plans.Count == 1 && dto.Plans.Contains(0) == true)
                     {
-                        var pl = _context.Plans.Where(p => p.Id == planId && p.Deleted == false).FirstOrDefault();
-                        await AddContentPlan(pl, contentAux, _context);
+                        var pl1 = cre.Plans.FirstOrDefault();
+                        await AddContentPlan(pl1, contentAux, _context);
+                    }
+                    else
+                    {
+                        foreach (var planId in dto.Plans)
+                        {
+                            var pl = _context.Plans.Where(p => p.Id == planId && p.Deleted == false).FirstOrDefault();
+                            await AddContentPlan(pl, contentAux, _context);
+                        }
                     }
                 }
                 else
