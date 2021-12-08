@@ -55,9 +55,11 @@ namespace Application.Features.ContentFeature.Commands
                 await _context.SaveChangesAsync();
 
                 var pl1 = cre.Plans.FirstOrDefault();
-                AddContentPlan(pl1, content, _context);
+                await AddContentPlan(pl1, content, _context);
 
                 var dtores = _mapper.Map<ContentDto>(content);
+                dtores.IdCreator = dto.IdCreator;
+                dtores.NickName = dto.NickName;
                 dtores.Plans = new List<int>();
                 dtores.Tags = new List<TagDto>();
                 if (content.ContentTags != null)
@@ -84,7 +86,7 @@ namespace Application.Features.ContentFeature.Commands
 
             }
 
-            public async void AddContentPlan(Plan pl, Content content, ICreadoresUyDbContext _context)
+            public async Task AddContentPlan(Plan pl, Content content, ICreadoresUyDbContext _context)
             {
                 var contentPlan = new ContentPlan
                 {

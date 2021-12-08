@@ -178,7 +178,7 @@ namespace Persistence.Context
             modelBuilder.Entity<Payment>()
             .HasOne<UserPlan>(py => py.UserPlan)
             .WithMany(p => p.Payments)
-            .HasForeignKey(py => new { py.UserPlanId, py.IdUser});
+            .HasForeignKey(py => new { py.UserPlanIdP, py.UserPlanIdU});
 
             modelBuilder.Entity<PagoCreador>()
                 .HasOne(p => p.Payment)

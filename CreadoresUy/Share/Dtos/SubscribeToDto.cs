@@ -12,6 +12,7 @@ namespace Share.Dtos
         public string NickName {  get; set; }
         public int IdPlan { get; set; }
         public string ExternalPaymentId {  get; set; }
+        public double PaymentAmount { get; set; }
 
     }
 }
