@@ -123,33 +123,23 @@ namespace Application.Features.UserFeatures.Commands
             public async Task<bool> ActualizarSuscripcion(ICreadoresUyDbContext _context, SubscribeToDto dto, Plan plan, User usr, Creator cre)
             {
                 var userp = new UserPlan();
-                
+                bool encontre = false
                 foreach (var pl in cre.Plans)
                 {
                     foreach (var us in pl.UserPlans)
                     {
                         if (us.IdUser == usr.Id)
                         {
-                            if(us.Deleted == false && us.IdPlan != dto.IdPlan) 
-                            { 
-                                us.Deleted = true;
-                                us.ExpirationDate = DateTime.Now;
-                                await _context.SaveChangesAsync();
-                                userp = us;
-                            }
-                            if (us.Deleted == true && us.IdPlan == dto.IdPlan)
+                            if(us.IdPlan == plan.Id)
                             {
                                 userp = us;
-                            }
-                            else
-                            {
-                                userp = us;
+                                encontre = true;
                             }
 
                         }
                     }
                 }
-                if(userp.IdPlan == plan.Id) //Tiene una suscripcion que expiro y la quiere renovar
+                if(encontre == true) //Tiene una suscripcion que expiro y la quiere renovar
                 {
                     userp.Deleted = false;
                     userp.SusbscriptionDate = DateTime.Now;
@@ -160,9 +150,6 @@ namespace Application.Features.UserFeatures.Commands
                 }
                 else //Tiene una suscripcion que quiere cambiar o que expiro y quiere cambiar 
                 {
-                    userp.Deleted = true;
-                    userp.ExpirationDate = DateTime.Now;
-                    await _context.SaveChangesAsync();
                     await CrearSuscripcion(_context, dto, plan, usr);
                     return true;
                 }
