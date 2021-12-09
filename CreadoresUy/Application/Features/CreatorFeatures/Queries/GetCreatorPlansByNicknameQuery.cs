@@ -15,10 +15,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CreatorFeatures.Queries
 {
-    public class GetCreatorPlansByNicknameQuery : IRequest<Response<List<UpdatePlanAndBenefitsDto>>>
+    public class GetCreatorPlansByNicknameQuery : IRequest<Response<PlansAndIdDto>>
     {
+        public int IdUser { get; set; }
         public string Nickname { get; set; }
-        public class GetCreatorPlansByNicknameQueryHandler : IRequestHandler<GetCreatorPlansByNicknameQuery, Response<List<UpdatePlanAndBenefitsDto>>>
+        public class GetCreatorPlansByNicknameQueryHandler : IRequestHandler<GetCreatorPlansByNicknameQuery, Response<PlansAndIdDto>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
@@ -27,19 +28,22 @@ namespace Application.Features.CreatorFeatures.Queries
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Response<List<UpdatePlanAndBenefitsDto>>> Handle(GetCreatorPlansByNicknameQuery query, CancellationToken cancellationToken)
+            public async Task<Response<PlansAndIdDto>> Handle(GetCreatorPlansByNicknameQuery query, CancellationToken cancellationToken)
             {
 
-                var respuesta = new Response<List<UpdatePlanAndBenefitsDto>>
+                var respuesta = new Response<PlansAndIdDto>
                 {
                     Message = new List<string>()
                 };
                 var creador = _context.Creators.Where(c => c.NickName == query.Nickname).Include(c => c.Plans).
-                                    ThenInclude(p => p.Benefits).FirstOrDefault();
+                    ThenInclude(p => p.Benefits).Include(c => c.Plans).ThenInclude(p => p.UserPlans).FirstOrDefault();                
                 var listresp = new List<UpdatePlanAndBenefitsDto>();
+                var obj = new PlansAndIdDto();
                 if (creador == null)
                 {
-                    respuesta.Obj = listresp;
+                    obj.SubscribedTo = 0;
+                    obj.Plans = listresp;
+                    respuesta.Obj = obj;
                     respuesta.CodStatus = HttpStatusCode.BadRequest;
                     respuesta.Success = false;
                     respuesta.Message.Add("Error - No se ha encontrado el Id ingresado");
@@ -47,6 +51,13 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
                 foreach (var item in creador.Plans)
                 {
+                    foreach (var up in item.UserPlans)
+                    {
+                        if(up.IdUser == query.IdUser)
+                        {
+                            obj.SubscribedTo = up.IdPlan;
+                        }
+                    }
                     var pl = _mapper.Map<UpdatePlanAndBenefitsDto>(item);
                     pl.IdPlan = item.Id;
                     pl.Benefits = new List<string>();
@@ -56,7 +67,8 @@ namespace Application.Features.CreatorFeatures.Queries
                     }
                     listresp.Add(pl);
                 }
-                respuesta.Obj = listresp;
+                obj.Plans = listresp;
+                respuesta.Obj = obj;
                 respuesta.CodStatus = HttpStatusCode.OK;
                 respuesta.Success = true;
                 respuesta.Message.Add("Exito");

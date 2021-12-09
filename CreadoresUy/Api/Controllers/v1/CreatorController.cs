@@ -49,11 +49,12 @@ namespace Api.Controllers.v1
         }
 
         [HttpGet]
-        [Route("GetCreatorPlansByNickname")]
+        [Route("GetCreatorPlansSubsc")]
         //[Authorize]
-        public async Task<IActionResult> GetCategGetCreatorPlansoryesByNickname(string nickname)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCategGetCreatorPlansSubsc(int idUser, string nickname)
         {
-            return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { Nickname = nickname }));
+            return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { IdUser = idUser, Nickname = nickname }));
         }
 
         [HttpGet]
