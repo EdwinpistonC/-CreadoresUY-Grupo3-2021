@@ -1,3 +1,4 @@
+using Api.NoSQL;
 using Application;
 using Application.Interface;
 using Application.Service;
@@ -47,6 +48,8 @@ namespace Api
                    (d => d.GetRequiredService<IOptions<FirebaseSotrageManager>>().Value);
 
             services.AddSingleton<ImagePostService>();
+            services.AddSingleton<NoSQLConnection>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyCors,

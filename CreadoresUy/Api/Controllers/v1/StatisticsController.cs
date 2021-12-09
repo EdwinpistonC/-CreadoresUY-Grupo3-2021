@@ -36,8 +36,14 @@ namespace Api.Controllers.v1
 
         }
 
+        [HttpGet("CreatorCategory")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorCategory()
+        {
+            return Ok(await Mediator.Send(new GetCreatorCategoryQuery()));
 
-        
+        }
+
 
 
     }

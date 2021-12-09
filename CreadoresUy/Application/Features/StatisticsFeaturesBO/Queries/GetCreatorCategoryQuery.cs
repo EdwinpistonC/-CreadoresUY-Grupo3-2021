@@ -56,6 +56,25 @@ namespace Application.Features.StatisticsFeaturesBO.Queries
 
                     listPagos.Add(new StatisticsBODto<String, float> { XValue= item.Categoria , YValue = sum });
                 }
+                foreach (var item in categorias2)
+                {
+                    var sum = 0;
+                    sum += item.Creadores;
+                    var contiene = false;
+                    foreach (var item2 in categorias1)
+                    {
+                        if (item.Categoria == item2.Categoria)
+                        {
+                            contiene = true;
+                        }
+                    }
+                    if (!contiene)
+                    {
+                        listPagos.Add(new StatisticsBODto<String, float> { XValue = item.Categoria, YValue = sum });
+                    }
+                }
+
+
 
                 response.Obj = listPagos;
                 response.CodStatus = HttpStatusCode.OK;

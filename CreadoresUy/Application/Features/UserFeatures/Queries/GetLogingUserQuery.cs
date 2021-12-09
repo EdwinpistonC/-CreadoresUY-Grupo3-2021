@@ -22,6 +22,8 @@ namespace Application.Features.UserFeatures.Queries
     public class GetLogingUserQuery : IRequest<Response<AuthenticateResponse>>
     {
         public LoginDto User { get; set; }
+        public LoginDto User { get; set; }
+
 
         public class GetLogingUserHandler : IRequestHandler<GetLogingUserQuery, Response<AuthenticateResponse>>
         {
