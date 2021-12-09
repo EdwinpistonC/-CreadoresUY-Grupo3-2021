@@ -13,13 +13,6 @@ namespace Api.Controllers.v1
     public class UserController : BaseApiController
     {
         //tokens functions
-        private readonly NoSQLConnection _gameService;
-
-        public UserController(NoSQLConnection gamesService)
-        {
-            _gameService = gamesService;
-        }
-
         [AllowAnonymous]
         [HttpPost(nameof(Authenticate))]
         public async Task<IActionResult> Authenticate(GetLogingUserQuery command)

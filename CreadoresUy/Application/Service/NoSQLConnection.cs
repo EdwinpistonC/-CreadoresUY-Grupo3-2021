@@ -2,7 +2,7 @@
 using Share.NoSql;
 using System.Collections.Generic;
 
-namespace Api.NoSQL
+namespace Application.Service
 {
     public class NoSQLConnection
     {
