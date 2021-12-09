@@ -48,6 +48,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan))  ||  
                     (c.IsPublic && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false)))
                     ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
