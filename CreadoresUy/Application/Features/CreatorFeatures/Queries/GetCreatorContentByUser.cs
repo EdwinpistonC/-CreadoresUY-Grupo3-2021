@@ -164,7 +164,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                     dtoplan.IdCreator = cre.Id;
                                     dtoplan.NickName = cre.NickName;
                                     dtoplan.NoNulls();
-                                    if (dtoplan.Public == true)
+                                    if (dtoplan.IsPublic == true)
                                     {
                                         if (authorized == false) EraFalse = true;
                                         authorized = true;

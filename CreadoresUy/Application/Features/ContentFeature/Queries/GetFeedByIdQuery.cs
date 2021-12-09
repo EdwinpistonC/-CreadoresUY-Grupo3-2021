@@ -42,7 +42,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     listPlans.Add(idPlan.IdPlan);
                 }
                 var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).Include(c=> c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator)
-                    .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan)) || c.Public).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                    .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan)) || c.IsPublic).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;

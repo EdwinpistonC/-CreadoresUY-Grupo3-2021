@@ -41,7 +41,7 @@ namespace Application.Features.ContentFeature.Commands
                 };
                 var dto = request.Content;
                 
-                var validator = new UpdateContentCommandValidator(_context, dto.NickName, dto.IdCreator, dto.Id, dto.Public);
+                var validator = new UpdateContentCommandValidator(_context, dto.NickName, dto.IdCreator, dto.Id, dto.IsPublic);
                 ValidationResult result = validator.Validate(dto);
                 if(dto.Draft == false) 
                 { 
@@ -80,7 +80,7 @@ namespace Application.Features.ContentFeature.Commands
                 if (contentAux.Title != dto.Title) contentAux.Title = dto.Title;
                 if (contentAux.Description != dto.Description) contentAux.Description = dto.Description;
                 if (contentAux.Draft != dto.Draft) contentAux.Draft = dto.Draft;
-                if (contentAux.Public != dto.Public) contentAux.Public = dto.Public;
+                if (contentAux.IsPublic != dto.IsPublic) contentAux.IsPublic = dto.IsPublic;
                 if (contentAux.Dato != dto.Dato)
                 {
                     if (contentAux.Type != dto.Type)
@@ -127,7 +127,7 @@ namespace Application.Features.ContentFeature.Commands
                 await _context.SaveChangesAsync();
 
                 //Actualizo los nuevos links
-                if (dto.Public != true)
+                if (dto.IsPublic != true)
                 {
                     if (dto.Plans.Count == 1 && dto.Plans.Contains(0) == true)
                     {

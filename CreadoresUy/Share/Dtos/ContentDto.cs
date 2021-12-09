@@ -20,7 +20,7 @@ namespace Share.Dtos
         public string CreatorImage { get; set; }
 
         public DateTime AddedDate { get; set; }
-        public bool Public { get; set; }
+        public bool IsPublic { get; set; }
         public string Dato { get; set; }
         public bool Draft { get; set; }
         public DateTime PublishDate { get; set; }
@@ -48,9 +48,9 @@ namespace Share.Dtos
             {
                 Description = "";
             }
-            if (Public == null)
+            if (IsPublic == null)
             {
-                Public = false;
+                IsPublic = false;
             }
             if (Plans == null)
             {
