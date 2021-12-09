@@ -17,31 +17,31 @@ namespace Application.Features.StatisticsFeaturesBO.Queries
     
     //cuantos pagos por mes
 
-    public class GetFinancesQuery : IRequest<Response<List<StatisticsBODto<DateTime, double>>>>
+    public class GetNewUsersQuery : IRequest<Response<List<StatisticsBODto<DateTime,float>>>>
     {
 
-        public class GetFinancesQueryHandler : IRequestHandler<GetFinancesQuery, Response<List<StatisticsBODto<DateTime, double>>>>
+        public class GetNewUsersQueryHandler : IRequestHandler<GetNewUsersQuery, Response<List<StatisticsBODto<DateTime, float>>>>
         {
 
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
 
-            public GetFinancesQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
+            public GetNewUsersQueryHandler(ICreadoresUyDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
             }
 
-            public async Task<Response<List<StatisticsBODto<DateTime, double>>>> Handle(GetFinancesQuery query, CancellationToken cancellationToken)
+            public async Task<Response<List<StatisticsBODto<DateTime, float>>>> Handle(GetNewUsersQuery query, CancellationToken cancellationToken)
             {
-                Response<List<StatisticsBODto<DateTime, double>>> response = new();
+                Response<List<StatisticsBODto<DateTime, float>>> response = new();
 
-                var pagos = await _context.PagosCreador.GroupBy(p =>new { p.AdeedDate.Year, p.AdeedDate.Month}).Select(p => new { Fecha = p.Key, Pagos = p.Sum( x=> x.Amount)}).ToListAsync();
+                var pagos = await _context.Users.GroupBy(p =>new { p.Created.Year, p.Created.Month, p.Created.Day }).Select(p => new { Fecha = p.Key, Usuarios = p.Count()}).ToListAsync();
 
-                List<StatisticsBODto<DateTime, double>> listPagos = new();
+                List<StatisticsBODto<DateTime, float>> listPagos = new();
                 foreach (var item in pagos)
                 {
-                    listPagos.Add(new StatisticsBODto<DateTime, double> { XValue= new DateTime(item.Fecha.Year, item.Fecha.Month, 1) , YValue = item.Pagos });
+                    listPagos.Add(new StatisticsBODto<DateTime, float> { XValue= new DateTime(item.Fecha.Year, item.Fecha.Month, item.Fecha.Day) , YValue = item.Usuarios });
                 }
 
                 response.Obj = listPagos;
