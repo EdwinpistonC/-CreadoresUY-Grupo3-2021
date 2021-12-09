@@ -58,6 +58,7 @@ namespace Api.Controllers.v1
         public async Task<IActionResult> CreatorsUnfollowers()
         {
             return Ok(await Mediator.Send(new GetCreatorUnfollowersQuery()));
+        }
 
         [HttpGet("CreatorCategory")]
         [AllowAnonymous]

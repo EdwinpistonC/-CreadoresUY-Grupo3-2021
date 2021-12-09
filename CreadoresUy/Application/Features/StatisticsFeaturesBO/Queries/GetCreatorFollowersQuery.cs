@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
-using Share.Entities;
+using Share.Dtos.BackOffice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
