@@ -46,7 +46,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators)
                     .Where(c =>c.Deleted == false && c.Draft == false && c.PublishDate<= DateTime.Now &&
                     c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan))  ||  
-                    (c.Public && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false)))
+                    (c.IsPublic && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false)))
                     ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {

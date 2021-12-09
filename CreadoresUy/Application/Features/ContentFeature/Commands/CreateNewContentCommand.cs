@@ -79,7 +79,7 @@ namespace Application.Features.ContentFeature.Commands
                 _context.Contents.Add(content);
                 await _context.SaveChangesAsync();
                 
-                if (dto.Public != true)
+                if (dto.IsPublic != true)
                 {
                     foreach (var planId in dto.Plans)
                     {
