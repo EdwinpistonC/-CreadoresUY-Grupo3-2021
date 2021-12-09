@@ -1,4 +1,3 @@
-using Api.NoSQL;
 using Application;
 using Application.Interface;
 using Application.Service;
@@ -17,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.Context;
 using Persistence.Storage;
+using Share.NoSql;
 using System.Text;
 
 namespace Api
@@ -42,12 +42,16 @@ namespace Api
             services.AddSingleton<IConexion>
                     (d => d.GetRequiredService<IOptions<Conexion>>().Value);
              */
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+
+            services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.Configure<FirebaseSotrageManager>(Configuration.GetSection("Storage"));
             services.AddSingleton<IFirebaseStorageManager>
                    (d => d.GetRequiredService<IOptions<FirebaseSotrageManager>>().Value);
 
             services.AddSingleton<ImagePostService>();
+            services.AddSingleton<NoSQLConnection>();
 
             services.AddCors(options =>
             {

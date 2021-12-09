@@ -1,5 +1,4 @@
-﻿using Api.NoSQL;
-using Application.Features.UserFeatures.Commands;
+﻿using Application.Features.UserFeatures.Commands;
 using Application.Features.UserFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

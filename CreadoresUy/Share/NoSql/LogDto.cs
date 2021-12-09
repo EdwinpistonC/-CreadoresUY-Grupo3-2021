@@ -17,8 +17,17 @@ namespace Share.NoSql
         [BsonElement("Name")]
         public string User { get; set; }
 
-        public string intent { get; set; }
-        public decimal Date { get; set; }
+        [BsonElement("Intent")]
+        public bool intent { get; set; }
 
+        [BsonElement("Date")]
+        public DateTime Date { get; set; }
+
+        public LogDto(string user, bool intent, DateTime date)
+        {
+            User = user;
+            this.intent = intent;
+            Date = date;
+        }
     }
 }

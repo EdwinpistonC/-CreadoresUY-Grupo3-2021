@@ -8,12 +8,12 @@ namespace Application.Service
     {
         private readonly IMongoCollection<LogDto> _logs;
 
-        public NoSQLConnection(DatabaseSettings settings)
+        public NoSQLConnection(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _logs = database.GetCollection<LogDto>(settings.GamesCollectionName);
+            _logs = database.GetCollection<LogDto>(settings.CollectionName);
         }
 
         public List<LogDto> Get() => _logs.Find(log => true).ToList();

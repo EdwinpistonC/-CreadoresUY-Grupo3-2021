@@ -68,9 +68,17 @@ namespace Api.Controllers.v1
 
 
         }
+        [HttpGet("GetLogs")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLogs()
+        {
+            return Ok(await Mediator.Send(new GetLogsQuery()));
 
 
+        }
 
+
+        
     }
 
 }

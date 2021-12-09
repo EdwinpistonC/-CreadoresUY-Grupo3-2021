@@ -1,4 +1,5 @@
 ﻿using Application.Interface;
+using Application.Service;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Share;
 using Share.Dtos;
 using Share.Entities;
+using Share.NoSql;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,6 +25,7 @@ namespace Application.Features.UserFeatures.Queries
     {
         public LoginDto User { get; set; }
 
+
         public class GetLogingUserHandler : IRequestHandler<GetLogingUserQuery, Response<AuthenticateResponse>>
         {
 
@@ -30,10 +33,14 @@ namespace Application.Features.UserFeatures.Queries
 
             private readonly IMapper _mapper;
 
-            public GetLogingUserHandler(ICreadoresUyDbContext context, IMapper imapper)
+            private readonly NoSQLConnection _noSQLConnection;
+
+            
+            public GetLogingUserHandler(ICreadoresUyDbContext context, IMapper imapper, NoSQLConnection nosql)
             {
                 _context = context;
                 _mapper = imapper;
+                _noSQLConnection = nosql;
             }
             public async Task<Response<AuthenticateResponse>> Handle(GetLogingUserQuery query, CancellationToken cancellationToken)
             {
@@ -41,8 +48,7 @@ namespace Application.Features.UserFeatures.Queries
                 var u = _mapper.Map<User>(query.User);
                 var user = await _context.Users.Where(x => (x.Email == u.Email && x.Password == u.Password)).FirstOrDefaultAsync();
                 
-                
-                
+
                 var nickname = "";
                 Response<AuthenticateResponse> res = new Response<AuthenticateResponse>();
                 res.Message = new List<string>();
@@ -53,6 +59,9 @@ namespace Application.Features.UserFeatures.Queries
                     res.CodStatus = HttpStatusCode.BadRequest;
                     res.Success = false;
                     res.Message.Add("Contraseña o email erroneos");
+
+                    _noSQLConnection.Create(new LogDto(u.Email,false,DateTime.Now));
+
                     return res;
 
                 }
@@ -64,7 +73,6 @@ namespace Application.Features.UserFeatures.Queries
                 }
 
 
-                
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", user.Name));
@@ -106,7 +114,7 @@ namespace Application.Features.UserFeatures.Queries
                     res.Obj = new AuthenticateResponse(user, tokenReturn, nickname);
                     res.Message.Add("Logueado");
 
-
+                    _noSQLConnection.Create(new LogDto(user.Email, true, DateTime.Now));
                     return res;
                 }
 
