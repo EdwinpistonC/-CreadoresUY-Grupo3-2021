@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
+using Share.Dtos.BackOffice;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Application.Features.StatisticsFeaturesBO.Queries
 
                 foreach (var cre in creadores)
                 {
-                    var cantUsuarios = await _context.Plans.Include(p=>p.Creator).Include(c => c.UserPlans).Where(p=>p.Creator.Id== cre.Id).Select(c => new { cantUsuarios = c.UserPlans.Count }).ToListAsync();
+                    var cantUsuarios = await _context.Plans.Include(p=>p.Creator).Include(c => c.UserPlans).Where(p=>p.Creator.Id== cre.Id ).Select(c => new { cantUsuarios = c.UserPlans.Where(up=> up.Deleted==false).ToList().Count }).ToListAsync();
                     var suma = 0;
                     foreach (var item in cantUsuarios)
                     {

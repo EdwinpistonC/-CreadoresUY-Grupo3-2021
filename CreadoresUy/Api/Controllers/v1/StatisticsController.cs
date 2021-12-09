@@ -36,6 +36,7 @@ namespace Api.Controllers.v1
 
         }
 
+
         [HttpGet("CreatorsUnsub")]
         [AllowAnonymous]
         public async Task<IActionResult> CreatorsUnsubs()
@@ -57,6 +58,13 @@ namespace Api.Controllers.v1
         public async Task<IActionResult> CreatorsUnfollowers()
         {
             return Ok(await Mediator.Send(new GetCreatorUnfollowersQuery()));
+
+        [HttpGet("CreatorCategory")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorCategory()
+        {
+            return Ok(await Mediator.Send(new GetCreatorCategoryQuery()));
+
 
         }
 

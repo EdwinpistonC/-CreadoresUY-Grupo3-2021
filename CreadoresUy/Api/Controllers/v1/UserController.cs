@@ -1,4 +1,5 @@
-﻿using Application.Features.UserFeatures.Commands;
+﻿using Api.NoSQL;
+using Application.Features.UserFeatures.Commands;
 using Application.Features.UserFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,12 @@ namespace Api.Controllers.v1
     public class UserController : BaseApiController
     {
         //tokens functions
+        private readonly NoSQLConnection _gameService;
 
+        public UserController(NoSQLConnection gamesService)
+        {
+            _gameService = gamesService;
+        }
 
         [AllowAnonymous]
         [HttpPost(nameof(Authenticate))]

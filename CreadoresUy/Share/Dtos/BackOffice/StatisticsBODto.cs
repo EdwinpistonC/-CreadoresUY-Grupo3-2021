@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Share.Entities
+namespace Share.Dtos.BackOffice
 {
     /*
      * Name y email no se pueden repetir en la base
