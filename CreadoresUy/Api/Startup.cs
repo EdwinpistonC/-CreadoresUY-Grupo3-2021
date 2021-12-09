@@ -48,7 +48,7 @@ namespace Api
                    (d => d.GetRequiredService<IOptions<FirebaseSotrageManager>>().Value);
 
             services.AddSingleton<ImagePostService>();
-            services.AddSingleton<NoSQLConnection>();
+//            services.AddSingleton<NoSQLConnection>();
 
             services.AddCors(options =>
             {
