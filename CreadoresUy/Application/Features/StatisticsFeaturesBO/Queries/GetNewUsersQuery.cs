@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
+using Share.Dtos.BackOffice;
 using Share.Entities;
 using System;
 using System.Collections.Generic;
