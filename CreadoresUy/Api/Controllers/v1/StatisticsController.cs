@@ -76,9 +76,16 @@ namespace Api.Controllers.v1
 
 
         }
+        [HttpGet("GetFinancesCreator/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLogs(int id)
+        {
+            return Ok(await Mediator.Send(new GetFinancesCreatorQuery() { idCreator=id}));
 
 
-        
+        }
+
+
     }
 
 }
