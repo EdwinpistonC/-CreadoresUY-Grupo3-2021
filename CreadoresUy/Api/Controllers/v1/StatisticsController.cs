@@ -36,8 +36,30 @@ namespace Api.Controllers.v1
 
         }
 
+        [HttpGet("CreatorsUnsub")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorsUnsubs()
+        {
+            return Ok(await Mediator.Send(new GetUnsubscribersQuery()));
 
-        
+        }
+
+        [HttpGet("CreatorsFollowers")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorsFollowers()
+        {
+            return Ok(await Mediator.Send(new GetCreatorFollowersQuery()));
+
+        }
+
+        [HttpGet("CreatorsUnfollowers")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorsUnfollowers()
+        {
+            return Ok(await Mediator.Send(new GetCreatorUnfollowersQuery()));
+
+        }
+
 
 
     }
