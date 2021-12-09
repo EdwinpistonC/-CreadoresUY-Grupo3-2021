@@ -21,6 +21,23 @@ namespace Api.Controllers.v1
 
         }
 
+        [HttpGet("GetNewUsers")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNewUsers()  
+        {
+            return Ok(await Mediator.Send(new GetNewUsersQuery()));
+
+        }
+        [HttpGet("CreatorsSubs")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatorsSubs()
+        {
+            return Ok(await Mediator.Send(new GetCreatorsSubsQuery()));
+
+        }
+
+
+        
 
 
     }
