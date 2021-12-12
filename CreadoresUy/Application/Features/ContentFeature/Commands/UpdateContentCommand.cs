@@ -76,6 +76,7 @@ namespace Application.Features.ContentFeature.Commands
                 //Verifico si hubo cambios en el contenido
                 contentAux.AddedDate = DateTime.Today;
                 if (contentAux.PublishDate != dto.PublishDate) contentAux.PublishDate = dto.PublishDate;
+                if (contentAux.Type != dto.Type) contentAux.Type = dto.Type;
                 if (contentAux.PublishDate.Date < DateTime.Today.Date) contentAux.PublishDate = DateTime.Today;
                 if (contentAux.Title != dto.Title) contentAux.Title = dto.Title;
                 if (contentAux.Description != dto.Description) contentAux.Description = dto.Description;
@@ -83,10 +84,6 @@ namespace Application.Features.ContentFeature.Commands
                 if (contentAux.IsPublic != dto.IsPublic) contentAux.IsPublic = dto.IsPublic;
                 if (contentAux.Dato != dto.Dato)
                 {
-                    if (contentAux.Type != dto.Type)
-                    {
-                        contentAux.Type = dto.Type;
-                    }
                     if ((int)contentAux.Type == 2) //Imagen 
                     {
                         var aux1 = dto.Dato;
