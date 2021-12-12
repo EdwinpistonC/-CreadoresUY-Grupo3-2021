@@ -65,10 +65,20 @@ namespace Application.Features.CreatorFeatures.Queries
                             var plan = _context.Plans.Where(p => p.Id == pl.Id)
                            .Include(p => p.UserPlans).Include(p => p.ContentPlans)
                            .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
-
+                            var listaux = new List<Content>();
                             foreach (var contp in plan.ContentPlans)
                             {
-                                var content = contp.Content;
+                                listaux.Add(contp.Content);
+
+                            }
+                            var listaux1 = new List<Content>();
+                            listaux1 = listaux.OrderBy(x => x.Id ).Where(x => x.Deleted == false && x.Draft == false && x.PublishDate<= DateTime.Now).ToList();
+
+                            //foreach (var contp in plan.ContentPlans)
+                            foreach (var content in listaux1)
+                            {
+                                //var content = new Content();
+                                //content = contp.Content;
                                 if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
                                 {
                                     var dtoplan = _mapper.Map<ContentDto>(content);
@@ -92,7 +102,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                 }
                             }
                         }
-                        contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
+                        contenidos = contenidos.OrderByDescending(c => c.Content.PublishDate).ToList();//ordeno la lista desc por fecha 
 
                         // Paginado 
                         var reqPage = new RequestPageUser();
