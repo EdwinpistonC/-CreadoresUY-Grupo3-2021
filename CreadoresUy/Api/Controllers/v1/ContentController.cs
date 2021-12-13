@@ -11,31 +11,27 @@ namespace Api.Controllers.v1
 
     public class ContentController : BaseApiController
     {
+       
         [HttpPost]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Create(CreateContentCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-        [HttpPost]
-        //[Authorize]
-        [AllowAnonymous]
+        [Authorize]
         [Route("CreateNewDraftContent")]
         public async Task<IActionResult> CreateNewDraftContent(CreateDraftContentCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [AllowAnonymous]
+        
         [HttpGet]
+        [Authorize]
         [Route("GetContentDraft")]
         public async Task<IActionResult> GetContentDraftQuery(string nickname)
         {
             return Ok(await Mediator.Send(new GetContentDraftQuery { Nickname = nickname }));
         }
 
-        [AllowAnonymous]
+        
         [HttpPut]
+        [Authorize]
         [Route("UpdateContent")]
         public async Task<IActionResult> Update(UpdateContentCommand command)
         {
@@ -43,7 +39,7 @@ namespace Api.Controllers.v1
         }
 
         [HttpDelete]
-        [AllowAnonymous]
+        [Authorize]
         [Route("DeleteContent")]
         public async Task<IActionResult> Delete(int idCre, int idCont)
         {
