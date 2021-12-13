@@ -8,6 +8,7 @@ namespace Share.Entities
      */
     public class AdminBODto 
     {
+
         public int Id { get; set; }
         public bool Deleted { get; set; }
         public string Name {  get; set; }
