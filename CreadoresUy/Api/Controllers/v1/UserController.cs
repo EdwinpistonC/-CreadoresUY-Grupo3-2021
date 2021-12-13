@@ -83,6 +83,13 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCreatorFromUserQuery { IdUser = idUser}));
 
         }
+        [HttpGet("GetUserForChat/{nickname}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserForChat(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetUserForChatQuery { Nickname = nickname }));
+
+        }
 
         [HttpPost]
         [Authorize]
