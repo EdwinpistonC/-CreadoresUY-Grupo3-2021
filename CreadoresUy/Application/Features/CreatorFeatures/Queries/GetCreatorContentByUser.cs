@@ -59,40 +59,28 @@ namespace Application.Features.CreatorFeatures.Queries
                     if ( cre != null)
                     {
                         List<ContentAndBoolDto> contenidos = new();
+                        var aux = new List<int>();
                         foreach (var pl in cre.Plans)
                         {
-                            bool authorized = true;
-                            var plan = _context.Plans.Where(p => p.Id == pl.Id)
-                           .Include(p => p.UserPlans).Include(p => p.ContentPlans)
-                           .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
+                            aux.Add(pl.Id);
+                        }
 
-                            foreach (var contp in plan.ContentPlans)
+                        var content1 = await _context.Contents.Include(c=> c.ContentTags).ThenInclude(t => t.Tag).Include(c => c.ContentPlans).ThenInclude(cp => cp.Plan).Include(c => c.ContentPlans)
+                            .ThenInclude(cp => cp.Plan).ThenInclude(p => p.Creator).Where(c => c.ContentPlans.Any(cp => cp.Plan.Creator.Id == cre.Id) 
+                            && c.ContentPlans.Any(cp => aux.Contains(cp.IdPlan))).ToListAsync();
+
+                        bool authorized = true;
+                        foreach (var content in content1)
+                        {
+                            if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
                             {
-                                var content = contp.Content;
-                                if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
-                                {
-                                    var dtoplan = _mapper.Map<ContentDto>(content);
-                                    dtoplan.Tags = new List<TagDto>();
-                                    dtoplan.Plans = new List<int>();
-                                    foreach (var tag in content.ContentTags)
-                                    {
-                                        var a = _mapper.Map<TagDto>(tag.Tag);
-                                        dtoplan.Tags.Add(a);
-                                    }
-                                    foreach (var p in content.ContentPlans)
-                                    {
-                                        dtoplan.Plans.Add(p.IdPlan);
-                                    }
-                                    dtoplan.IdCreator = cre.Id;
-                                    dtoplan.NickName = cre.NickName;
-                                    dtoplan.NoNulls();
-                                    if (authorized == false) dtoplan.ReduceContent();
-                                    ContentAndBoolDto dto = new(dtoplan, authorized);
-                                    contenidos.Add(dto);
-                                }
+                                var dtoplan = GetDto(content, cre.Id, cre.NickName);
+                                if (authorized == false) dtoplan.ReduceContent();
+                                ContentAndBoolDto dto = new(dtoplan, authorized);
+                                contenidos.Add(dto);
                             }
                         }
-                        contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
+                        contenidos = contenidos.OrderByDescending(c => c.Content.PublishDate).ToList();//ordeno la lista desc por fecha 
 
                         // Paginado 
                         var reqPage = new RequestPageUser();
@@ -129,9 +117,11 @@ namespace Application.Features.CreatorFeatures.Queries
                     if (user != null && cre != null)
                     {
                         List<ContentAndBoolDto> contenidos = new();
+                        var aux = new List<int>();
                         foreach (var pl in cre.Plans)
                         {
                             bool authorized = false;
+                            bool EraFalse = false;
                             var plan = _context.Plans.Where(p => p.Id == pl.Id)
                             .Include(p => p.UserPlans).Include(p => p.ContentPlans)
                             .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
@@ -143,44 +133,45 @@ namespace Application.Features.CreatorFeatures.Queries
                                 }
                             }
                             if (user.CreatorId == cre.Id) authorized = true;
-                            bool EraFalse = false;
                             foreach (var contp in plan.ContentPlans)
                             {
                                 var content = contp.Content;
                                 if (content.Deleted == false && content.Draft == false && content.PublishDate.Date <= DateTime.Now.Date)
                                 {
-                                    var dtoplan = _mapper.Map<ContentDto>(content);
-                                    dtoplan.Tags = new List<TagDto>();
-                                    dtoplan.Plans = new List<int>();
-                                    foreach (var tag in content.ContentTags)
+                                    if (aux.Contains(content.Id))
                                     {
-                                        var a = _mapper.Map<TagDto>(tag.Tag);
-                                        dtoplan.Tags.Add(a);
+                                        foreach(var item in contenidos)
+                                        {
+                                            if(item.Content.Id == content.Id)
+                                            {
+                                                var dtoaux = GetDto(content, cre.Id, cre.NickName);
+                                                item.Content = dtoaux;
+                                                if(item.Authorized == false && authorized == true) item.Authorized = authorized;
+                                            }
+                                        }
                                     }
-                                    foreach (var p in content.ContentPlans)
+                                    else
                                     {
-                                        dtoplan.Plans.Add(p.IdPlan);
-                                    }
-                                    dtoplan.IdCreator = cre.Id;
-                                    dtoplan.NickName = cre.NickName;
-                                    dtoplan.NoNulls();
-                                    if (dtoplan.IsPublic == true)
-                                    {
-                                        if (authorized == false) EraFalse = true;
-                                        authorized = true;
-                                    }
-                                    if (authorized == false) dtoplan.ReduceContent();
-                                    ContentAndBoolDto dto = new(dtoplan, authorized);
-                                    contenidos.Add(dto);
-                                    if (EraFalse == true)
-                                    {
-                                        authorized = false;
-                                        EraFalse = false;
+                                        var dtoplan = GetDto(content, cre.Id, cre.NickName);
+                                        if (dtoplan.IsPublic == true)
+                                        {
+                                            if (authorized == false) EraFalse = true;
+                                            authorized = true;
+                                        }
+                                        if (authorized == false) dtoplan.ReduceContent();
+                                        ContentAndBoolDto dto = new(dtoplan, authorized);
+                                        contenidos.Add(dto);
+                                        aux.Add(dtoplan.Id);
+                                        if (EraFalse == true)
+                                        {
+                                            authorized = false;
+                                            EraFalse = false;
+                                        }
                                     }
                                 }
                             }
                         }
-                        contenidos = contenidos.OrderByDescending(c => c.Content.AddedDate).ToList();//ordeno la lista desc por fecha 
+                        contenidos = contenidos.OrderByDescending(c => c.Content.PublishDate).ToList();//ordeno la lista desc por fecha 
 
                         // Paginado 
                         var reqPage = new RequestPageUser();
@@ -202,10 +193,27 @@ namespace Application.Features.CreatorFeatures.Queries
                     res.Obj = userpc;
                     return res;
                 }
-            
-
-
                
+            }
+
+            public ContentDto GetDto(Content content, int id, string name)
+            {
+                var dtoaux = _mapper.Map<ContentDto>(content);
+                dtoaux.Tags = new List<TagDto>();
+                dtoaux.Plans = new List<int>();
+                foreach (var tag in content.ContentTags)
+                {
+                    var a = _mapper.Map<TagDto>(tag.Tag);
+                    dtoaux.Tags.Add(a);
+                }
+                foreach (var p in content.ContentPlans)
+                {
+                    dtoaux.Plans.Add(p.IdPlan);
+                }
+                dtoaux.IdCreator = id;
+                dtoaux.NickName = name;
+                dtoaux.NoNulls();
+                return dtoaux;
             }
 
         }
