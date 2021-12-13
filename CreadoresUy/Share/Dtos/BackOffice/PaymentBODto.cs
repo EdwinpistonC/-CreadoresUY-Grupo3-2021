@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace Share.Dtos.BackOffice
 {
-    /*
-     * Name y email no se pueden repetir en la base
-     */
     public class PaymentBODto
     {
         public int IdCreator { get; set; }

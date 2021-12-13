@@ -127,7 +127,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
                             foreach (var usu in plan.UserPlans)
                             {
-                                if (usu.IdUser == user.Id && usu.Deleted == false)
+                                if (usu.IdUser == user.Id && usu.Deleted == false && usu.ExpirationDate > DateTime.Today)
                                 {
                                     authorized = true;
                                 }

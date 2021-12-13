@@ -62,7 +62,6 @@ namespace Application.Features.PaymentFeaturesBO.Commands
 
                 }
 
-
                 if (command.Password != "") user.Password = command.Password;
                 if (command.Created != DateTime.MinValue) user.Created = command.Created;
                 if (command.LasLogin !=  DateTime.MinValue) user.LasLogin = command.LasLogin;

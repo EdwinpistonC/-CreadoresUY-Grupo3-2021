@@ -60,7 +60,7 @@ namespace Application.Features.CreatorFeatures.Commands
                 }
 
                 //Validacion valida (OK)
-                //Almacenamiento externo de imagenes en FIREBASE
+                //Almacenamiento externo de imagen en FIREBASE
                 string urlPlanImg; 
                 if(pl.Image != string.Empty)
                 {
@@ -69,11 +69,10 @@ namespace Application.Features.CreatorFeatures.Commands
                 }
                 else
                 {
-                    urlPlanImg = "";
+                    urlPlanImg = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/Planes%2Fdefault%20plan.jpg?alt=media&token=19d2c351-4f92-406f-a794-0a5bb156a8ac";
                 }
                 
                 var plan = new Plan(pl.Name, pl.Description, pl.Price, urlPlanImg, pl.SubscriptionMsg, pl.WelcomeVideoLink, cre.Id, cre);
-                //var plan = new Plan(pl.Name, pl.Description, pl.Price, pl.Image, pl.SubscriptionMsg, pl.WelcomeVideoLink, cre.Id, cre);
                 _context.Plans.Add(plan);
                 await _context.SaveChangesAsync();
                 foreach (var b in pl.Benefits)

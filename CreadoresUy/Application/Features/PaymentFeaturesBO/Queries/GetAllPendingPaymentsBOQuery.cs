@@ -33,7 +33,7 @@ namespace Application.Features.UserFeaturesBO.Queries
                 res.Message = new List<string>();
                 var pagos = new List<PaymentBODto>();
 
-//                var resultados = _context.PagosCreador.GroupBy(x => x.IdCreator).Select(c => new { IdCre = c.Key, Nickname = c.Nickname, Monto = c.Amount }).ToListAsync(); 
+//              var resultados = _context.PagosCreador.GroupBy(x => x.IdCreator).Select(c => new { IdCre = c.Key, Nickname = c.Nickname, Monto = c.Amount }).ToListAsync(); 
                                                                         
 
 

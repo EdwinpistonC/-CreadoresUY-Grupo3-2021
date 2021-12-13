@@ -28,7 +28,6 @@ namespace Api.Controllers.v1
 
         }
 
-
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<UserSignUpCommand>> CreateUser(UserSignUpCommand command)
@@ -36,52 +35,11 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [AllowAnonymous]
-        [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateUserCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            return Ok(await Mediator.Send(new DeleteUserCommand { Id = id }));
-        }
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllUsersQuery()));
-        }
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetById(int id)
-        {
-            return Ok(await Mediator.Send(new GetUserById { Id = id }));
-        }
-        [HttpGet("{search},{pageSize},{page}")]
-        public async Task<IActionResult> GetSearch(string search,int pageSize,int page)
-        {
-            return Ok(await Mediator.Send(new GetUserBySearchQuery { SearchText = search, SizePage = pageSize, Page=page }));
-        }
-        
-        [HttpGet("{email},{password}")]
-        public async Task<IActionResult> GetGetPruebaSearch(string email,string password)
-        {
-            return Ok(await Mediator.Send(
-                new GetLogingUserQuery { User = new LoginDto() { Email = email, Password = password } }));
-
-        }
-        [HttpGet("GetCreatorFromUser/{idUser}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCreatorsFromUser(int idUser)
-        {
-            return Ok(await Mediator.Send(new GetCreatorFromUserQuery { IdUser = idUser}));
-
         }
 
         [HttpPost]
@@ -100,25 +58,24 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-
         // A que esta suscripto
         [HttpGet]
+        [Authorize]
         [Route("SubscribedTo")]
-        //[Authorize]
         public async Task<IActionResult> SubscribedTo(int idUser)
         {
             return Ok(await Mediator.Send(new SubscribedToQuery { IdUser = idUser }));
         }
 
-        // A que esta suscripto
+        // A quien esta siguiendo
         [HttpGet]
+        [Authorize]
         [Route("FollowingTo")]
         //[Authorize]
         public async Task<IActionResult> FollowingTo(int idUser)
         {
             return Ok(await Mediator.Send(new FollowingToQuery { IdUser = idUser }));
         }
-
 
         //Suscribirse a
         [HttpPost]
@@ -135,6 +92,14 @@ namespace Api.Controllers.v1
         public async Task<ActionResult<UnsubscribeCommand>> Unsubscribed(UnsubscribeCommand command)
         {
             return Ok(await Mediator.Send(command));
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetUserProfile")]
+        public async Task<ActionResult<GetUserProfileQuery>> GetUserProfile(int id)
+        {
+            return Ok(await Mediator.Send(new GetUserProfileQuery { IdUser = id }));
         }
 
     }

@@ -59,6 +59,10 @@ namespace Application.Features.UserFeatures.Commands
                     var urlUserImg = await _imagePost.postImage(dtoImgUser);
                     dto.ImgProfile = urlUserImg;
                 }
+                else
+                {
+                    dto.ImgProfile = "https://firebasestorage.googleapis.com/v0/b/creadoresuy-674c1.appspot.com/o/creadores%2Fdefaultimage.jpg?alt=media&token=20acde1a-b875-43dd-a68c-e36a6e8c2abc";
+                }
 
                 var user = _mapper.Map<User>(dto);
                 user.Created = DateTime.Now;
