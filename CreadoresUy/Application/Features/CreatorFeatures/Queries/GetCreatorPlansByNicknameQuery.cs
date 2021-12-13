@@ -65,6 +65,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     {
                         pl.Benefits.Add(b.Description);
                     }
+                    pl.FixIsNull();
                     listresp.Add(pl);
                 }
                 obj.Plans = listresp;

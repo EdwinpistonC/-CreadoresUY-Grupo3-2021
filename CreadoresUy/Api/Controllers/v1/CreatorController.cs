@@ -12,6 +12,7 @@ namespace Api.Controllers.v1
     {
         [HttpPost]
         [Route("SignUp")]
+        [Authorize]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -19,30 +20,39 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
-        [AllowAnonymous]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetCategoryes()
         {
             return Ok(await Mediator.Send(new GetCategoryes { }));
         }
 
         [HttpPost]
-        [Route("SetPlansAndBenefits")]
-        public async Task<ActionResult<SetPlanAndBenefitsCommand>> SetPlansAndBenefits(SetPlanAndBenefitsCommand command)
+        [Route("CreatePlanAndBenefits")]
+        [Authorize]
+        public async Task<ActionResult<SetPlanAndBenefitsCommand>> CreatePlanAndBenefits(SetPlanAndBenefitsCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPut]
         [Route("UpdatePlansAndBenefits")]
+        [Authorize]
         public async Task<IActionResult> Update(UpdatePlanAndBenefitsCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpGet]
+        [Route("GetCreatorPlanBenefits")]
+        [Authorize]
+        public async Task<IActionResult> GetCreatorPlanBenefits(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetBenefitCantQuery { Nickname = nickname }));
+        }
+
+        [HttpGet]
         [Route("GetCreatorPlansById")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetCategGetCreatorPlansoryesById(int id)
         {
             return Ok(await Mediator.Send(new GetCreatorPlansByIdQuery { CreatorId = id }));
@@ -50,16 +60,15 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCreatorPlansSubsc")]
-        //[Authorize]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCategGetCreatorPlansSubsc(int idUser, string nickname)
+        [Authorize]
+        public async Task<IActionResult> GetCreatorPlansSubsc(int idUser, string nickname)
         {
             return Ok(await Mediator.Send(new GetCreatorPlansByNicknameQuery { IdUser = idUser, Nickname = nickname }));
         }
 
         [HttpGet]
         [Route("GetSubscribers")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetSubscribers(int idCreator)
         {
             return Ok(await Mediator.Send(new GetSubscribersQuery { IdCreator = idCreator }));
@@ -67,55 +76,18 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetFollowers")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetFollowers(int idCreator)
         {
             return Ok(await Mediator.Send(new GetFollowersQuery { IdCreator = idCreator }));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetCreatorsByCategory")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetCreatorsByCategory(string category, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorByCategoryQuery { SearchCategory = category, Page = pageNumber, SizePage = pageSize }));
-        }
-
-
-        [HttpPost]
-        [Route("Basic")]
-        public async Task<ActionResult<CreateCreatorCommand>> CreateCreator(CreateCreatorCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
-        [HttpPatch]
-        [Route("Update")]
-        public async Task<ActionResult<UpdateCreatorCommand>> Update(UpdateCreatorCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
-        [HttpDelete]
-        [Route("Delete")]
-        public async Task<ActionResult<DeleteCreatorCommand>> Delete(DeleteCreatorCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
-        [HttpGet]
-        [Route("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await Mediator.Send(new GetAllCreatorQuery { }));
-        }
-
-        [HttpGet]
-        [Route("GetBool")]
-        public async Task<IActionResult> IsValidNickname(string nickname)
-        {
-            return Ok(await Mediator.Send(new IsValidNicknameQuery { Nickname = nickname}));
         }
 
         [HttpGet]
@@ -127,9 +99,8 @@ namespace Api.Controllers.v1
         }
 
         [HttpGet]
-        [AllowAnonymous]
-
         [Route("GetContentByUser")]
+        [Authorize]
         public async Task<IActionResult> GetContentByUser(string nickname,int idUser, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorContentByUser { 
@@ -140,8 +111,8 @@ namespace Api.Controllers.v1
                                             }));
         }
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetCreatorBySearch")]
+        [Authorize]
         public async Task<IActionResult> GetCreatorBySearch(string searchText, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));
@@ -149,36 +120,12 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCreatorPlansBasic")]
+        [Authorize]
         public async Task<IActionResult> GetCreatorPlansQuery(string nickname)
         {
             return Ok(await Mediator.Send(new GetCreatorPlansQuery { Nickname = nickname}));
         }
 
-        //GetCreatorProfile
-
-        /* TRAE los planes asociados a un creador
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPlansByIdUser(int id)
-        {
-            return Ok(await Mediator.Send(new GetPlansByIdCreatorQuery { IdCreator = id }));
-        }
-        
-        [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateUserCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            return Ok(await Mediator.Send(new DeleteUserCommand { Id = id }));
-        }
-
-        */
     }
 
 

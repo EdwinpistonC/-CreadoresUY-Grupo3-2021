@@ -3,7 +3,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Share.Dtos;
+using Share.Dtos.BackOffice;
 using Share.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace Application.Features.UserFeaturesBO.Queries
 {
-    public class GetAllPendingPaymentsBOQuery : IRequest<Response<List<UserBODto>>>
+    public class GetAllPendingPaymentsBOQuery : IRequest<Response<List<PaymentBODto>>>
     {
 
-        public class GetAllPendingPaymentsBOQueryHandler : IRequestHandler<GetAllPendingPaymentsBOQuery, Response<List<UserBODto>>>
+        public class GetAllPendingPaymentsBOQueryHandler : IRequestHandler<GetAllPendingPaymentsBOQuery, Response<List<PaymentBODto>>>
         {
             private readonly ICreadoresUyDbContext _context;
             private readonly IMapper _mapper;
@@ -25,33 +27,18 @@ namespace Application.Features.UserFeaturesBO.Queries
                 _mapper = mapper;
             }
 
-            public async Task<Response<List<UserBODto>>> Handle(GetAllPendingPaymentsBOQuery query, CancellationToken cancellationToken)
+            public async Task<Response<List<PaymentBODto>>> Handle(GetAllPendingPaymentsBOQuery query, CancellationToken cancellationToken)
             {
-                Response<List<UserBODto>> res = new();
+                Response<List<PaymentBODto>> res = new();
                 res.Message = new List<string>();
+                var pagos = new List<PaymentBODto>();
+
+//              var resultados = _context.PagosCreador.GroupBy(x => x.IdCreator).Select(c => new { IdCre = c.Key, Nickname = c.Nickname, Monto = c.Amount }).ToListAsync(); 
+                                                                        
 
 
-                List<User> usrs1 = await _context.Users.ToListAsync();
-                        //.Where(u => u.Deleted.Equals(false)) --En caso de no querer listar los eliminados logicamente
-                if (usrs1 == null)
-                {
-                    res.Obj = default;
-                    res.CodStatus = HttpStatusCode.BadRequest;
-                    res.Success = false;
-                    var msj = "No se han encontrado datos para retornar";
-                    res.Message.Add(msj);
-                    return res;
-                }
-                
-                List<UserBODto> usuarios = new();
-                foreach(User u in usrs1)
-                {
-                    var usr = _mapper.Map<UserBODto>(u);
-                    usr.NoNulls();
-                    usuarios.Add(usr);
-                }
-               
-                res.Obj = usuarios;
+
+                res.Obj = pagos;
                 res.CodStatus = HttpStatusCode.OK;
                 res.Success = true;
                 var msj1 = "Ok";
