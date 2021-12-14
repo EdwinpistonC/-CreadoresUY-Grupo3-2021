@@ -17,7 +17,6 @@ namespace Application.Features.CreatorFeatures.Commands
     public class UpdatePlanAndBenefitsCommand :IRequest<Response<string>>
     {
         public string Nickname {  get; set; }
-        public bool UpdateImage {  get; set; }
         public UpdatePlanAndBenefitsDto PandB { get; set; }
         public class UpdatePlanAndBenefitsCommandHandler : IRequestHandler<UpdatePlanAndBenefitsCommand, Response<string>>
         {
@@ -67,13 +66,13 @@ namespace Application.Features.CreatorFeatures.Commands
                         plan.SubscriptionMsg = dto.SubscriptionMsg;
                         plan.Description = dto.Description;
                         plan.WelcomeVideoLink = dto.WelcomeVideoLink;
-                        if (command.UpdateImage == true)
+                        if (dto.Image != string.Empty)
                         {
                             ImageDto dtoImgPlan = new(dto.Image, plan.Name + " photo by " + cre.NickName, "Planes");
                             var urlPlanImg = await _imagePost.postImage(dtoImgPlan);
                             plan.Image = urlPlanImg;
                         }
-
+                        await _context.SaveChangesAsync();
                         foreach (var be in plan.Benefits)
                         {
                             plan.Benefits.Remove(be);
@@ -90,7 +89,7 @@ namespace Application.Features.CreatorFeatures.Commands
                         }
                         res.CodStatus = HttpStatusCode.OK;
                         res.Success = true;
-                        res.Obj = "Tus planes han sido registrados con Exito";
+                        res.Obj = "Tus planes ha sido actualizado con Exito";
                         res.Message.Add("Exito");
                     }
                 }

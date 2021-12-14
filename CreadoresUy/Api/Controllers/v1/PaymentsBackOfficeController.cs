@@ -1,4 +1,6 @@
-﻿using Application.Features.UserFeaturesBO.Commands;
+﻿using Application.Features.PaymentFeaturesBO.Commands;
+using Application.Features.PaymentFeaturesBO.Queries;
+using Application.Features.UserFeaturesBO.Commands;
 using Application.Features.UserFeaturesBO.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,22 +14,30 @@ namespace Api.Controllers.v1
 
    
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetUserByIdBOQuery { Id = id }));
         }
 
-        [HttpPut]
-        [AllowAnonymous]
-        public async Task<IActionResult> endAllPayment()
+        [HttpGet("GetAllPendingPayments")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetAllPendingPayments()
         {
-            return Ok(await Mediator.Send(new DeleteUserByIdCommandBO()
-                ));
+            return Ok(await Mediator.Send(new GetAllPendingPaymentsBOQuery()));
+
+
+        }
+
+        [HttpPut("EndAllPayments")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> EndAllPayment(EndAllPaymentsCommand command)
+        {
+            return Ok(await Mediator.Send(command));
         }
 
         [HttpPut("ByOne/{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> endOnePayment(int id)
         {
             return Ok(await Mediator.Send(new DeleteUserByIdCommandBO { Id = id }));

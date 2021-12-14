@@ -21,7 +21,6 @@ namespace Application.Features.Validators
             RuleFor(x => x.IdPlan).NotEqual(0).WithMessage("{PropertyValue} -> no es un id valido")
                 .Must(ExistePlan).WithMessage("{PropertyName} = {PropertyValue} -> no puede ser actualizado porque no existe");
             RuleFor(x => x.Name).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");               
-            RuleFor(x => x.Image).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.Price).NotNull().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.WelcomeVideoLink).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.SubscriptionMsg).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");

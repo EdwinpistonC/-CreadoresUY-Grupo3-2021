@@ -28,8 +28,8 @@ namespace Api.Controllers.v1
 
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<UserSignUpCommand>> CreateUser(UserSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -43,32 +43,31 @@ namespace Api.Controllers.v1
         }
         
         [HttpGet("GetUserForChat/{nickname}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetUserForChat(string nickname)
         {
             return Ok(await Mediator.Send(new GetUserForChatQuery { Nickname = nickname }));
 
         }
         [HttpGet("GetUsersChats/{users}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetUsersChats(string users)
         {
             return Ok(await Mediator.Send(new GetUsersChatsQuery { Users = users }));
 
         }
 
-
         [HttpPost]
-        [Authorize]
         [Route("Follow")]
+        [Authorize]
         public async Task<ActionResult<FollowCommand>> FollowCreator(FollowCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPost]
-        [Authorize]
         [Route("Unfollow")]
+        [Authorize]
         public async Task<ActionResult<UnfollowCommand>> UnfollowCreator(UnfollowCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -76,8 +75,8 @@ namespace Api.Controllers.v1
 
         // A que esta suscripto
         [HttpGet]
-        [Authorize]
         [Route("SubscribedTo")]
+        [Authorize]
         public async Task<IActionResult> SubscribedTo(int idUser)
         {
             return Ok(await Mediator.Send(new SubscribedToQuery { IdUser = idUser }));
@@ -85,9 +84,8 @@ namespace Api.Controllers.v1
 
         // A quien esta siguiendo
         [HttpGet]
-        [Authorize]
         [Route("FollowingTo")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> FollowingTo(int idUser)
         {
             return Ok(await Mediator.Send(new FollowingToQuery { IdUser = idUser }));
@@ -95,24 +93,24 @@ namespace Api.Controllers.v1
 
         //Suscribirse a
         [HttpPost]
-        [Authorize]
         [Route("SubscribeTo")]
+        [Authorize]
         public async Task<ActionResult<SubscribeToCommand>> SubscribeTo(SubscribeToCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPost]
-        [Authorize]
         [Route("Unsubscribed")]
+        [Authorize]
         public async Task<ActionResult<UnsubscribeCommand>> Unsubscribed(UnsubscribeCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpGet]
-        [Authorize]
         [Route("GetUserProfile")]
+        [Authorize]
         public async Task<ActionResult<GetUserProfileQuery>> GetUserProfile(int id)
         {
             return Ok(await Mediator.Send(new GetUserProfileQuery { IdUser = id }));

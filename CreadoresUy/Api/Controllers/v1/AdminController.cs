@@ -14,14 +14,16 @@ namespace Api.Controllers.v1
         {
             _config = config;
         }
-        [AllowAnonymous]
+        
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CreateAdminCommand>> CreateAdmin(CreateAdminCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
-        [AllowAnonymous]
+        
         [HttpPut("[action]")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(int id, UpdateAdminCommand command)
         {
             if (id != command.Id)
@@ -31,6 +33,7 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdminCommand { Id = id }));

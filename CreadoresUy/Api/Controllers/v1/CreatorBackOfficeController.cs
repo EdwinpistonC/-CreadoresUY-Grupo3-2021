@@ -12,39 +12,38 @@ namespace Api.Controllers.v1
     [ApiVersion("1.0")]
     public class CreatorBackOfficeController : BaseApiController
     {
-
    
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await Mediator.Send(new GetCreatorByIdBOQuery { Id = id }));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetAll")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllCreatorBOQuery()));
         }
        
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteCreatorByIdCommandBO { Id = id }));
         }
-        [AllowAnonymous]
+
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CreateCreatorCommandBO>> CreateUser(CreateCreatorCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [Authorize]
-        [AllowAnonymous]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser( UpdateCreatorCommandBO command)
         {
             return Ok(await Mediator.Send(command));

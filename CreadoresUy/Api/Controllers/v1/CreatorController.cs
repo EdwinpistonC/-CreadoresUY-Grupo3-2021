@@ -10,9 +10,10 @@ namespace Api.Controllers.v1
 
     public class CreatorController : BaseApiController
     {
+        
         [HttpPost]
         [Route("SignUp")]
-        [Authorize]
+        [Authorize(Roles = "user,admin,creator")]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -20,7 +21,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetCategoryes()
         {
             return Ok(await Mediator.Send(new GetCategoryes { }));
@@ -43,11 +44,19 @@ namespace Api.Controllers.v1
         }
 
         [HttpGet]
-        [Route("GetCreatorPlanBenefits")]
+        [Route("GetCreatorPlanBenefitsById")]
         [Authorize]
-        public async Task<IActionResult> GetCreatorPlanBenefits(string nickname)
+        public async Task<IActionResult> GetBenefitCantByPlanQuery(int idp, string nickname)
         {
-            return Ok(await Mediator.Send(new GetBenefitCantQuery { Nickname = nickname }));
+            return Ok(await Mediator.Send(new GetBenefitCantByPlanQuery { IdPlan = idp, Nickname = nickname }));
+        }
+
+        [HttpGet]
+        [Route("GetDefaultBenefits")]
+        [Authorize]
+        public async Task<IActionResult> GetDefaultBenefits()
+        {
+            return Ok(await Mediator.Send(new GetDefaultBenefitsQuery { }));
         }
 
         [HttpGet]
