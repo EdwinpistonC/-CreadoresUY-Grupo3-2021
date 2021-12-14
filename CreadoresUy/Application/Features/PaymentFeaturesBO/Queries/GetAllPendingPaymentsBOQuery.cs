@@ -35,9 +35,6 @@ namespace Application.Features.UserFeaturesBO.Queries
 
 //              var resultados = _context.PagosCreador.GroupBy(x => x.IdCreator).Select(c => new { IdCre = c.Key, Nickname = c.Nickname, Monto = c.Amount }).ToListAsync(); 
                                                                         
-
-
-
                 res.Obj = pagos;
                 res.CodStatus = HttpStatusCode.OK;
                 res.Success = true;
