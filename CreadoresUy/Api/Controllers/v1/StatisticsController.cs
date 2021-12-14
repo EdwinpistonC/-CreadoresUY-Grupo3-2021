@@ -1,4 +1,5 @@
-﻿using Application.Features.StatisticsFeaturesBO.Queries;
+﻿using Application.Features.PaymentFeaturesBO.Queries;
+using Application.Features.StatisticsFeaturesBO.Queries;
 using Application.Features.UserFeatures.Commands;
 using Application.Features.UserFeatures.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -84,7 +85,6 @@ namespace Api.Controllers.v1
 
 
         }
-
 
     }
 
