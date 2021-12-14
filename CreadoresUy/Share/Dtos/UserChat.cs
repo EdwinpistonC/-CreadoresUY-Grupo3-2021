@@ -11,5 +11,7 @@ namespace Share.Dtos
         public int idCreator {  get; set; }
         public int idUser {  get; set; }
         public string imgProfile { get; set; }
+        public string name { get; set; }
+
     }
 }

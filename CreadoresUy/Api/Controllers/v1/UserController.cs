@@ -49,6 +49,14 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetUserForChatQuery { Nickname = nickname }));
 
         }
+        [HttpGet("GetUsersChats/{users}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUsersChats(string users)
+        {
+            return Ok(await Mediator.Send(new GetUsersChatsQuery { Users = users }));
+
+        }
+
 
         [HttpPost]
         [Authorize]

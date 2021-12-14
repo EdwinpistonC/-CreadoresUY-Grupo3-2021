@@ -49,7 +49,7 @@ namespace Application.Features.UserFeatures.Queries
                 u.idCreator = user.CreatorId ?? default(int);
                 u.idUser = user.Id;
                 u.imgProfile = user.ImgProfile;
-
+                u.name = user.Name;
                 res.Obj = u;
 
 
