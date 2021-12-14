@@ -72,7 +72,7 @@ namespace Application.Features.CreatorFeatures.Commands
                             var urlPlanImg = await _imagePost.postImage(dtoImgPlan);
                             plan.Image = urlPlanImg;
                         }
-
+                        await _context.SaveChangesAsync();
                         foreach (var be in plan.Benefits)
                         {
                             plan.Benefits.Remove(be);
@@ -89,7 +89,7 @@ namespace Application.Features.CreatorFeatures.Commands
                         }
                         res.CodStatus = HttpStatusCode.OK;
                         res.Success = true;
-                        res.Obj = "Tus planes han sido registrados con Exito";
+                        res.Obj = "Tus planes ha sido actualizado con Exito";
                         res.Message.Add("Exito");
                     }
                 }
