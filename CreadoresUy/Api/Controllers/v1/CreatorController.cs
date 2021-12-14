@@ -20,7 +20,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoryes()
         {
             return Ok(await Mediator.Send(new GetCategoryes { }));
@@ -84,7 +84,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCreatorsByCategory")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCreatorsByCategory(string category, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorByCategoryQuery { SearchCategory = category, Page = pageNumber, SizePage = pageSize }));
@@ -100,7 +100,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetContentByUser")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetContentByUser(string nickname,int idUser, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorContentByUser { 
@@ -112,7 +112,7 @@ namespace Api.Controllers.v1
         }
         [HttpGet]
         [Route("GetCreatorBySearch")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCreatorBySearch(string searchText, int pageNumber, int pageSize)
         {
             return Ok(await Mediator.Send(new GetCreatorBySearchQuery { SearchText = searchText, SizePage = pageSize, Page = pageNumber }));

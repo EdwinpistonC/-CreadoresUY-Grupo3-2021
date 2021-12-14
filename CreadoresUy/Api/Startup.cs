@@ -58,7 +58,8 @@ namespace Api
                 options.AddPolicy(name: MyCors,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                                      builder.WithOrigins("http://localhost:4200", 
+                                          "http://creadoresuy.s3-website.us-east-2.amazonaws.com/").AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 
