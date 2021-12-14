@@ -12,7 +12,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.UserFeaturesBO.Queries
+namespace Application.Features.PaymentFeaturesBO.Queries
 {
     public class GetAllPendingPaymentsBOQuery : IRequest<Response<List<PaymentBODto>>>
     {
@@ -32,9 +32,21 @@ namespace Application.Features.UserFeaturesBO.Queries
                 Response<List<PaymentBODto>> res = new();
                 res.Message = new List<string>();
                 var pagos = new List<PaymentBODto>();
+                var resultados = await _context.PagosCreador.Where(x => x.AdeedDate.Month == DateTime.Today.Month && x.AdeedDate.Year == DateTime.Today.Year && x.Pending == true)
+                    .GroupBy(x => x.Nickname ).Select(c => new { Nickname = c.Key , sum = c.Sum( x => x.Amount)})
+                    .ToListAsync();
+                
+                foreach (var xx in resultados)
+                {
+                    var dto = new PaymentBODto
+                    {
+                        Nickname = xx.Nickname,
+                        Amount = xx.sum,
+                        MonthYear = DateTime.Today.Month + "/" + DateTime.Today.Year
+                    };
+                    pagos.Add(dto);
+                }
 
-//              var resultados = _context.PagosCreador.GroupBy(x => x.IdCreator).Select(c => new { IdCre = c.Key, Nickname = c.Nickname, Monto = c.Amount }).ToListAsync(); 
-                                                                        
                 res.Obj = pagos;
                 res.CodStatus = HttpStatusCode.OK;
                 res.Success = true;

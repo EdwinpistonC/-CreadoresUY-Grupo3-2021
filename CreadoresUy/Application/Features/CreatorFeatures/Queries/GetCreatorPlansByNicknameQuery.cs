@@ -53,7 +53,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 {
                     foreach (var up in item.UserPlans)
                     {
-                        if(up.IdUser == query.IdUser)
+                        if(up.IdUser == query.IdUser && up.Deleted == false)
                         {
                             obj.SubscribedTo = up.IdPlan;
                         }
