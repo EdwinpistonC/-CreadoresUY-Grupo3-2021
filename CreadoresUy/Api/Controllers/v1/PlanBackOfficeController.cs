@@ -12,36 +12,36 @@ namespace Api.Controllers.v1
 
  
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await Mediator.Send(new GetDefaultPlanByIdBOQuery { Id = id }));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetAll")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllDefaultPlanBOQuery()));
         }
        
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteDefaultPlanByIdCommandBO { Id = id }));
         }
-        [AllowAnonymous]
+
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CreateDefaultPlanCommandBO>> CreateUser(CreateDefaultPlanCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [Authorize]
-        [AllowAnonymous]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser( UpdateDefaultPlanCommandBO command)
         {
             return Ok(await Mediator.Send(command));

@@ -13,36 +13,36 @@ namespace Api.Controllers.v1
 
    
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await Mediator.Send(new GetBenefitByIdBOQuery { Id = id }));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetAll")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllBenefitBOQuery()));
         }
        
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteBenefitByIdCommandBO { Id = id }));
         }
-        [AllowAnonymous]
+        
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CreateBenefitCommandBO>> CreateUser(CreateBenefitCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [Authorize]
-        [AllowAnonymous]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser( UpdateBenefitCommandBO command)
         {
             return Ok(await Mediator.Send(command));

@@ -80,11 +80,11 @@ namespace Application.Features.UserFeatures.Queries
 
                 // Add roles as multiple claims
 
-                var rol = "usuario";
+                var rol = "user";
 
                 if (user.CreatorId != null)
                 {
-                    rol = "creador";
+                    rol = "creator";
                 }
                 if (user.IsAdmin == true)
                 {

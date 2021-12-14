@@ -13,8 +13,8 @@ namespace Api.Controllers.v1
     {
        
         [HttpPost]
-        [Authorize]
         [Route("CreateNewDraftContent")]
+        [Authorize(Roles = "creator,admin")]
         public async Task<IActionResult> CreateNewDraftContent(CreateDraftContentCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -22,8 +22,8 @@ namespace Api.Controllers.v1
 
         
         [HttpGet]
-        [Authorize]
         [Route("GetContentDraft")]
+        [Authorize(Roles = "creator,admin")]
         public async Task<IActionResult> GetContentDraftQuery(string nickname)
         {
             return Ok(await Mediator.Send(new GetContentDraftQuery { Nickname = nickname }));
@@ -31,16 +31,16 @@ namespace Api.Controllers.v1
 
         
         [HttpPut]
-        [Authorize]
         [Route("UpdateContent")]
+        [Authorize(Roles = "creator,admin")]
         public async Task<IActionResult> Update(UpdateContentCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpDelete]
-        [Authorize]
         [Route("DeleteContent")]
+        [Authorize(Roles = "creator,admin")]
         public async Task<IActionResult> Delete(int idCre, int idCont)
         {
             return Ok(await Mediator.Send(new DeleteContentCommand { IdCreator = idCre, IdContent = idCont }));

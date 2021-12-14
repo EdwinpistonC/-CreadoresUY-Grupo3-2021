@@ -10,9 +10,10 @@ namespace Api.Controllers.v1
 
     public class CreatorController : BaseApiController
     {
+        
         [HttpPost]
         [Route("SignUp")]
-        [Authorize]
+        [Authorize(Roles = "user,admin,creator")]
         public async Task<ActionResult<CreatorSignUpCommand>> CreateCreator(CreatorSignUpCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -20,7 +21,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> GetCategoryes()
         {
             return Ok(await Mediator.Send(new GetCategoryes { }));

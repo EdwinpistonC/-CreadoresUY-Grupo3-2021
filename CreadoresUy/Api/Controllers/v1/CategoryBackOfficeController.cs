@@ -13,36 +13,37 @@ namespace Api.Controllers.v1
 
    
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await Mediator.Send(new GetCategoryByIdBOQuery { Id = id }));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("GetAll")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllCategoryBOQuery()));
         }
        
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteCategoryByIdCommandBO { Id = id }));
         }
-        [AllowAnonymous]
+        
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<CreateCategoryCommandBO>> CreateUser(CreateCategoryCommandBO command)
         {
             return Ok(await Mediator.Send(command));
         }
 
-        [Authorize]
-        [AllowAnonymous]
+        
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser( UpdateCategoryCommandBO command)
         {
             return Ok(await Mediator.Send(command));
