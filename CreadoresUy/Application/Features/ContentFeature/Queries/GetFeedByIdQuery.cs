@@ -35,14 +35,15 @@ namespace Application.Features.CreatorFeatures.Queries
             }
             public async Task<Response<List<ContentDto>>> Handle(GetFeedByIdQuery query, CancellationToken cancellationToken)
             {
-                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser).ToListAsync();
+                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser && up.ExpirationDate >= DateTime.Now).ToListAsync();
                 var listPlans = new List<int>();
                 foreach (var idPlan in idPlans) {
 
                     listPlans.Add(idPlan.IdPlan);
                 }
                 var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).Include(c=> c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator)
-                    .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan)) || c.IsPublic).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                    .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted == false && cp.Content.Draft == false) 
+                    || c.IsPublic ).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;

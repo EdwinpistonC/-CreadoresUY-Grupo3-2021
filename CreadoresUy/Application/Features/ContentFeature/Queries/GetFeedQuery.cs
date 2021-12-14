@@ -33,20 +33,18 @@ namespace Application.Features.CreatorFeatures.Queries
             }
             public async Task<Response<List<ContentDto>>> Handle(GetFeedQuery query, CancellationToken cancellationToken)
             {
-                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser ).ToListAsync();
+                var idPlans = await _context.UserPlans.Include(up=> up.Plan).Where(up => up.IdUser == query.IdUser && up.ExpirationDate>= DateTime.Now ).ToListAsync();
                 var listPlans = new List<int>();
                 foreach (var idPlan in idPlans) {
 
                     listPlans.Add(idPlan.IdPlan);
                 }
 
-
-
                 //TODO   orderby
                 var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators)
                     .Where(c =>c.Deleted == false && c.Draft == false && c.PublishDate<= DateTime.Now &&
-                    c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan))  ||  
-                    (c.IsPublic && c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false)))
+                    c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted ==false)  ||  
+                    (c.IsPublic && (c.ContentPlans.Any(cp=> cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false))))
                     ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 
                 List<ContentDto> list = new List<ContentDto>();
