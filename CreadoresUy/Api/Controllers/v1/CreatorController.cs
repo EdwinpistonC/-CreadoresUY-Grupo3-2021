@@ -21,7 +21,7 @@ namespace Api.Controllers.v1
 
         [HttpGet]
         [Route("GetCategoryes")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoryes()
         {
             return Ok(await Mediator.Send(new GetCategoryes { }));
