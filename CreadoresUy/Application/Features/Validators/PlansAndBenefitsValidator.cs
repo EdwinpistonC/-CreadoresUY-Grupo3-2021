@@ -21,8 +21,6 @@ namespace Application.Features.Validators
             RuleFor(x => x.Name).NotEmpty().WithMessage("{PropertyName} No puede ser vacio")
                 .Must(ExistePlan).WithMessage("{PropertyName} = {PropertyValue} -> no puede ser ingresado porque ya existe un plan con el mismo nombre");
             RuleFor(x => x.Price).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.WelcomeVideoLink).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
-            RuleFor(x => x.SubscriptionMsg).NotEmpty().WithMessage("{PropertyName} No puede ser vacio");
             RuleFor(x => x.Benefits).Must(Validar).WithMessage("{PropertyName} Debe contener al menos un Beneficio");
         }
         public bool Validar(ICollection<string> dato)
