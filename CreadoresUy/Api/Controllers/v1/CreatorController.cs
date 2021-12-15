@@ -135,6 +135,14 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetCreatorPlansQuery { Nickname = nickname}));
         }
 
+        [HttpGet]
+        [Route("GetBoolSubsc")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetBoolSubsc(int id, string nickname)
+        {
+            return Ok(await Mediator.Send(new GetBoolSubscQuery { IdUser = id,Nickname = nickname }));
+        }
+
     }
 
 
