@@ -41,10 +41,12 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
 
                 //TODO   orderby
-                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators)
+                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators).
+                    Include(c => c.ContentPlans).ThenInclude(cp => cp.Plan).ThenInclude(p => p.Creator).ThenInclude(c => c.Plans)
                     .Where(c =>c.Deleted == false && c.Draft == false && c.PublishDate<= DateTime.Now &&
                     c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted ==false)  ||  
                     (c.IsPublic&& !c.Deleted  && (c.ContentPlans.Any(cp=> !cp.Plan.Deleted && !cp.Plan.Creator.Deleted  && cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false))))
+                    || (c.IsPublic &&     c.ContentPlans.Any(cp=>  cp.Plan.Creator.Plans.Any(p=>listPlans.Contains(p.Id ) && !p.Deleted)   ))
                     ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 
                 List<ContentDto> list = new List<ContentDto>();

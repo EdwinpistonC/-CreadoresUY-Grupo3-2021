@@ -45,6 +45,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted == false && cp.Content.Draft == false) 
                     || c.IsPublic ).OrderByDescending(c=>c.PublishDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
+
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
                     Creator creator = _context.Creators.Where(c=> c.Id ==creadorId).FirstOrDefault();
