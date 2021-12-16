@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace Application.Features.PaymentFeaturesBO.Queries
 {
-    public class GetPendingPaymentsByNicknameQuery : IRequest<Response<List<PaymentCreatorBODto>>>
+    public class GetPendingPaymentsByNicknameQuery : IRequest<Response<List<StatisticsBODto<DateTime, double>>>>
     {
         public string Nickname { get; set; }
-        public class GetPendingPaymentsByNicknameQueryHandler : IRequestHandler<GetPendingPaymentsByNicknameQuery, Response<List<PaymentCreatorBODto>>>
+        public class GetPendingPaymentsByNicknameQueryHandler : IRequestHandler<GetPendingPaymentsByNicknameQuery, Response<List<StatisticsBODto<DateTime, double>>>>
         {
             private readonly ICreadoresUyDbContext _context;
 
@@ -25,11 +25,11 @@ namespace Application.Features.PaymentFeaturesBO.Queries
                 _context = context;
             }
 
-            public async Task<Response<List<PaymentCreatorBODto>>> Handle(GetPendingPaymentsByNicknameQuery request, CancellationToken cancellationToken)
+            public async Task<Response<List<StatisticsBODto<DateTime, double>>>> Handle(GetPendingPaymentsByNicknameQuery request, CancellationToken cancellationToken)
             {
-                Response<List<PaymentCreatorBODto>> res = new();
+                Response<List<StatisticsBODto<DateTime, double>>> res = new();
                 res.Message = new List<string>();
-                var pagos = new List<PaymentCreatorBODto>();
+                var pagos = new List<StatisticsBODto<DateTime, double>>();
                 var resultados = await _context.PagosCreador.Where(x =>x.Nickname == request.Nickname && x.AdeedDate.Month == DateTime.Today.Month && x.AdeedDate.Year == DateTime.Today.Year && x.Pending == true)
                     .GroupBy(x => x.AdeedDate).Select(c => new { Fecha = c.Key, sum = c.Sum(x => x.Amount) })
                     .ToListAsync();
@@ -47,10 +47,10 @@ namespace Application.Features.PaymentFeaturesBO.Queries
 
                 foreach (var xx in resultados)
                 {
-                    var dto = new PaymentCreatorBODto
+                    var dto = new StatisticsBODto<DateTime, double>
                     {
-                        Date = xx.Fecha,
-                        Amount = xx.sum,
+                        XValue = xx.Fecha,
+                        YValue = xx.sum,
                     };
                     pagos.Add(dto);
                 }

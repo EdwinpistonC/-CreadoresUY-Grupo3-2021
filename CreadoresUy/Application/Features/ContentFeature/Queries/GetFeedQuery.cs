@@ -53,9 +53,6 @@ namespace Application.Features.CreatorFeatures.Queries
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
                     Creator creator = _context.Creators.Where(c=> c.Id ==creadorId).FirstOrDefault();
-
-
-
                     ContentDto contentDataBaseDto = _mapper.Map<ContentDto>(x);
                     contentDataBaseDto.IdCreator = creadorId;
                     contentDataBaseDto.NickName = creator.NickName;
