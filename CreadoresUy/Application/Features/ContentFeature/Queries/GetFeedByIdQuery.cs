@@ -35,7 +35,7 @@ namespace Application.Features.CreatorFeatures.Queries
             }
             public async Task<Response<List<ContentDto>>> Handle(GetFeedByIdQuery query, CancellationToken cancellationToken)
             {
-                var idPlans = await _context.UserPlans.Where(up => up.IdUser == query.IdUser && up.ExpirationDate >= DateTime.Now).ToListAsync();
+                var idPlans = await _context.UserPlans.Include(up=> up.Plan).Where(up => up.IdUser == query.IdUser && up.ExpirationDate >= DateTime.Now && !up.Plan.Deleted&& !up.Deleted ).ToListAsync();
                 var listPlans = new List<int>();
                 foreach (var idPlan in idPlans) {
 
