@@ -47,8 +47,8 @@ namespace Application.Features.CreatorFeatures.Queries
 
                 if(query.IdUser == 0)
                 {
-                    var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
-                                .Include(c => c.Plans).FirstOrDefault();
+                    var cre = _context.Creators.Include(c => c.Plans).Where(c => c.NickName == query.Nickname)
+                                .FirstOrDefault();
                     if ( cre == null)
                     {   if (cre == null) res.Message.Add("No se ha encontrado el nickname ingresado");
                         res.Success = false;
@@ -103,8 +103,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 else
                 {
                     var user = _context.Users.Where(u => u.Id == query.IdUser).FirstOrDefault();
-                    var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
-                                .Include(c => c.Plans).FirstOrDefault();
+                    var cre = _context.Creators.Include(c => c.Plans).Where(c => c.NickName == query.Nickname).FirstOrDefault();
                     if (user == null || cre == null)
                     {
                         if (user == null) res.Message.Add("No se ha encontrado el iduser ingresado");
@@ -127,7 +126,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
                             foreach (var usu in plan.UserPlans)
                             {
-                                if (usu.IdUser == user.Id && usu.Deleted == false && usu.ExpirationDate > DateTime.Today && usu.Plan.Deleted)
+                                if (usu.IdUser == user.Id && usu.Deleted == false && usu.ExpirationDate > DateTime.Today && !usu.Plan.Deleted)
                                 {
                                     authorized = true;
                                 }
@@ -155,7 +154,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                         var dtoplan = GetDto(content, cre.Id, cre.NickName);
                                         if (dtoplan.IsPublic == true)
                                         {
-                                            if (authorized == false) { EraFalse = true; }
+                                            if (authorized == false) EraFalse = true;
                                             authorized = true;
                                         }
                                         if (authorized == false) dtoplan.ReduceContent();
@@ -185,7 +184,6 @@ namespace Application.Features.CreatorFeatures.Queries
                         if (siguiendo != null && siguiendo.Unfollow != true) userpc.Follower = true;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
-                        
                         res.Message.Add("Exito");
                         res.Success = true;
                         res.CodStatus = HttpStatusCode.OK;
