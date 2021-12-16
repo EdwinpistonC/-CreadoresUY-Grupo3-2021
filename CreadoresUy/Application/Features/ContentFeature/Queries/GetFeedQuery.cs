@@ -47,7 +47,7 @@ namespace Application.Features.CreatorFeatures.Queries
                     c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted ==false)  ||  
                     (c.IsPublic&& !c.Deleted  && (c.ContentPlans.Any(cp=> !cp.Plan.Deleted && !cp.Plan.Creator.Deleted  && cp.Plan.Creator.UserCreators.Any(uc=> uc.IdUser==query.IdUser && uc.Unfollow==false))))
                     || (c.IsPublic &&     c.ContentPlans.Any(cp=>  cp.Plan.Creator.Plans.Any(p=>listPlans.Contains(p.Id ) && !p.Deleted)   ))
-                    ).OrderByDescending(c=>c.AddedDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                    ).OrderByDescending(c=>c.PublishDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 
                 List<ContentDto> list = new List<ContentDto>();
                 content.ForEach(async x => {
