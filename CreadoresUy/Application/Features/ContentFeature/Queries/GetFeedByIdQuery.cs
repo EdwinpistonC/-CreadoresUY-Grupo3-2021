@@ -43,7 +43,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
                 var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).Include(c=> c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator)
                     .Where(c =>c.ContentPlans.Any(cp=> cp.Plan.Creator.Id == query.IdCreator) && c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted == false && cp.Content.Draft == false) 
-                    || c.IsPublic ).OrderByDescending(c=>c.PublishDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
+                    || (c.IsPublic && c.ContentPlans.Any(cp=>cp.Plan.Creator.Id == query.IdCreator)) && !c.Deleted  ).OrderByDescending(c=>c.PublishDate).Skip(query.Page*query.ContentPerPage).Take(query.ContentPerPage).ToListAsync();
                 List<ContentDto> list = new List<ContentDto>();
 
                 content.ForEach(async x => {
