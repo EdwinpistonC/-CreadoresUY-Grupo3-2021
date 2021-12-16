@@ -41,7 +41,7 @@ namespace Application.Features.CreatorFeatures.Queries
                 }
 
                 //TODO   orderby
-                var content = await _context.Contents.Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators).
+                var content = await _context.Contents.Include(c=> c.ContentTags).ThenInclude(ct=> ct.Tag).Include(c=>c.ContentPlans).ThenInclude(cp=>cp.Plan).ThenInclude(p=>p.Creator).ThenInclude(c=>c.UserCreators).
                     Include(c => c.ContentPlans).ThenInclude(cp => cp.Plan).ThenInclude(p => p.Creator).ThenInclude(c => c.Plans)
                     .Where(c =>c.Deleted == false && c.Draft == false && c.PublishDate<= DateTime.Now &&
                     c.ContentPlans.Any(cp=>listPlans.Contains(cp.IdPlan) && cp.Plan.Deleted ==false)  ||  
@@ -53,12 +53,26 @@ namespace Application.Features.CreatorFeatures.Queries
                 content.ForEach(async x => {
                     int creadorId = x.ContentPlans.FirstOrDefault().Plan.CreatorId;
                     Creator creator = _context.Creators.Where(c=> c.Id ==creadorId).FirstOrDefault();
+
+
+
                     ContentDto contentDataBaseDto = _mapper.Map<ContentDto>(x);
                     contentDataBaseDto.IdCreator = creadorId;
                     contentDataBaseDto.NickName = creator.NickName;
                     contentDataBaseDto.CreatorImage = creator.CreatorImage;
                     contentDataBaseDto.NoNulls();
+
+                    foreach (var tag in x.ContentTags)
+                    {
+                        var a = _mapper.Map<TagDto>(tag.Tag);
+                        contentDataBaseDto.Tags.Add(a);
+                    }
+
+
                     list.Add(contentDataBaseDto); 
+
+
+
                 });
                 Response<List<ContentDto>> res = new Response<List<ContentDto>>
                 {
