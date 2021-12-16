@@ -29,6 +29,15 @@ namespace Api.Controllers.v1
 
         }
 
+        [HttpGet("GetAllPendingPaymentsByNickname")]
+        [Authorize]
+        public async Task<IActionResult> GetAllPendingPaymentsByNickname(string nickname)
+        {
+            return Ok(await Mediator.Send(new GetPendingPaymentsByNicknameQuery { Nickname = nickname }));
+
+
+        }
+
         [HttpPut("EndAllPayments")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> EndAllPayment(EndAllPaymentsCommand command)
