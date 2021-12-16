@@ -34,8 +34,8 @@ namespace Application.Features.CreatorFeatures.Queries
                 {
                     Message = new List<string>()
                 };
-                var cre = _context.Creators.Where(c => c.NickName == query.Nickname)
-                            .Include(c => c.Plans).ThenInclude(b => b.Benefits).Include(c => c.Plans).ThenInclude(up => up.UserPlans).FirstOrDefault();
+                var cre = _context.Creators.Include(c => c.Plans).ThenInclude(b => b.Benefits).Include(c => c.Plans).ThenInclude(up => up.UserPlans).Where(c => c.NickName == query.Nickname)
+                            .FirstOrDefault();
                 var dtocre = new CreatorProfileDto();
                 int cantSubs = 0;
                 List<PlanDto> plans = new List<PlanDto>();
@@ -63,11 +63,12 @@ namespace Application.Features.CreatorFeatures.Queries
 
                         plDto.FixIfIsNull();
                         dtocre.Plans.Add(plDto);
-                        cantSubs += pl.UserPlans.Count;
                     }
 
 
-                    dtocre.CantSubscriptores = cantSubs;
+                    var countSubs = await _context.UserPlans.Include(c => c.Plan).ThenInclude(b => b.Creator ).Include(u=>u.User).Where(up => up.Plan.Creator.NickName == query.Nickname && !up.Deleted && !up.Plan.Deleted && !up.User.Deleted).ToListAsync();
+
+                    dtocre.CantSubscriptores = countSubs.Count;
                     dtocre.FixIfIsNull();
                     resp.Obj = dtocre;
                     resp.CodStatus = HttpStatusCode.OK;

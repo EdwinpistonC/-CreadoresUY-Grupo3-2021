@@ -127,7 +127,7 @@ namespace Application.Features.CreatorFeatures.Queries
                             .ThenInclude(p => p.Content).ThenInclude(c => c.ContentTags).ThenInclude(t => t.Tag).FirstOrDefault();
                             foreach (var usu in plan.UserPlans)
                             {
-                                if (usu.IdUser == user.Id && usu.Deleted == false && usu.ExpirationDate > DateTime.Today)
+                                if (usu.IdUser == user.Id && usu.Deleted == false && usu.ExpirationDate > DateTime.Today && usu.Plan.Deleted)
                                 {
                                     authorized = true;
                                 }
@@ -155,7 +155,7 @@ namespace Application.Features.CreatorFeatures.Queries
                                         var dtoplan = GetDto(content, cre.Id, cre.NickName);
                                         if (dtoplan.IsPublic == true)
                                         {
-                                            if (authorized == false) EraFalse = true;
+                                            if (authorized == false) { EraFalse = true; }
                                             authorized = true;
                                         }
                                         if (authorized == false) dtoplan.ReduceContent();
@@ -185,6 +185,7 @@ namespace Application.Features.CreatorFeatures.Queries
                         if (siguiendo != null && siguiendo.Unfollow != true) userpc.Follower = true;
                         userpc.ContentsAndBool = contenidosResult; //guardo los contenidos del cre, con el bool usr auth
                         userpc.Results = contenidosResult.Count;
+                        
                         res.Message.Add("Exito");
                         res.Success = true;
                         res.CodStatus = HttpStatusCode.OK;
