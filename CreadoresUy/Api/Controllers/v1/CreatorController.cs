@@ -143,7 +143,14 @@ namespace Api.Controllers.v1
             return Ok(await Mediator.Send(new GetBoolSubscQuery { IdUser = id,Nickname = nickname }));
         }
 
-    }
+        [HttpGet]
+        [Route("GetInfoPlan")]
+        [Authorize]
+        public async Task<IActionResult> GetInfoPlan(int idPlan)
+        {
+            return Ok(await Mediator.Send(new GetInfoPlanQuery { IdPlan = idPlan}));
+        }
 
+    }
 
 }
